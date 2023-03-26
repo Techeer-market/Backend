@@ -30,6 +30,7 @@ public class UsersApiController {
         return usersMapper.fromEntity(users);
     }
 
+<<<<<<< refs/remotes/origin/develop
     @PatchMapping("/update")
     public Users updateUser(@RequestBody Users requestUser){
         Users user = usersApiService.update(requestUser);
@@ -42,6 +43,8 @@ public class UsersApiController {
         return user;
     }
 
+=======
+>>>>>>> (TM-10) 카카오,구글,네이버 로그인
 //    @PostMapping("/signup")
 //    public UsersResponseDto update(@ModelAttribute UsersRequestDto usersRequestDto) {
 //        log.info(usersRequestDto.toString());

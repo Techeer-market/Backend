@@ -30,6 +30,7 @@ public class UsersApiService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+<<<<<<< refs/remotes/origin/develop
         return userRepository.save(usersMapper.toEntity(usersRequestDto));
     }
     //유저 정보 세션 처리 예정
@@ -39,6 +40,10 @@ public class UsersApiService {
                 .orElseThrow(()-> new RuntimeException("유저 정보를 찾을 수 없습니다."));
         existingUser.update(updateUser);
         return userRepository.save(existingUser);
+=======
+
+        return userRepository.save(usersMapper.toEntity(usersRequestDto));
+>>>>>>> (TM-10) 카카오,구글,네이버 로그인
     }
     //유저 정보 세션 처리 예정
     @Transactional
@@ -49,6 +54,8 @@ public class UsersApiService {
 //        existingUser.delete(deleteUser);
         return userRepository.save(existingUser);
     }
+
+
 
 
 }

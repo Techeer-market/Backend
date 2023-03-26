@@ -52,6 +52,7 @@ public class Users extends BaseEntity {
     @Column(name = "thumb_nail_url")
     private String thumbnailUrl;
 
+<<<<<<< refs/remotes/origin/develop
 
     public void update(Users updateUser){
         this.email = updateUser.getEmail();
@@ -63,6 +64,8 @@ public class Users extends BaseEntity {
         deleteUser.setDeleted(true);
     }
 
+=======
+>>>>>>> (TM-10) 카카오,구글,네이버 로그인
 //    public String getRoleKey(){
 //        return this.role.getKey();
 //    }
