@@ -1,19 +1,21 @@
 package com.teamjo.techeermarket.domain.users.entity;
 
-import com.teamjo.techeermarket.global.common.BaseTimeEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.teamjo.techeermarket.global.common.BaseEntity;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class Users extends BaseTimeEntity {
+@Builder
+@AllArgsConstructor
+@ToString
+public class Users extends BaseEntity {
 
     @Id
     @Column(name = "id", unique = true, nullable = false)
@@ -21,31 +23,37 @@ public class Users extends BaseTimeEntity {
     private Long id;
 
 
+//    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+//    @Column(name = "user_uuid", columnDefinition = "BINARY(16)")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(name = "user_uuid", columnDefinition = "BINARY(16)")
+    @Column(name = "user_uuid", length = 36, nullable = false, updatable = false)
     private UUID userUuid;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "social")
+    private String social;
+
+//    @Enumerated(EnumType.STRING)
+////    @Column(nullable = false)
+//    private Role role;
+
+
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "birthday", nullable = false)
-    private Date birthday;
+    @Column(name = "birthday")
+    private LocalDateTime birthday;
 
     @Column(name = "thumb_nail_url")
     private String thumbnailUrl;
 
-    @Builder
-    public Users(String email, String password, String name, Date birthday, String thumbnailUrl) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.birthday = birthday;
-        this.thumbnailUrl = thumbnailUrl;
-    }
+//    public String getRoleKey(){
+//        return this.role.getKey();
+//    }
+
 }
