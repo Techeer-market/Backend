@@ -6,15 +6,14 @@ import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.mapper.UsersMapper;
 import com.teamjo.techeermarket.domain.users.service.UsersApiService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/users")
+@Slf4j
 public class UsersApiController {
 
     private final UsersApiService usersApiService;
@@ -22,13 +21,22 @@ public class UsersApiController {
     private final UsersMapper usersMapper;
 
     @PostMapping("/signup")
-    public UsersResponseDto signup(@Validated @RequestBody UsersRequestDto usersRequestDto) {
+    public UsersResponseDto signup(@ModelAttribute UsersRequestDto usersRequestDto) {
+        log.info(usersRequestDto.toString());
         if (usersRequestDto == null) {
             return null;
         }
-        Users user = usersApiService.signup(usersRequestDto);
-        return usersMapper.fromEntity(user);
+        Users users = usersApiService.signup(usersRequestDto);
+        return usersMapper.fromEntity(users);
     }
 
-
+//    @PostMapping("/signup")
+//    public UsersResponseDto update(@ModelAttribute UsersRequestDto usersRequestDto) {
+//        log.info(usersRequestDto.toString());
+//        if (usersRequestDto == null) {
+//            return null;
+//        }
+//        Users users = usersApiService.signup(usersRequestDto);
+//        return usersMapper.fromEntity(users);
+//    }
 }

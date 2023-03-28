@@ -3,6 +3,7 @@ package com.teamjo.techeermarket.domain.users.dto.response;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -10,8 +11,6 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 public class UsersResponseDto {
-
-    private Long id;
 
     private UUID userUuid;
 
@@ -21,9 +20,11 @@ public class UsersResponseDto {
 
     private String name;
 
-    private Date birthDay;
+    private LocalDateTime birthDay;
 
     private String thumbnailUrl;
+
+    private String social;
 
     private String createdDate;
 
