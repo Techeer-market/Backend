@@ -52,6 +52,17 @@ public class Users extends BaseEntity {
     @Column(name = "thumb_nail_url")
     private String thumbnailUrl;
 
+
+    public void update(Users updateUser){
+        this.email = updateUser.getEmail();
+        this.password = updateUser.getPassword();
+        this.name = updateUser.getName();
+    }
+
+    public void delete(Users deleteUser){
+        deleteUser.setDeleted(true);
+    }
+
 //    public String getRoleKey(){
 //        return this.role.getKey();
 //    }

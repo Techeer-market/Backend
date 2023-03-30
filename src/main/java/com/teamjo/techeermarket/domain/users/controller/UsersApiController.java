@@ -30,6 +30,18 @@ public class UsersApiController {
         return usersMapper.fromEntity(users);
     }
 
+    @PatchMapping("/update")
+    public Users updateUser(@RequestBody Users requestUser){
+        Users user = usersApiService.update(requestUser);
+        return user;
+    }
+
+    @DeleteMapping("/delete")
+    public Users deleteUser(@RequestBody Users requestUser){
+        Users user = usersApiService.delete(requestUser);
+        return user;
+    }
+
 //    @PostMapping("/signup")
 //    public UsersResponseDto update(@ModelAttribute UsersRequestDto usersRequestDto) {
 //        log.info(usersRequestDto.toString());
