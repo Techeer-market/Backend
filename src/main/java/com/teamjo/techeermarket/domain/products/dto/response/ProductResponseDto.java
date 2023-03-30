@@ -1,6 +1,5 @@
 package com.teamjo.techeermarket.domain.products.dto.response;
 
-import com.teamjo.techeermarket.domain.products.entity.ProductState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,10 +14,9 @@ public class ProductResponseDto {
     private Long id;
 
 //    private Long userId;
+    // 필요없다.
 
-    private UUID categoryUuid;   //
-
-    private String categoryName;  //
+//    private Long categoryId;
 
     private UUID productUuid;
 
@@ -28,7 +26,7 @@ public class ProductResponseDto {
 
     private int price;
 
-    private ProductState productState;
+//    private String state;
 
     private int views;
 

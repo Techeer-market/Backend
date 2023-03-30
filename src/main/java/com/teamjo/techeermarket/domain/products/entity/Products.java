@@ -1,9 +1,7 @@
 package com.teamjo.techeermarket.domain.products.entity;
 
-import com.teamjo.techeermarket.domain.category.entity.Categorys;
-import com.teamjo.techeermarket.global.common.BaseEntity;
-
-import lombok.AllArgsConstructor;
+import com.teamjo.techeermarket.domain.users.entity.Users;
+import com.teamjo.techeermarket.global.common.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,30 +10,24 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.UUID;
 
-import static javax.persistence.FetchType.LAZY;
-
 @Getter
-@AllArgsConstructor
-@Entity
-@Builder
 @NoArgsConstructor
-public class Products extends BaseEntity {
+@Entity
+public class Products extends BaseTimeEntity {
 
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private Users users;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Users users;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "categorys")
-    private Categorys categorys;
+    // category_id
 
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(name = "product_uuid" ,length = 36, nullable = false, updatable = false)  // uuid 나중에 추가
+    @Column(name = "product_uuid")  // uuid 나중에 추가
     private UUID productUuid ;
 
     @Column(name = "title", nullable = false)
@@ -49,12 +41,18 @@ public class Products extends BaseEntity {
 
     @Column(name = "state", nullable = false)
     @Enumerated(EnumType.STRING)
-    private ProductState productState ;
+    private ProductState state;
 
     @Column(name = "views", nullable = false)
     private int views;
 
-
+    @Builder
+    public Products(String title, String description, Users users, int price ){
+        this.title = title;
+        this.description = description;
+        this.users = users;
+        this.price = price;
+    }
 
 
 }
