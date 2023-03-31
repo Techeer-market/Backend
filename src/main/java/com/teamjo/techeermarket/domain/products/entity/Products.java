@@ -1,7 +1,8 @@
 package com.teamjo.techeermarket.domain.products.entity;
 
 import com.teamjo.techeermarket.domain.users.entity.Users;
-import com.teamjo.techeermarket.global.common.BaseTimeEntity;
+import com.teamjo.techeermarket.global.common.BaseEntity;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,16 +14,16 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Products extends BaseTimeEntity {
+public class Products extends BaseEntity {
 
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Users users;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id")
+//    private Users users;
 
     // category_id
 
@@ -41,16 +42,15 @@ public class Products extends BaseTimeEntity {
 
     @Column(name = "state", nullable = false)
     @Enumerated(EnumType.STRING)
-    private ProductState state;
+    private ProductState productState;
 
     @Column(name = "views", nullable = false)
     private int views;
 
     @Builder
-    public Products(String title, String description, Users users, int price ){
+    public Products(String title, String description, int price ){
         this.title = title;
         this.description = description;
-        this.users = users;
         this.price = price;
     }
 

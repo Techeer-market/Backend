@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ProductMapper {
 
-    public Products toEntity(ProductRequestDto productRequestDto, Users users){
+    public Products toEntity(ProductRequestDto productRequestDto){
         return Products.builder()
-                .users(users)
+//                .users(users)
                 .title(productRequestDto.getTitle())
                 .description(productRequestDto.getDescription())
                 .price(productRequestDto.getPrice())
@@ -27,7 +27,7 @@ public class ProductMapper {
                 .title(products.getTitle())
                 .description(products.getDescription())
                 .price(products.getPrice())
-//                .state()
+//                .productState()
                 .views(products.getViews())
                 .createdDate(products.getCreatedDate())
                 .modifiedDate(products.getModifiedDate())

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ProductAPIService {
+public class ProductAPiService {
 
     public final ProductRepository productRepository;
 
