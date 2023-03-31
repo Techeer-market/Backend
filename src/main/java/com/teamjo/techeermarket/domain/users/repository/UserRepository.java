@@ -10,7 +10,7 @@ public interface UserRepository extends JpaRepository<Users, Long> {
 
     Optional<Users> findByEmailAndSocial(String email, String social);
 
-<<<<<<< refs/remotes/origin/develop
+<<<<<<< develop
     Optional<Users> findByEmailAndSocialAndIsDeletedIsFalse(String email, String social);
 
     boolean existsByEmailAndSocial(String email, String social);

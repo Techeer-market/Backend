@@ -14,7 +14,6 @@ public class ProductResponseDto {
     private Long id;
 
 //    private Long userId;
-    // 필요없다.
 
 //    private Long categoryId;
 
@@ -26,7 +25,7 @@ public class ProductResponseDto {
 
     private int price;
 
-//    private String state;
+//    private String productState;
 
     private int views;
 
