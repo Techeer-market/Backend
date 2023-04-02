@@ -41,14 +41,11 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 	compileOnly 'org.projectlombok:lombok'
-<<<<<<< Updated upstream
-//	runtimeOnly 'com.h2database:h2'
-=======
+
 
 	runtimeOnly 'com.h2database:h2'
 	// https://mvnrepository.com/artifact/org.postgresql/postgresql
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.3'
->>>>>>> Stashed changes
 	runtimeOnly 'org.postgresql:postgresql'
 	implementation group: 'org.bgee.log4jdbc-log4j2', name:'log4jdbc-log4j2-jdbc4.1',version:'1.16'
 
