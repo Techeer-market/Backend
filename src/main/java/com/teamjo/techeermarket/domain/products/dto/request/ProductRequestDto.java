@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductRequestDto {
 
-//    private User user;
-    
     private String title;
 
     private String description;

@@ -40,9 +40,9 @@ public class Products extends BaseEntity {
     @Column(name = "price", nullable = false)
     private int price;
 
-    @Column(name = "state", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ProductState productState;
+//    @Column(name = "state", nullable = false)
+//    @Enumerated(EnumType.STRING)
+//    private ProductState productState;
 
     @Column(name = "views", nullable = false)
     private int views;
