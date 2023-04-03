@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +30,25 @@ public class UsersApiService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return userRepository.save(usersMapper.toEntity(usersRequestDto));
     }
-
+    //유저 정보 세션 처리 예정
+    @Transactional
+    public Users update(Users updateUser){
+        Users existingUser = userRepository.findById(updateUser.getId())
+                .orElseThrow(()-> new RuntimeException("유저 정보를 찾을 수 없습니다."));
+        existingUser.update(updateUser);
+        return userRepository.save(existingUser);
+    }
+    //유저 정보 세션 처리 예정
+    @Transactional
+    public Users delete(Users deleteUser){
+        Users existingUser = userRepository.findById(deleteUser.getId())
+                .orElseThrow(()-> new RuntimeException("유저 정보를 찾알 수 없습니다."));
+        existingUser.setDeleted(true);
+//        existingUser.delete(deleteUser);
+        return userRepository.save(existingUser);
+    }
 
 
 }
