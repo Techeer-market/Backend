@@ -1,6 +1,7 @@
 spring:
   datasource:
 <<<<<<< refs/remotes/origin/develop
+<<<<<<< refs/remotes/origin/develop
     url: jdbc:postgresql://${CLOUD_AWS_DB_HOST}:5432/${CLOUD_AWS_DB_DATABASE_NAME}
     username: ${CLOUD_AWS_DB_USERNAME}
     password: ${CLOUD_AWS_DB_PASSWORD}
@@ -16,6 +17,17 @@ spring:
     password: 1234
     driverClassName: org.postgresql.Driver
 >>>>>>> (TM-10) 카카오,구글,네이버 로그인
+=======
+    url: jdbc:postgresql://${CLOUD_AWS_DB_HOST}:5432/${CLOUD_AWS_DB_DATABASE_NAME}
+    username: ${CLOUD_AWS_DB_USERNAME}
+    password: ${CLOUD_AWS_DB_PASSWORD}
+    driverClassName: org.postgresql.Driver
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/techeermarket
+#    username: postgres
+#    password: 1234
+#    driverClassName: org.postgresql.Driver
+>>>>>>> (TM-24) DB 클라우드 초기설정 (B)
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -65,8 +77,14 @@ security:
           user_name_attribute: response
           jwk-set-uri: temp
 <<<<<<< refs/remotes/origin/develop
+<<<<<<< refs/remotes/origin/develop
 
 jwt:
   secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
 =======
 >>>>>>> (TM-10) 카카오,구글,네이버 로그인
+=======
+
+jwt:
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+>>>>>>> (TM-24) DB 클라우드 초기설정 (B)
