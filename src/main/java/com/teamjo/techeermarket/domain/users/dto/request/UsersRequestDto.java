@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -22,6 +23,9 @@ public class UsersRequestDto {
 
     private String birthDay;
 
-    private String thumbnailImage;
+    private MultipartFile thumbnailImage;
+
+    // TODO 추후 수정할 것 > 클라이언트 요청 정보가 아니므로 분리해야 함
+    private String thumbnailImageUrl;
 
 }

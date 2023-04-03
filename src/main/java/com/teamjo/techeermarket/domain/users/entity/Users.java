@@ -49,7 +49,7 @@ public class Users extends BaseEntity {
     @Column(name = "birthday")
     private LocalDateTime birthday;
 
-    @Column(name = "thumb_nail_url")
+    @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
 <<<<<<< refs/remotes/origin/develop

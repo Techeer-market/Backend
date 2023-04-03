@@ -25,7 +25,7 @@ public class UsersMapper {
                 .password(usersRequestDto.getPassword())
                 .name(usersRequestDto.getName())
                 .birthday(dateTime)
-                .thumbnailUrl(usersRequestDto.getThumbnailImage())
+                .thumbnailUrl(usersRequestDto.getThumbnailImageUrl())
                 .social("local")
                 .build();
     }
