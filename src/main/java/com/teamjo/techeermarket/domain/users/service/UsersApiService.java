@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -39,23 +41,29 @@ public class UsersApiService {
     @Transactional
     public Users signup(UsersRequestDto usersRequestDto) {
         try {
-            String thumbnailImageUrl;
-
-            // 파일 존재 여부 확인 후 thumbnailImageUrl 설정
-            if(usersRequestDto.getThumbnailImage() != null && !usersRequestDto.getThumbnailImage().isEmpty()) {
-                thumbnailImageUrl = s3Service.uploadImage(usersRequestDto.getThumbnailImage());
+            // 이메일 중복 확인
+            if(userRepository.existsByEmailAndSocial(usersRequestDto.getEmail(), "local")){
+                return null;
             } else {
-                thumbnailImageUrl = "https://techeermarket-bucket.s3.ap-northeast-2.amazonaws.com/thumbnails/bfe7def1-2f96-4a0e-a4a8-0255ee6bd874/default_profile.png";
-            }
+                String thumbnailImageUrl;
 
-            usersRequestDto.setThumbnailImageUrl(thumbnailImageUrl);
-            String password = passwordEncoder.encode(usersRequestDto.getPassword());
-            usersRequestDto.setPassword(password);
+                // 파일 존재 여부 확인 후 thumbnailImageUrl 설정
+                if(usersRequestDto.getThumbnailImage() != null && !usersRequestDto.getThumbnailImage().isEmpty()) {
+                    thumbnailImageUrl = s3Service.uploadImage(usersRequestDto.getThumbnailImage());
+                } else {
+                    thumbnailImageUrl = "https://techeermarket-bucket.s3.ap-northeast-2.amazonaws.com/thumbnails/bfe7def1-2f96-4a0e-a4a8-0255ee6bd874/default_profile.png";
+                }
+
+                usersRequestDto.setThumbnailImageUrl(thumbnailImageUrl);
+                String password = passwordEncoder.encode(usersRequestDto.getPassword());
+                usersRequestDto.setPassword(password);
+
+                return userRepository.save(usersMapper.toEntity(usersRequestDto));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return userRepository.save(usersMapper.toEntity(usersRequestDto));
+        return null;
     }
 
 //    public JwtToken login(String email, String password) {
