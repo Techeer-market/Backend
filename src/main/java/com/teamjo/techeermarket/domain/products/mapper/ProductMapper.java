@@ -3,6 +3,7 @@ package com.teamjo.techeermarket.domain.products.mapper;
 
 import com.teamjo.techeermarket.domain.products.dto.request.ProductRequestDto;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductResponseDto;
+import com.teamjo.techeermarket.domain.products.entity.ProductState;
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +20,18 @@ public class ProductMapper {
                 .title(productRequestDto.getTitle())
                 .description(productRequestDto.getDescription())
                 .price(productRequestDto.getPrice())
+                .productState(productRequestDto.getProductState())
                 .build();
     }
 
-    public ProductResponseDto fromEntity(Products products){
+    public ProductResponseDto fromEntity(Products products ){
         return ProductResponseDto.builder()
                 .id(products.getId())
                 .productUuid(UUID.randomUUID())
                 .title(products.getTitle())
                 .description(products.getDescription())
                 .price(products.getPrice())
-//                .productState()
+                .productState(products.getProductState())
                 .views(products.getViews())
                 .createdDate(products.getCreatedDate())
                 .modifiedDate(products.getModifiedDate())
