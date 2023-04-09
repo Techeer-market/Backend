@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlType;
 import java.util.UUID;
 
 @Getter
@@ -40,18 +41,23 @@ public class Products extends BaseEntity {
     @Column(name = "price", nullable = false)
     private int price;
 
-//    @Column(name = "state", nullable = false)
-//    @Enumerated(EnumType.STRING)
-//    private ProductState productState;
+    @Column(name = "state", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ProductState productState ;
+
+//    @Column (name = "product_state")
+//    private String productState;
+
 
     @Column(name = "views", nullable = false)
     private int views;
 
     @Builder
-    public Products(String title, String description, int price ){
+    public Products(String title, String description, int price, ProductState productState ){
         this.title = title;
         this.description = description;
         this.price = price;
+        this.productState = productState;
     }
 
 
