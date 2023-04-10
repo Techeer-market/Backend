@@ -16,7 +16,9 @@ public class ProductResponseDto {
 
 //    private Long userId;
 
-//    private Long categoryId;
+    private UUID categoryUuid;   //
+
+    private String categoryName;  //
 
     private UUID productUuid;
 

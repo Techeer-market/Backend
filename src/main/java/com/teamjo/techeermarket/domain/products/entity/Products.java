@@ -1,20 +1,24 @@
 package com.teamjo.techeermarket.domain.products.entity;
 
-import com.teamjo.techeermarket.domain.users.entity.Users;
+import com.teamjo.techeermarket.domain.category.entity.Categorys;
 import com.teamjo.techeermarket.global.common.BaseEntity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlType;
 import java.util.UUID;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Builder
+@NoArgsConstructor
 public class Products extends BaseEntity {
 
     @Id
@@ -26,10 +30,12 @@ public class Products extends BaseEntity {
 //    @JoinColumn(name = "user_id")
 //    private Users users;
 
-    // category_id
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "categorys")
+    private Categorys categorys;
 
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(name = "product_uuid")  // uuid 나중에 추가
+    @Column(name = "product_uuid" ,length = 36, nullable = false, updatable = false)  // uuid 나중에 추가
     private UUID productUuid ;
 
     @Column(name = "title", nullable = false)
@@ -45,20 +51,10 @@ public class Products extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ProductState productState ;
 
-//    @Column (name = "product_state")
-//    private String productState;
-
-
     @Column(name = "views", nullable = false)
     private int views;
 
-    @Builder
-    public Products(String title, String description, int price, ProductState productState ){
-        this.title = title;
-        this.description = description;
-        this.price = price;
-        this.productState = productState;
-    }
+
 
 
 }
