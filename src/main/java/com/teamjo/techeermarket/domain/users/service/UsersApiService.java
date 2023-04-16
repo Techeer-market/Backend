@@ -1,11 +1,11 @@
 package com.teamjo.techeermarket.domain.users.service;
 
-import com.teamjo.techeermarket.domain.users.dto.request.UsersRequestDto;
+import com.teamjo.techeermarket.domain.users.dto.request.UsersSignupRequestDto;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.mapper.UsersMapper;
 import com.teamjo.techeermarket.domain.users.repository.UserRepository;
-//import com.teamjo.techeermarket.global.security.JwtToken;
-//import com.teamjo.techeermarket.global.security.JwtTokenProvider;
+import com.teamjo.techeermarket.global.jwt.JwtTokenProvider;
+import com.teamjo.techeermarket.global.jwt.TokenInfo;
 import com.teamjo.techeermarket.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -35,30 +32,30 @@ public class UsersApiService {
 
     private final S3Service s3Service;
 
-//    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
 
     @Transactional
-    public Users signup(UsersRequestDto usersRequestDto) {
+    public Users signup(UsersSignupRequestDto usersSignupRequestDto) {
         try {
             // 이메일 중복 확인
-            if(userRepository.existsByEmailAndSocial(usersRequestDto.getEmail(), "local")){
+            if(userRepository.existsByEmailAndSocial(usersSignupRequestDto.getEmail(), "local")){
                 return null;
             } else {
                 String thumbnailImageUrl;
 
                 // 파일 존재 여부 확인 후 thumbnailImageUrl 설정
-                if(usersRequestDto.getThumbnailImage() != null && !usersRequestDto.getThumbnailImage().isEmpty()) {
-                    thumbnailImageUrl = s3Service.uploadImage(usersRequestDto.getThumbnailImage());
+                if(usersSignupRequestDto.getThumbnailImage() != null && !usersSignupRequestDto.getThumbnailImage().isEmpty()) {
+                    thumbnailImageUrl = s3Service.uploadImage(usersSignupRequestDto.getThumbnailImage());
                 } else {
                     thumbnailImageUrl = "https://techeermarket-bucket.s3.ap-northeast-2.amazonaws.com/thumbnails/bfe7def1-2f96-4a0e-a4a8-0255ee6bd874/default_profile.png";
                 }
 
-                usersRequestDto.setThumbnailImageUrl(thumbnailImageUrl);
-                String password = passwordEncoder.encode(usersRequestDto.getPassword());
-                usersRequestDto.setPassword(password);
+                usersSignupRequestDto.setThumbnailImageUrl(thumbnailImageUrl);
+                String password = passwordEncoder.encode(usersSignupRequestDto.getPassword());
+                usersSignupRequestDto.setPassword(password);
 
-                return userRepository.save(usersMapper.toEntity(usersRequestDto));
+                return userRepository.save(usersMapper.toEntity(usersSignupRequestDto));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,18 +89,20 @@ public class UsersApiService {
 >>>>>>> (TM-09) 로컬 회원가입에 email 중복여부 체크 로직 추가 (B)
     }
 
-//    public JwtToken login(String email, String password) {
-//        // Authentication 객체 생성
-//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
-//        log.info(authenticationToken.toString());
-////        System.out.println(authenticationManagerBuilder.getObject());
-//
-//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-//
-//        // 검증된 인증 정보로 JWT 토큰 생성
-//        JwtToken token = jwtTokenProvider.generateToken(authentication);
-//
-//        return token;
-//    }
+    @Transactional
+    public TokenInfo login(String memberId, String password) {
+        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
+        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId, password);
+
+        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
+        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        // 3. 인증 정보를 기반으로 JWT 토큰 생성
+        TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+        return tokenInfo;
+    }
 
 }

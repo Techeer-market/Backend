@@ -1,13 +1,11 @@
 package com.teamjo.techeermarket.domain.users.controller;
 
-import com.amazonaws.Response;
 import com.teamjo.techeermarket.domain.users.dto.request.UsersLoginRequestDto;
-import com.teamjo.techeermarket.domain.users.dto.request.UsersRequestDto;
-import com.teamjo.techeermarket.domain.users.dto.response.UsersResponseDto;
+import com.teamjo.techeermarket.domain.users.dto.request.UsersSignupRequestDto;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.mapper.UsersMapper;
 import com.teamjo.techeermarket.domain.users.service.UsersApiService;
-//import com.teamjo.techeermarket.global.security.JwtToken;
+import com.teamjo.techeermarket.global.jwt.TokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,8 +14,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -30,17 +26,17 @@ public class UsersApiController {
     private final UsersMapper usersMapper;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@ModelAttribute @Validated UsersRequestDto usersRequestDto, Errors errors) {
+    public ResponseEntity<?> signup(@ModelAttribute @Validated UsersSignupRequestDto usersSignupRequestDto, Errors errors) {
         // validation check
         if(errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Please check your value");
         }
         // 객체가 null인 경우 에러 코드 404 return
-        if (usersRequestDto == null) {
+        if (usersSignupRequestDto == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Please enter your information");
         }
 
-        Users users = usersApiService.signup(usersRequestDto);
+        Users users = usersApiService.signup(usersSignupRequestDto);
 
         // 이메일이 중복될 경우 에러 코드 409 return
         if(users == null) {
@@ -49,11 +45,12 @@ public class UsersApiController {
         return ResponseEntity.ok(usersMapper.fromEntity(users));
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<JwtToken> loginSuccess(@ModelAttribute UsersLoginRequestDto loginForm) {
-//        log.info(loginForm.toString());
-//        JwtToken token = usersApiService.login(loginForm.getEmail(), loginForm.getPassword());
-//        return ResponseEntity.ok(token);
-//    }
+    @PostMapping("/login")
+    public TokenInfo login(@ModelAttribute @Validated UsersLoginRequestDto usersLoginRequestDto) {
+        String memberId = usersLoginRequestDto.getEmail();
+        String password = usersLoginRequestDto.getPassword();
+        TokenInfo tokenInfo = usersApiService.login(memberId, password);
+        return tokenInfo;
+    }
 
 }

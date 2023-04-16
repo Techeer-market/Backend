@@ -7,15 +7,12 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 @Builder
 @AllArgsConstructor
 @ToString
-public class UsersRequestDto {
+public class UsersSignupRequestDto {
 
     @NotBlank(message = "email cannot be blank")
     private String email;
