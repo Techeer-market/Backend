@@ -25,11 +25,8 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final CustomOAuth2UserService customOAuth2UserService;
 
     private final JwtTokenProvider jwtTokenProvider;
-
-//    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -47,35 +44,8 @@ public class SecurityConfig {
 //                .anyRequest().authenticated()
             .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-//                .oauth2Login()
-//                .userInfoEndpoint() // oauth2 로그인 성공 후 가져올 때의 설정들
-//                // 소셜로그인 성공 시 후속 조치를 진행할 UserService 인터페이스 구현체 등록
-//                .userService(customOAuth2UserService);
-//        httpSecurity.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
         return httpSecurity.build();
-//        httpSecurity.csrf().disable();
-//        httpSecurity.cors()
-//                .and()
-////                    .csrf().disable()
-//                    .sessionManagement()
-//                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                    .authorizeRequests()
-//                    .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-//                    .antMatchers(HttpMethod.POST, "/api/users/login").permitAll()
-//    //                .antMatchers("/api/v1/test/permit-all").permitAll()
-//    //                .antMatchers("/api/v1/test/auth").authenticated()
-//    //                .antMatchers("/**").authenticated()
-//                    .anyRequest().permitAll()
-//                .and()
-//                    .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-////                    .oauth2Login()
-////                    .userInfoEndpoint() // oauth2 로그인 성공 후 가져올 때의 설정들
-////                    // 소셜로그인 성공 시 후속 조치를 진행할 UserService 인터페이스 구현체 등록
-////                    .userService(customOAuth2UserService); // 리소스 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
-//
-//        return httpSecurity.getOrBuild();
     }
 
     @Bean
