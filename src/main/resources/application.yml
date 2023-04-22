@@ -99,4 +99,11 @@ jwt:
 
 jwt:
   secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+<<<<<<< refs/remotes/origin/develop
 >>>>>>> (TM-24) DB 클라우드 초기설정 (B)
+=======
+
+#logging:
+#  level:
+#    org.springframework.security: DEBUG
+>>>>>>> (TM-19) 로컬/소셜로그인 JWT 작업 (B)

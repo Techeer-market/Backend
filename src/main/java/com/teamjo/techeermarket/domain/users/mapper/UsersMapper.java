@@ -2,6 +2,7 @@ package com.teamjo.techeermarket.domain.users.mapper;
 
 import com.teamjo.techeermarket.domain.users.dto.request.UsersSignupRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.response.UsersResponseDto;
+import com.teamjo.techeermarket.domain.users.entity.Role;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.global.security.OAuthAttributes;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class UsersMapper {
                 .birthday(dateTime)
                 .thumbnailUrl(usersSignupRequestDto.getThumbnailImageUrl())
                 .social("local")
+                .role(Role.USER)
                 .build();
     }
 

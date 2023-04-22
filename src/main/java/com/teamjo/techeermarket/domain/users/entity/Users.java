@@ -22,9 +22,6 @@ public class Users extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-//    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-//    @Column(name = "user_uuid", columnDefinition = "BINARY(16)")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "user_uuid", length = 36, nullable = false, updatable = false)
     private UUID userUuid;
@@ -38,10 +35,9 @@ public class Users extends BaseEntity {
     @Column(name = "social")
     private String social;
 
-//    @Enumerated(EnumType.STRING)
-////    @Column(nullable = false)
-//    private Role role;
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
 
     @Column(name = "name")
     private String name;
