@@ -117,3 +117,6 @@ gradle-app.setting
 .idea/misc.xml
 
 *.lock
+
+# env
+.env
