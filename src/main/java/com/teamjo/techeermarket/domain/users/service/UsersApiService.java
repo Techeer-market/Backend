@@ -60,21 +60,23 @@ public class UsersApiService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-<<<<<<< refs/remotes/origin/develop
-<<<<<<< refs/remotes/origin/develop
-        return userRepository.save(usersMapper.toEntity(usersRequestDto));
+        return null;
     }
-    //유저 정보 세션 처리 예정
-    @Transactional
-    public Users update(Users updateUser){
-        Users existingUser = userRepository.findById(updateUser.getId())
-                .orElseThrow(()-> new RuntimeException("유저 정보를 찾을 수 없습니다."));
-        existingUser.update(updateUser);
-        return userRepository.save(existingUser);
-=======
 
-        return userRepository.save(usersMapper.toEntity(usersRequestDto));
->>>>>>> (TM-10) 카카오,구글,네이버 로그인
+    @Transactional
+    public TokenInfo login(String memberId, String password) {
+        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
+        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberId, password);
+
+        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
+        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        // 3. 인증 정보를 기반으로 JWT 토큰 생성
+        TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+        return tokenInfo;
     }
     //유저 정보 세션 처리 예정
     @Transactional

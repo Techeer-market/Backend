@@ -48,6 +48,7 @@ public class Users extends BaseEntity {
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
+<<<<<<< HEAD
 <<<<<<< refs/remotes/origin/develop
 
     public void update(Users updateUser){
@@ -62,6 +63,8 @@ public class Users extends BaseEntity {
 
 =======
 >>>>>>> (TM-10) 카카오,구글,네이버 로그인
+=======
+>>>>>>> 31-add-dockerfile
 //    public String getRoleKey(){
 //        return this.role.getKey();
 //    }
