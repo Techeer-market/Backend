@@ -22,9 +22,6 @@ public class Users extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-//    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-//    @Column(name = "user_uuid", columnDefinition = "BINARY(16)")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "user_uuid", length = 36, nullable = false, updatable = false)
     private UUID userUuid;
@@ -38,10 +35,9 @@ public class Users extends BaseEntity {
     @Column(name = "social")
     private String social;
 
-//    @Enumerated(EnumType.STRING)
-////    @Column(nullable = false)
-//    private Role role;
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
 
     @Column(name = "name")
     private String name;
@@ -49,19 +45,8 @@ public class Users extends BaseEntity {
     @Column(name = "birthday")
     private LocalDateTime birthday;
 
-    @Column(name = "thumb_nail_url")
+    @Column(name = "thumbnail_url")
     private String thumbnailUrl;
-
-
-    public void update(Users updateUser){
-        this.email = updateUser.getEmail();
-        this.password = updateUser.getPassword();
-        this.name = updateUser.getName();
-    }
-
-    public void delete(Users deleteUser){
-        deleteUser.setDeleted(true);
-    }
 
 //    public String getRoleKey(){
 //        return this.role.getKey();

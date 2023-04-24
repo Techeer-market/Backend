@@ -1,11 +1,11 @@
 package com.teamjo.techeermarket.domain.users.mapper;
 
-import com.teamjo.techeermarket.domain.users.dto.request.UsersRequestDto;
+import com.teamjo.techeermarket.domain.users.dto.request.UsersSignupRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.response.UsersResponseDto;
+import com.teamjo.techeermarket.domain.users.entity.Role;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.global.security.OAuthAttributes;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -15,18 +15,19 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class UsersMapper {
-    public Users toEntity(UsersRequestDto usersRequestDto) { //클라 -> 서버
+    public Users toEntity(UsersSignupRequestDto usersSignupRequestDto) { //클라 -> 서버
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-        LocalDateTime dateTime = LocalDateTime.parse(usersRequestDto.getBirthDay()+" 00:00:00.000", formatter);
+        LocalDateTime dateTime = LocalDateTime.parse(usersSignupRequestDto.getBirthDay()+" 00:00:00.000", formatter);
 
         return Users.builder()
                 .userUuid(UUID.randomUUID())
-                .email(usersRequestDto.getEmail())
-                .password(usersRequestDto.getPassword())
-                .name(usersRequestDto.getName())
+                .email(usersSignupRequestDto.getEmail())
+                .password(usersSignupRequestDto.getPassword())
+                .name(usersSignupRequestDto.getName())
                 .birthday(dateTime)
-                .thumbnailUrl(usersRequestDto.getThumbnailImage())
+                .thumbnailUrl(usersSignupRequestDto.getThumbnailImageUrl())
                 .social("local")
+                .role(Role.USER)
                 .build();
     }
 

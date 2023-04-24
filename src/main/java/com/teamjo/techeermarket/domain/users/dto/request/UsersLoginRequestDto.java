@@ -5,23 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 @Data
 @Builder
 @AllArgsConstructor
 @ToString
-public class UsersRequestDto {
-
+public class UsersLoginRequestDto {
     private String email;
 
     private String password;
-
-    private String name;
-
-    private String birthDay;
-
-    private String thumbnailImage;
-
 }
