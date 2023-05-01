@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,11 +14,10 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmailAndSocialAndIsDeletedIsFalse(username, "local")
+        return userRepository.findByEmailAndSocialAndIsDeletedIsFalse(username, "local") // TODO: local 부분 수정 필요
                 .map(this::createUserDetails)
                 .orElseThrow(() -> new UsernameNotFoundException("해당하는 유저를 찾을 수 없습니다."));
     }
@@ -28,9 +26,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserDetails createUserDetails(Users users) {
         return User.builder()
                 .username(users.getEmail())
-                .password(passwordEncoder.encode(users.getPassword()))
-                .roles("user")
-//                .roles(users.getRoles().toArray(new String[0]))
+                .password(users.getPassword())
+                .roles(users.getRole().toString())
                 .build();
     }
 }
