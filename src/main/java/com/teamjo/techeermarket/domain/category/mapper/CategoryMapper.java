@@ -22,7 +22,7 @@ public class CategoryMapper {
 
     public CategoryResponseDto fromEntity(Categorys categorys){
         return CategoryResponseDto.builder()
-                .id(categorys.getId())
+
                 .categoryUuid(categorys.getCategoryUuid())
                 .name(categorys.getName())
                 .createdDate(categorys.getCreatedDate())

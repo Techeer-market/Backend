@@ -12,7 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CategoryResponseDto {
 
-    private Long id;
 
     private UUID categoryUuid;
 

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @Entity
-@Data
+//@Data
 @Builder
 @NoArgsConstructor
 public class Categorys extends BaseEntity {

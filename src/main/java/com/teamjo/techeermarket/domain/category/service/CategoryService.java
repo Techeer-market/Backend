@@ -26,5 +26,12 @@ public class CategoryService {
         return categoryRepository.save(categoryMapper.toEntity(categoryRequestDto));
     }
 
+    @Transactional
+    public List<CategoryResponseDto> getAllCategory() {
+        List<Categorys> categoryies = categoryRepository.findAll();
+        return categoryies.stream()
+                .map(categoryMapper::fromEntity)
+                .collect(Collectors.toList());
+    }
 
 }
