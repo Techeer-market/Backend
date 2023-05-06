@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProductResponseDto {
 
-    private Long id;
+//    private Long id;
 
 //    private Long userId;
 

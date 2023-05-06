@@ -3,6 +3,7 @@ package com.teamjo.techeermarket.domain.products.mapper;
 
 import com.teamjo.techeermarket.domain.category.entity.Categorys;
 import com.teamjo.techeermarket.domain.products.dto.request.ProductRequestDto;
+import com.teamjo.techeermarket.domain.products.dto.response.ProductInfo;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductResponseDto;
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,6 @@ public class ProductMapper {
 
     public ProductResponseDto fromEntity(Products products){
         return ProductResponseDto.builder()
-                .id(products.getId())
                 .productUuid(products.getProductUuid())
                 .categoryUuid(products.getCategorys().getCategoryUuid())   //카테고리!
                 .categoryName(products.getCategorys().getName())  // 카테고리 !
@@ -39,6 +39,14 @@ public class ProductMapper {
                 .createdDate(products.getCreatedDate())
                 .modifiedDate(products.getModifiedDate())
                 .build();
+    }
+
+    public ProductInfo fromListEntity(Products products){
+        return ProductInfo.builder()
+              .title(products.getTitle())
+              .price(products.getPrice())
+              .productState(products.getProductState())
+              .build();
     }
 
 }
