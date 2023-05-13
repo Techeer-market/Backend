@@ -9,6 +9,11 @@ import com.teamjo.techeermarket.global.jwt.TokenInfo;
 import com.teamjo.techeermarket.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -18,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -119,9 +127,10 @@ public class UsersApiService {
             access_Token = element.getAsJsonObject().get("access_token").getAsString();
             refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
 
-            System.out.println("access_token : " + access_Token);
-            System.out.println("refresh_token : " + refresh_Token);
+            log.info("UsersApiService :: access_token :: {}",access_Token);
+            log.info("UsersApiService :: refresh_token :: {}",refresh_Token);
 
+            log.info("UserApiService :: userinfoFromKaKao :: {}", getUserInfoFromKaKao(access_Token));
             br.close();
             bw.close();
         }catch (IOException e) {
@@ -129,6 +138,30 @@ public class UsersApiService {
         }
 
         return access_Token;
+    }
+    @Transactional
+    public ResponseEntity getUserInfoFromKaKao(String access_Token){
+        RestTemplate restTemplate = new RestTemplateBuilder().build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(access_Token);
+
+        UriComponents builder = UriComponentsBuilder.newInstance()
+                .scheme("https").host("kapi.kakao.com")
+                .path("v2/user/me")
+                .build();
+
+
+        HttpEntity request = new HttpEntity(headers);
+
+//        Users user = new Users();
+
+
+        return restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                request,
+                String.class
+        );
     }
 
 
