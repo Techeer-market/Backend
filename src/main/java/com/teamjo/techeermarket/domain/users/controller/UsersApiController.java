@@ -50,7 +50,6 @@ public class UsersApiController {
         usersApiService.getKaKaoAccessToken(code);
     }
 
-
     @PostMapping("/login")
     public TokenInfo login(@ModelAttribute @Validated UsersLoginRequestDto usersLoginRequestDto) {
         String memberId = usersLoginRequestDto.getEmail();
@@ -58,5 +57,7 @@ public class UsersApiController {
         TokenInfo tokenInfo = usersApiService.login(memberId, password);
         return tokenInfo;
     }
+
+
 
 }

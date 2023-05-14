@@ -48,8 +48,8 @@ public class Users extends BaseEntity {
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
-//    public String getRoleKey(){
-//        return this.role.getKey();
-//    }
-
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
 }
+
