@@ -44,6 +44,11 @@ public class UsersApiController {
         }
         return ResponseEntity.ok(usersMapper.fromEntity(users));
     }
+    @ResponseBody
+    @GetMapping("/auth/kakao")
+    public void kakaoCallBack(@RequestParam String code){
+        usersApiService.getKaKaoAccessToken(code);
+    }
 
     @PostMapping("/login")
     public TokenInfo login(@ModelAttribute @Validated UsersLoginRequestDto usersLoginRequestDto) {
@@ -52,5 +57,7 @@ public class UsersApiController {
         TokenInfo tokenInfo = usersApiService.login(memberId, password);
         return tokenInfo;
     }
+
+
 
 }

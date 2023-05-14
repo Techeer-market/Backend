@@ -4,11 +4,11 @@ spring:
     username: ${CLOUD_AWS_DB_USERNAME}
     password: ${CLOUD_AWS_DB_PASSWORD}
     driverClassName: org.postgresql.Driver
-  #  datasource:
-  #    url: jdbc:postgresql://localhost:5432/techeermarket
-  #    username: postgres
-  #    password: 1234
-  #    driverClassName: org.postgresql.Driver
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/techeermarket
+#    username: postgres
+#    password: 1234
+#    driverClassName: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:

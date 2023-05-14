@@ -117,15 +117,3 @@ gradle-app.setting
 .idea/misc.xml
 
 *.lock
-
-<<<<<<< HEAD
-<<<<<<< refs/remotes/origin/develop
-.idea/
-=======
-# env
-.env
->>>>>>> (TM-31) 백엔드 도커 실행방법 작성 (B)
-=======
-# env
-.env
->>>>>>> 31-add-dockerfile
