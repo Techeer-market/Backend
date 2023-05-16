@@ -31,6 +31,7 @@ security:
     client:
       registration:
         kakao:
+          restapi-key: b0a4f785ed460ba74d3b23c3fd538e2a
           client-id: ${SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_CLIENT_ID} # aa81c883664edf4219ffc21a62f49749
           client-secret: ${SECURITY_OAUTH2_CLIENT_REGISTRATION_KAKAO_CLIENT_SECRECT}
           client-name: Kakao

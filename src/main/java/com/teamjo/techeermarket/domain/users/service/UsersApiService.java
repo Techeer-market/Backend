@@ -1,5 +1,6 @@
 package com.teamjo.techeermarket.domain.users.service;
 
+import com.teamjo.techeermarket.domain.users.dto.request.AuthTokenRequest;
 import com.teamjo.techeermarket.domain.users.dto.request.UsersSignupRequestDto;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.mapper.UsersMapper;
@@ -10,10 +11,8 @@ import com.teamjo.techeermarket.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.env.Environment;
+import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -23,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -53,7 +53,10 @@ public class UsersApiService {
 
     private final S3Service s3Service;
 
+    private final Environment env;
+
     private final JwtTokenProvider jwtTokenProvider;
+
 
 
     @Transactional
@@ -84,60 +87,37 @@ public class UsersApiService {
         return null;
     }
 
-    public String getKaKaoAccessToken(String code){
-        String access_Token="";
-        String refresh_Token ="";
-        String reqURL = "https://kauth.kakao.com/oauth/token";
+    public ResponseEntity getKaKaoAccessToken(String code){
+        RestTemplate restTemplate = new RestTemplateBuilder().build();
 
-        try{
-            URL url = new URL(reqURL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            //POST 요청을 위해 기본값이 false인 setDoOutput을 true로
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-
-            //POST 요청에 필요로 요구하는 파라미터 스트림을 통해 전송
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-            StringBuilder sb = new StringBuilder();
-            sb.append("grant_type=authorization_code");
-            sb.append("&client_id=fadeb1cea8077be1a20d8cc98139a990"); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=http://localhost:3000/auth/kakao"); // TODO 인가코드 받은 redirect_uri 입력
-            sb.append("&code=" + code);
-            bw.write(sb.toString());
-            bw.flush();
-
-            //결과 코드가 200이라면 성공
-            int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
-            //요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line = "";
-            String result = "";
-
-            while ((line = br.readLine()) != null) {
-                result += line;
-            }
-            System.out.println("response body : " + result);
-
-            //Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
-            com.google.gson.JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(result);
-
-            access_Token = element.getAsJsonObject().get("access_token").getAsString();
-            refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
-
-            log.info("UsersApiService :: access_token :: {}",access_Token);
-            log.info("UsersApiService :: refresh_token :: {}",refresh_Token);
-
-            log.info("UserApiService :: userinfoFromKaKao :: {}", getUserInfoFromKaKao(access_Token));
-            br.close();
-            bw.close();
-        }catch (IOException e) {
-            e.printStackTrace();
+        AuthTokenRequest authTokenRequest = new AuthTokenRequest();
+        authTokenRequest.setGrantType("authorization_code");
+//        authTokenRequest.setClientId(env.getProperty("security.oauth2.client.registration.kakao.client-id"));
+        authTokenRequest.setClientId("b0a4f785ed460ba74d3b23c3fd538e2a");
+        authTokenRequest.setRedirectUri("http://localhost:3000/auth/kakao");
+        authTokenRequest.setCode(code);
+//        authTokenRequest.setClientSecret(env.getProperty("security.oauth2.client.registration.kakao.client_secret"));
+        if (StringUtils.isEmpty(authTokenRequest.getClientId()) || StringUtils.isEmpty(authTokenRequest.getRedirectUri())
+                || StringUtils.isEmpty(authTokenRequest.getCode())) {
+            return ResponseEntity.badRequest().body("필수 파라미터 불충족");
         }
 
-        return access_Token;
+        String clientSecret = "";
+        if (StringUtils.isEmpty(authTokenRequest.getClientSecret())) clientSecret = authTokenRequest.getClientSecret();
+
+        UriComponents builder = UriComponentsBuilder.newInstance()
+                .scheme("https").host("kauth.kakao.com")
+                .path("/oauth/token")
+                .queryParam("grant_type", "authorization_code")
+                .queryParam("code", authTokenRequest.getCode())
+                .queryParam("redirect_uri", authTokenRequest.getRedirectUri())
+                .queryParam("client_id", authTokenRequest.getClientId())
+//                .queryParam("client_secret", clientSecret)
+                .build();
+
+        String response = restTemplate.postForObject(builder.toUriString(), authTokenRequest, String.class);
+        return ResponseEntity.ok().body(response);
+
     }
     @Transactional
     public ResponseEntity getUserInfoFromKaKao(String access_Token){
@@ -163,6 +143,7 @@ public class UsersApiService {
                 String.class
         );
     }
+
 
 
 

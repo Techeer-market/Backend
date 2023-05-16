@@ -47,6 +47,7 @@ public class UsersApiController {
     @ResponseBody
     @GetMapping("/auth/kakao")
     public void kakaoCallBack(@RequestParam String code){
+        log.info("UserApiController :: {}", code);
         usersApiService.getKaKaoAccessToken(code);
     }
 
