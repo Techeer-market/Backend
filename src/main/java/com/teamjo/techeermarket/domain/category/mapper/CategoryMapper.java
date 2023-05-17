@@ -25,8 +25,8 @@ public class CategoryMapper {
 
                 .categoryUuid(categorys.getCategoryUuid())
                 .name(categorys.getName())
-                .createdDate(categorys.getCreatedDate())
-                .modifiedDate(categorys.getModifiedDate())
+                .createdDate(categorys.getCreatedDate() != null ? categorys.getCreatedDate().toString() : null)
+                .modifiedDate(categorys.getModifiedDate() != null ? categorys.getModifiedDate().toString() : null)
                 .build();
     }
 

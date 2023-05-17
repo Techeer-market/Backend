@@ -33,6 +33,17 @@ public class Categorys extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    public void update(String name) {
+        this.name = name;
+    }
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+
+
+
 
 
 }
