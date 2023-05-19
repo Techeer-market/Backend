@@ -13,9 +13,9 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 @Entity
-//@Data
 @Builder
 @NoArgsConstructor
+@Table(name="categorys")
 public class Categorys extends BaseEntity {
 
     @Id
