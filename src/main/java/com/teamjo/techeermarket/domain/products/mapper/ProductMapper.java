@@ -22,19 +22,21 @@ public class ProductMapper {
                 .categorys(categorys)               // 카테고리!
                 .description(productRequestDto.getDescription())
                 .price(productRequestDto.getPrice())
-                .productState(productRequestDto.getProductState())
+                .tradeType(productRequestDto.getTradeType())
+//                .productState(productRequestDto.getProductState())
                 .build();
     }
 
     public ProductResponseDto fromEntity(Products products){
         return ProductResponseDto.builder()
                 .productUuid(products.getProductUuid())
-                .categoryUuid(products.getCategorys().getCategoryUuid())   //카테고리!
+//                .categoryUuid(products.getCategorys().getCategoryUuid())   //카테고리!
                 .categoryName(products.getCategorys().getName())  // 카테고리 !
                 .title(products.getTitle())
                 .description(products.getDescription())
                 .price(products.getPrice())
                 .productState(products.getProductState())
+                .tradeType(products.getTradeType())
                 .views(products.getViews())
                 .createdDate(products.getCreatedDate())
                 .modifiedDate(products.getModifiedDate())
@@ -46,7 +48,17 @@ public class ProductMapper {
               .title(products.getTitle())
               .price(products.getPrice())
               .productState(products.getProductState())
+                .tradeType(products.getTradeType())
               .build();
+    }
+
+
+    public void updateProductFromDto(Products product, ProductRequestDto productRequestDto, Categorys categorys) {
+        product.setTitle(productRequestDto.getTitle());
+        product.setDescription(productRequestDto.getDescription());
+        product.setPrice(productRequestDto.getPrice());
+        product.setTradeType(productRequestDto.getTradeType());
+        product.setCategorys(categorys);
     }
 
 }

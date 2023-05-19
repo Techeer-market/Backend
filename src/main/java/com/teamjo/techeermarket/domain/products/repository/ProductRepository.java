@@ -11,9 +11,13 @@ import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Products, Long> {
 
-//    Products findByProductUuid(UUID productUuid) ;
+    Products findByProductUuid(UUID productUuid) ;
 
-    @Query(value = "SELECT * FROM products WHERE is_deleted is false ", nativeQuery = true)
-    Page<Products> findAllProductsWithPagination (Pageable pageable);
+//    List<Products> findAllByIsDeletedFalse();
+//
+//    @Query(value = "SELECT * FROM products WHERE is_deleted is false ", nativeQuery = true)
+//    Page<Products> findAllProductsWithPagination (Pageable pageable);
+
+    Page<Products> findAllByIsDeletedFalse(Pageable pageable);
 
 }

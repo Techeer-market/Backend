@@ -5,9 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ProductState {
-    SALE,      // 판매중
-    RESERVED,  // 예약중
-    SOLD,      // 판매완료
+public enum TradeType {
 
-};
+    CoolDeal,  // 쿨거래
+
+    GeneralDeal,  // 일반거래
+
+}

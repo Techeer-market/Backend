@@ -1,6 +1,7 @@
 package com.teamjo.techeermarket.domain.products.dto.request;
 
 import com.teamjo.techeermarket.domain.products.entity.ProductState;
+import com.teamjo.techeermarket.domain.products.entity.TradeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ProductRequestDto {
 
-    private UUID categoryUuid; //
+    private UUID categoryUuid;
 
     private String title;
 
@@ -22,7 +23,9 @@ public class ProductRequestDto {
 
     private int price;
 
-    private ProductState productState;
+//    private ProductState productState;
+
+    private TradeType tradeType ;
 
 
 }
