@@ -15,6 +15,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @ToString
+@Setter
 public class Users extends BaseEntity {
 
     @Id
@@ -52,3 +53,7 @@ public class Users extends BaseEntity {
     }
 }
 
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+}

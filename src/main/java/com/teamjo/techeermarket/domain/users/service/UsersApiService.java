@@ -4,6 +4,7 @@ import com.teamjo.techeermarket.domain.users.dto.request.AuthTokenRequest;
 import com.teamjo.techeermarket.domain.users.dto.request.UsersSignupRequestDto;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.mapper.UsersMapper;
+import com.teamjo.techeermarket.domain.users.repository.UserNotFoundException;
 import com.teamjo.techeermarket.domain.users.repository.UserRepository;
 import com.teamjo.techeermarket.global.jwt.JwtTokenProvider;
 import com.teamjo.techeermarket.global.jwt.TokenInfo;
@@ -36,6 +37,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -162,5 +166,34 @@ public class UsersApiService {
 
         return tokenInfo;
     }
+
+
+    @Transactional
+    public void deleteUser(UUID userUuid) {
+        Users users = userRepository.findByUserUuid(userUuid);
+        if (users == null) {
+            throw new UserNotFoundException("User not found: " + userUuid);
+        }
+        users.setIsDeleted(true);
+        userRepository.save(users);
+    }
+
+
+//    @Transactional
+//    public UsersResponseDto updateUser(UUID userUuid, UsersSignupRequestDto usersUpdateDto) {
+//        Optional<Users> optionalUser = userRepository.findByUserUuid(userUuid);
+//
+//        if (optionalUser.isPresent()) {
+//            Users user = optionalUser.get();
+//
+//            // 회원정보 수정 로직 적용
+//            Users updatedUser = usersMapper.updateEntity(usersUpdateDto, user);
+//
+//            return userRepository.save(updatedUser);
+//        } else {
+//            throw new NotFoundException("User not found with userUuid: " + userUuid);
+//        }
+//    }
+
 
 }
