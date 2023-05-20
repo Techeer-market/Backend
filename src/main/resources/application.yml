@@ -82,6 +82,9 @@ security:
 server:
   port: 8080
 
+jwt:
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+
 #logging:
 #  level:
 #    org.springframework.security: DEBUG

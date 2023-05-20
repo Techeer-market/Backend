@@ -51,7 +51,7 @@ public class Users extends BaseEntity {
     public String getRoleKey() {
         return this.role.getKey();
     }
-}
+
 
     public void setIsDeleted(boolean isDeleted) {
         this.isDeleted = isDeleted;
