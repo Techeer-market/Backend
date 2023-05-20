@@ -14,6 +14,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -59,6 +61,10 @@ public class UsersApiController {
         return tokenInfo;
     }
 
-
+    @DeleteMapping("/{userUuid}")
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID userUuid) {
+        usersApiService.deleteUser(userUuid);
+        return ResponseEntity.ok().build();
+    }
 
 }
