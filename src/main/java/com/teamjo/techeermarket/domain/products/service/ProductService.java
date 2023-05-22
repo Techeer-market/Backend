@@ -4,7 +4,7 @@ import com.teamjo.techeermarket.domain.category.entity.Categorys;
 import com.teamjo.techeermarket.domain.category.repository.CategoryNotFoundException;
 import com.teamjo.techeermarket.domain.category.repository.CategoryRepository;
 import com.teamjo.techeermarket.domain.products.dto.request.ProductRequestDto;
-import com.teamjo.techeermarket.domain.products.dto.response.ProductInfo;
+import com.teamjo.techeermarket.domain.products.dto.response.ProductInfoDto;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductResponseDto;
 import com.teamjo.techeermarket.domain.products.entity.ProductState;
 import com.teamjo.techeermarket.domain.products.entity.Products;
@@ -52,7 +52,7 @@ public class ProductService {
 
     // 상품 게시물 목록 페이지 전체 조회
     @Transactional(readOnly = true)
-    public List<ProductInfo> getAllProductList(int pageNo, int pageSize) {
+    public List<ProductInfoDto> getAllProductList(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Products> productPage = productRepository.findAllByIsDeletedFalse(pageable);
         return productPage.stream()

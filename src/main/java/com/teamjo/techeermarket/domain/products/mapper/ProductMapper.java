@@ -3,7 +3,7 @@ package com.teamjo.techeermarket.domain.products.mapper;
 
 import com.teamjo.techeermarket.domain.category.entity.Categorys;
 import com.teamjo.techeermarket.domain.products.dto.request.ProductRequestDto;
-import com.teamjo.techeermarket.domain.products.dto.response.ProductInfo;
+import com.teamjo.techeermarket.domain.products.dto.response.ProductInfoDto;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductResponseDto;
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import lombok.RequiredArgsConstructor;
@@ -43,8 +43,8 @@ public class ProductMapper {
                 .build();
     }
 
-    public ProductInfo fromListEntity(Products products){
-        return ProductInfo.builder()
+    public ProductInfoDto fromListEntity(Products products){
+        return ProductInfoDto.builder()
               .title(products.getTitle())
               .price(products.getPrice())
               .productState(products.getProductState())

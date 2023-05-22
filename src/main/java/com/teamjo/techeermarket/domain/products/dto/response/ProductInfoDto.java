@@ -9,7 +9,7 @@ import lombok.Getter;
 @Builder
 @Getter
 @AllArgsConstructor
-public class ProductInfo {
+public class ProductInfoDto {
 
     private final String title;
 

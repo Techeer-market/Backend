@@ -1,8 +1,7 @@
 package com.teamjo.techeermarket.domain.products.controller;
 
-import com.amazonaws.services.kms.model.NotFoundException;
 import com.teamjo.techeermarket.domain.products.dto.request.ProductRequestDto;
-import com.teamjo.techeermarket.domain.products.dto.response.ProductInfo;
+import com.teamjo.techeermarket.domain.products.dto.response.ProductInfoDto;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductResponseDto;
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.domain.products.mapper.ProductMapper;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -36,10 +34,10 @@ public class ProductController {
 
     // 목차 상품 목록 조회 : 제목, 가격, 상태 확인 가능
     @GetMapping("/list")
-    public ResponseEntity<List<ProductInfo>> getAllProductsListByPagnation(
+    public ResponseEntity<List<ProductInfoDto>> getAllProductsListByPagnation(
             @RequestParam(defaultValue = "0") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
-        List<ProductInfo> productsList = productService.getAllProductList(pageNo, pageSize);
+        List<ProductInfoDto> productsList = productService.getAllProductList(pageNo, pageSize);
         return ResponseEntity.ok(productsList);
     }
 
