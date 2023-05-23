@@ -45,6 +45,7 @@ public class SecurityConfig {
 //                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/api/users/login").permitAll()
                 .antMatchers("/api/users/signup").permitAll()
+                .antMatchers("/api/categorys/**").permitAll()
 
 //                .antMatchers("/users/test").hasRole("USER")
                 .anyRequest().authenticated()
