@@ -32,16 +32,22 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
             .cors()
+
+
             .and()
                 .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+
             .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+//                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/api/users/login").permitAll()
+                .antMatchers("/api/users/signup").permitAll()
+
 //                .antMatchers("/users/test").hasRole("USER")
-//                .anyRequest().authenticated()
+                .anyRequest().authenticated()
             .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
