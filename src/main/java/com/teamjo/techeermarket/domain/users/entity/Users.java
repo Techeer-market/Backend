@@ -35,9 +35,9 @@ public class Users extends BaseEntity {
     @Column(name = "social")
     private String social;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private Role role;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "role", nullable = false)
+//    private Role role;
 
     @Column(name = "name")
     private String name;
@@ -48,8 +48,8 @@ public class Users extends BaseEntity {
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
-    public String getRoleKey() {
-        return this.role.getKey();
-    }
+//    public String getRoleKey() {
+//        return this.role.getKey();
+//    }
 }
 

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +29,16 @@ import java.util.stream.Collectors;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
+//
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        CorsConfiguration corsConfiguration = new CorsConfiguration();
+//        corsConfiguration.addAllowedOrigin("*");
+//        corsConfiguration.addAllowedMethod("GET");
+//        corsConfiguration.addAllowedMethod("POST");
+//        corsConfiguration.addAllowedHeader("*");
+//        http.cors().and().csrf().disable();
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {

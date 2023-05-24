@@ -1,9 +1,6 @@
 package com.teamjo.techeermarket.domain.users.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
@@ -12,19 +9,18 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @AllArgsConstructor
 @ToString
+@RequiredArgsConstructor
 public class UsersSignupRequestDto {
 
-    @NotBlank(message = "email cannot be blank")
+    private Long id;
     private String email;
 
-    @NotBlank(message = "password cannot be blank")
     private String password;
 
-    @NotBlank(message = "name cannot be blank")
     private String name;
 
-    @NotBlank(message = "birthDay cannot be blank")
     private String birthDay;
+
 
     private MultipartFile thumbnailImage;
 

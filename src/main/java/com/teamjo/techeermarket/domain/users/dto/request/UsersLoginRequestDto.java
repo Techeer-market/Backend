@@ -11,6 +11,5 @@ import lombok.ToString;
 @ToString
 public class UsersLoginRequestDto {
     private String email;
-
     private String password;
 }

@@ -27,7 +27,7 @@ public class UsersMapper {
                 .birthday(dateTime)
                 .thumbnailUrl(usersSignupRequestDto.getThumbnailImageUrl())
                 .social("local")
-                .role(Role.USER)
+//                .role(Role.USER)
                 .build();
     }
 
