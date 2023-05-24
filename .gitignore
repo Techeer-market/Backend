@@ -4,7 +4,8 @@
 
 # Log file
 *.log
-
+.DS_Store
+/.DS_Store
 # BlueJ files
 *.ctxt
 
@@ -117,3 +118,23 @@ gradle-app.setting
 .idea/misc.xml
 
 *.lock
+
+<<<<<<< refs/remotes/origin/develop
+src/main/java/com/teamjo/techeermarket/domain/jwt/
+=======
+<<<<<<< develop
+<<<<<<< HEAD
+<<<<<<< refs/remotes/origin/develop
+.idea/
+=======
+# env
+.env
+>>>>>>> (TM-31) 백엔드 도커 실행방법 작성 (B)
+=======
+# env
+.env
+>>>>>>> 31-add-dockerfile
+=======
+src/main/java/com/teamjo/techeermarket/domain/jwt/
+>>>>>>> (TM-14) 게시물 작성 : 에러 있음
+>>>>>>> (TM-14) 게시물 작성 : 에러 있음

@@ -15,6 +15,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @ToString
+@Setter
 public class Users extends BaseEntity {
 
     @Id
@@ -23,7 +24,6 @@ public class Users extends BaseEntity {
     private Long id;
 
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(name = "user_uuid", length = 36, nullable = false, updatable = false)
     private UUID userUuid;
 
     @Column(name = "email")
@@ -53,3 +53,8 @@ public class Users extends BaseEntity {
 //    }
 }
 
+
+    public void setIsDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+}
