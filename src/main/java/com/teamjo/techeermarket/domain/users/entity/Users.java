@@ -45,13 +45,13 @@ public class Users extends BaseEntity {
     @Column(name = "birthday")
     private LocalDateTime birthday;
 
-    @Column(name = "thumbnail_url")
+    @Column(name = "thumbnail_url",length = 500)
     private String thumbnailUrl;
 
 //    public String getRoleKey() {
 //        return this.role.getKey();
 //    }
-}
+//}
 
 
     public void setIsDeleted(boolean isDeleted) {

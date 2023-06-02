@@ -5,7 +5,7 @@ import com.teamjo.techeermarket.domain.users.dto.request.UsersSignupRequestDto;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.mapper.UsersMapper;
 import com.teamjo.techeermarket.domain.users.service.UsersApiService;
-import com.teamjo.techeermarket.global.jwt.TokenInfo;
+//import com.teamjo.techeermarket.global.jwt.TokenInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,6 +14,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 
@@ -27,9 +28,15 @@ public class UsersApiController {
 
     private final UsersMapper usersMapper;
 
+    @GetMapping("/test")
+    public String csrfTest(){
+        return "testOk";
+    }
+
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@ModelAttribute @Validated UsersSignupRequestDto usersSignupRequestDto, Errors errors) {
         // validation check
+        log.info("controller :: {}" , usersSignupRequestDto);
         if(errors.hasErrors()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Please check your value");
         }
@@ -53,13 +60,13 @@ public class UsersApiController {
         usersApiService.getKaKaoAccessToken(code);
     }
 
-    @PostMapping("/login")
-    public TokenInfo login(@ModelAttribute @Validated UsersLoginRequestDto usersLoginRequestDto) {
-        String memberId = usersLoginRequestDto.getEmail();
-        String password = usersLoginRequestDto.getPassword();
-        TokenInfo tokenInfo = usersApiService.login(memberId, password);
-        return tokenInfo;
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<TokenInfo> login(@RequestBody @Valid UsersLoginRequestDto usersLoginRequestDto) {
+//        String memberId = usersLoginRequestDto.getEmail();
+//        String password = usersLoginRequestDto.getPassword();
+//        TokenInfo tokenInfo = usersApiService.login(memberId, password);
+//        return ResponseEntity.ok(tokenInfo);
+//    }
 
     @DeleteMapping("/{userUuid}")
     public ResponseEntity<Void> deleteUser(@PathVariable UUID userUuid) {
