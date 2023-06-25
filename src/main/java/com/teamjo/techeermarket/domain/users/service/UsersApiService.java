@@ -10,7 +10,7 @@ import com.teamjo.techeermarket.domain.users.repository.UserNotFoundException;
 import com.teamjo.techeermarket.domain.users.repository.UserRepository;
 //import com.teamjo.techeermarket.global.jwt.JwtTokenProvider;
 //import com.teamjo.techeermarket.global.jwt.TokenInfo;
-import com.teamjo.techeermarket.global.s3.S3Service;
+//import com.teamjo.techeermarket.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -66,7 +66,7 @@ public class UsersApiService {
 
 //    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    private final S3Service s3Service;
+//    private final S3Service s3Service;
 
     private final Environment env;
 
