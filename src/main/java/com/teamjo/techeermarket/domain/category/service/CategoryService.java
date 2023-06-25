@@ -1,7 +1,7 @@
 package com.teamjo.techeermarket.domain.category.service;
 
 
-import com.amazonaws.services.kms.model.NotFoundException;
+//import com.amazonaws.services.kms.model.NotFoundException;
 import com.teamjo.techeermarket.domain.category.dto.CategoryRequestDto;
 import com.teamjo.techeermarket.domain.category.dto.CategoryResponseDto;
 import com.teamjo.techeermarket.domain.category.dto.CategoryUpdateRequestDto;
