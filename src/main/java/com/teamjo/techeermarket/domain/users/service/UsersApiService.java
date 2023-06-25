@@ -2,6 +2,7 @@ package com.teamjo.techeermarket.domain.users.service;
 
 import com.google.gson.Gson;
 import com.teamjo.techeermarket.domain.users.dto.request.AuthTokenRequest;
+import com.teamjo.techeermarket.domain.users.dto.request.UsersLoginRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.request.UsersSignupRequestDto;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.mapper.UsersMapper;
@@ -86,11 +87,11 @@ public class UsersApiService {
                 String thumbnailImageUrl;
 
                 // 파일 존재 여부 확인 후 thumbnailImageUrl 설정
-                if (usersSignupRequestDto.getThumbnailImage() != null && !usersSignupRequestDto.getThumbnailImage().isEmpty()) {
-                    thumbnailImageUrl = s3Service.uploadImage(usersSignupRequestDto.getThumbnailImage());
-                } else {
+//                if (usersSignupRequestDto.getThumbnailImage() != null && !usersSignupRequestDto.getThumbnailImage().isEmpty()) {
+//                    thumbnailImageUrl = s3Service.uploadImage(usersSignupRequestDto.getThumbnailImage());
+//                } else {
                     thumbnailImageUrl = "https://techeermarket-bucket.s3.ap-northeast-2.amazonaws.com/thumbnails/bfe7def1-2f96-4a0e-a4a8-0255ee6bd874/default_profile.png";
-                }
+//                }
 
 //                usersSignupRequestDto.setThumbnailImageUrl(thumbnailImageUrl);
                 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -105,6 +106,24 @@ public class UsersApiService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public Users login(UsersLoginRequestDto usersLoginRequestDto){
+        String email = usersLoginRequestDto.getEmail();
+        String password = usersLoginRequestDto.getPassword();
+
+        Users users = userRepository.findByEmail(email);
+        log.info("UsersApiService :: login :: users :: {}",users);
+
+        if(users != null && passwordMatches(password,users.getPassword())){
+            return users;
+        }
+        return null;
+    }
+
+    private boolean passwordMatches(String rawPassword, String encodedPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
     public ResponseEntity getKaKaoAccessToken(String code) {

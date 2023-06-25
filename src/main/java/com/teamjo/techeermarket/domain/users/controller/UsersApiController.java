@@ -60,13 +60,10 @@ public class UsersApiController {
         usersApiService.getKaKaoAccessToken(code);
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<TokenInfo> login(@RequestBody @Valid UsersLoginRequestDto usersLoginRequestDto) {
-//        String memberId = usersLoginRequestDto.getEmail();
-//        String password = usersLoginRequestDto.getPassword();
-//        TokenInfo tokenInfo = usersApiService.login(memberId, password);
-//        return ResponseEntity.ok(tokenInfo);
-//    }
+    @PostMapping("/login")
+    public Users login(@RequestBody @Valid UsersLoginRequestDto usersLoginRequestDto) {
+        return usersApiService.login(usersLoginRequestDto);
+    }
 
     @DeleteMapping("/{userUuid}")
     public ResponseEntity<Void> deleteUser(@PathVariable UUID userUuid) {
