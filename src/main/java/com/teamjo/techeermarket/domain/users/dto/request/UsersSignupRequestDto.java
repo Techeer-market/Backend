@@ -20,7 +20,7 @@ public class UsersSignupRequestDto {
 
     private String birthDay;
 
-    private MultipartFile thumbnailImage;
+//    private MultipartFile thumbnailImage;
 
     // TODO 추후 수정할 것 > 클라이언트 요청 정보가 아니므로 분리해야 함
 //    private String thumbnailImageUrl;
