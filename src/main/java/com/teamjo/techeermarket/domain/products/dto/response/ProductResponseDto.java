@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -32,6 +33,14 @@ public class ProductResponseDto {
     private ProductState productState;
 
     private TradeType tradeType;
+
+    private String image_url_1;   // 사진 url 리스트
+
+    private String image_url_2;   // 사진 url 리스트
+
+    private String image_url_3;   // 사진 url 리스트
+
+    private String image_url_4;   // 사진 url 리스트
 
     private int views;
 

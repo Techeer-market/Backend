@@ -23,7 +23,6 @@ public class ProductMapper {
                 .description(productRequestDto.getDescription())
                 .price(productRequestDto.getPrice())
                 .tradeType(productRequestDto.getTradeType())
-//                .productState(productRequestDto.getProductState())
                 .build();
     }
 
@@ -38,6 +37,10 @@ public class ProductMapper {
                 .productState(products.getProductState())
                 .tradeType(products.getTradeType())
                 .views(products.getViews())
+                .image_url_1(products.getImage_url_1())
+                .image_url_2(products.getImage_url_2())
+                .image_url_3(products.getImage_url_3())
+                .image_url_4(products.getImage_url_4())
                 .createdDate(products.getCreatedDate())
                 .modifiedDate(products.getModifiedDate())
                 .build();

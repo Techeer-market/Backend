@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -23,9 +24,15 @@ public class ProductRequestDto {
 
     private int price;
 
-//    private ProductState productState;
-
     private TradeType tradeType ;
+
+    private MultipartFile image_1;
+
+    private MultipartFile image_2;
+
+    private MultipartFile image_3;
+
+    private MultipartFile image_4;
 
 
 }

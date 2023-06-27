@@ -58,11 +58,24 @@ public class Products extends BaseEntity {
     @Column(name = "views", nullable = false)
     private int views;
 
-    @OneToMany(mappedBy = "products")
-    private List<ProductImage> productImages;
+    @Column(name = "image_url_1",length = 500)
+    private String image_url_1;
 
-    @OneToMany(mappedBy = "products")
-    private List<Comments> comments;
+    @Column(name = "image_url_2",length = 500)
+    private String image_url_2;
+
+    @Column(name = "image_url_3",length = 500)
+    private String image_url_3;
+
+    @Column(name = "image_url_4",length = 500)
+    private String image_url_4;
+
+
+//    @OneToMany(mappedBy = "products")
+//    private List<ProductImage> productImage;
+
+//    @OneToMany(mappedBy = "products")
+//    private List<Comments> comments;
 
 
     public void setIsDeleted(boolean isDeleted) {

@@ -13,6 +13,7 @@ import com.teamjo.techeermarket.domain.products.repository.ProductNotFoundExcept
 import com.teamjo.techeermarket.domain.products.repository.ProductRepository;
 
 
+import com.teamjo.techeermarket.global.s3.S3MarketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -37,6 +39,8 @@ public class ProductService {
 
     private final ProductMapper productMapper;
 
+    private final S3MarketService s3MarketService;
+
     // 상품 게시물 저장
     @Transactional
     public Products postProduct(ProductRequestDto productRequestDto){
@@ -45,6 +49,26 @@ public class ProductService {
 
         Products product = productMapper.toEntity(productRequestDto, findcategory);
         product.setProductState(ProductState.SALE); // ProductState를 "SALE"로 설정
+
+        if (productRequestDto.getImage_1() != null && !productRequestDto.getImage_1().isEmpty()) {
+            String imageUrl = s3MarketService.uploadImage(productRequestDto.getImage_1());
+            product.setImage_url_1(imageUrl);
+        }
+
+        if (productRequestDto.getImage_2() != null && !productRequestDto.getImage_2().isEmpty()) {
+            String imageUrl = s3MarketService.uploadImage(productRequestDto.getImage_2());
+            product.setImage_url_2(imageUrl);
+        }
+
+        if (productRequestDto.getImage_3() != null && !productRequestDto.getImage_3().isEmpty()) {
+            String imageUrl = s3MarketService.uploadImage(productRequestDto.getImage_3());
+            product.setImage_url_3(imageUrl);
+        }
+
+        if (productRequestDto.getImage_4() != null && !productRequestDto.getImage_4().isEmpty()) {
+            String imageUrl = s3MarketService.uploadImage(productRequestDto.getImage_4());
+            product.setImage_url_4(imageUrl);
+        }
 
         return productRepository.save(product);
     }
