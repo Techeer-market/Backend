@@ -34,7 +34,7 @@ public class UsersApiController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@ModelAttribute @Validated UsersSignupRequestDto usersSignupRequestDto, Errors errors) {
+    public ResponseEntity<?> signup(@RequestBody UsersSignupRequestDto usersSignupRequestDto, Errors errors) {
         // validation check
         log.info("controller :: {}" , usersSignupRequestDto);
         if(errors.hasErrors()) {

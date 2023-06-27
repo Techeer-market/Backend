@@ -9,12 +9,14 @@ import java.util.Set;
 
 @Data
 public class ChatRoom {
+    private Long productId;
     private String roomId;
     private String name;
     private Set<WebSocketSession> sessions = new HashSet<>();
 
     @Builder
-    public ChatRoom(String roomId, String name){
+    public ChatRoom(String roomId, String name, Long productId){
+        this.productId = productId;
         this.roomId = roomId;
         this.name = name;
     }

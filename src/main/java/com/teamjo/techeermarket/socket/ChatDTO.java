@@ -12,6 +12,7 @@ public class ChatDTO {
         ENTER,TALK
     }
 
+    private Long productId;
     private MessageType type;
     private String roomId;
     private String sender;
