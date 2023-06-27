@@ -27,11 +27,18 @@ public class ChatService {
         return new ArrayList<>(chatRooms.values());
     }
 
+
     public ChatRoom findRoomByProductId(Long productId){
         return chatRooms.get(productId);
     }
 
     public ChatRoom createRoom(String name,Long productId){
+
+    public ChatRoom findRoomById(String roomId){
+        return chatRooms.get(roomId);
+    }
+
+    public ChatRoom createRoom(String name){
         String roomId = UUID.randomUUID().toString();
 
         ChatRoom room = ChatRoom.builder()
@@ -39,8 +46,9 @@ public class ChatService {
                 .productId(productId)
                 .name(name)
                 .build();
-
         chatRooms.put(productId, room);
+
+
         return room;
     }
 
