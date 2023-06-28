@@ -37,7 +37,7 @@ public class ProductController {
     @GetMapping("/list")
     public ResponseEntity<List<ProductInfoDto>> getAllProductsListByPagnation(
             @RequestParam(defaultValue = "0") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize) {
+            @RequestParam(defaultValue = "25") int pageSize) {
         List<ProductInfoDto> productsList = productService.getAllProductList(pageNo, pageSize);
         return ResponseEntity.ok(productsList);
     }
@@ -61,7 +61,7 @@ public class ProductController {
     public ResponseEntity<List<ProductInfoDto>> getCategoryProductListByPagination(
             @PathVariable UUID categoryUuid,
             @RequestParam(defaultValue = "0") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize) {
+            @RequestParam(defaultValue = "25") int pageSize) {
         List<ProductInfoDto> productsList = productService.getCategoryProductList(categoryUuid, pageNo, pageSize);
         return ResponseEntity.ok(productsList);
     }
@@ -72,7 +72,7 @@ public class ProductController {
     public ResponseEntity<List<ProductInfoDto>> getMyProductsListByPagination(
             @PathVariable UUID userUuid,
             @RequestParam(defaultValue = "0") int pageNo,
-            @RequestParam(defaultValue = "10") int pageSize) {
+            @RequestParam(defaultValue = "25") int pageSize) {
         List<ProductInfoDto> productsList = productService.getMyProductsList(userUuid, pageNo, pageSize);
         return ResponseEntity.ok(productsList);
     }
