@@ -1,5 +1,6 @@
 package com.teamjo.techeermarket.domain.products.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.teamjo.techeermarket.domain.category.entity.Categorys;
 import com.teamjo.techeermarket.domain.comment.entity.Comments;
 import com.teamjo.techeermarket.domain.users.entity.Users;
@@ -75,8 +76,9 @@ public class Products extends BaseEntity {
 //    @OneToMany(mappedBy = "products")
 //    private List<ProductImage> productImage;
 
-//    @OneToMany(mappedBy = "products")
-//    private List<Comments> comments;
+    @OneToMany(mappedBy = "products")
+    @JsonIgnoreProperties({"products"})
+    private List<Comments> comments;
 
 
     public void setIsDeleted(boolean isDeleted) {
