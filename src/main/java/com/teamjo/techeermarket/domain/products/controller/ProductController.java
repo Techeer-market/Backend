@@ -67,6 +67,16 @@ public class ProductController {
     }
 
 
+    // 유저별 상품 목록 조회
+    @GetMapping("/my/{userUuid}")
+    public ResponseEntity<List<ProductInfoDto>> getMyProductsListByPagination(
+            @PathVariable UUID userUuid,
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        List<ProductInfoDto> productsList = productService.getMyProductsList(userUuid, pageNo, pageSize);
+        return ResponseEntity.ok(productsList);
+    }
+
 
     // 상품 게시물 삭제
     @DeleteMapping("/{productUuid}")
@@ -94,7 +104,7 @@ public class ProductController {
     @PutMapping("/{productUuid}")
     public ResponseEntity<ProductResponseDto> updateProduct(
             @PathVariable UUID productUuid,
-            @RequestBody ProductRequestDto productRequestDto) {
+            @ModelAttribute ProductRequestDto productRequestDto) {
         try {
             ProductResponseDto updatedProduct = productService.updateProduct(productUuid, productRequestDto);
             return ResponseEntity.ok(updatedProduct);
@@ -102,10 +112,6 @@ public class ProductController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
-
-
 
 
 

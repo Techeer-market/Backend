@@ -2,6 +2,7 @@ package com.teamjo.techeermarket.domain.products.entity;
 
 import com.teamjo.techeermarket.domain.category.entity.Categorys;
 import com.teamjo.techeermarket.domain.comment.entity.Comments;
+import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.global.common.BaseEntity;
 
 import lombok.*;
@@ -26,9 +27,9 @@ public class Products extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private Users users;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Users users;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "categorys")

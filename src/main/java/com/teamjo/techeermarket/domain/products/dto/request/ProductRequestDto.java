@@ -16,6 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ProductRequestDto {
 
+    private UUID userUuid;
+
     private UUID categoryUuid;
 
     private String title;

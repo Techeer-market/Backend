@@ -16,7 +16,7 @@ public class ProductResponseDto {
 
 //    private Long id;
 
-//    private Long userId;
+    private String userEmail;
 
 //    private UUID categoryUuid;
 
