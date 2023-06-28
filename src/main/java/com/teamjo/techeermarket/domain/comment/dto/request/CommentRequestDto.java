@@ -1,5 +1,6 @@
 package com.teamjo.techeermarket.domain.comment.dto.request;
 
+import com.teamjo.techeermarket.domain.users.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +21,7 @@ public class CommentRequestDto {
 
     @NotNull
     private String content;
+
+    @NotNull
+    private UUID userUuid;
 }

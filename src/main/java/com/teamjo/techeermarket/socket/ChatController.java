@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Slf4j
@@ -16,8 +17,8 @@ public class ChatController {
     private final ChatService service;
 
     @PostMapping
-    public ChatRoom createRoom(@RequestParam String email,Long productId){
-        return service.createRoom(email,productId);
+    public ChatRoom createRoom(@RequestParam String email, UUID productUuId){
+        return service.createRoom(email,productUuId);
     }
 
     @GetMapping

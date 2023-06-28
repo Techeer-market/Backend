@@ -16,7 +16,7 @@ import java.util.*;
 @Service
 public class ChatService {
     private final ObjectMapper mapper;
-    private Map<Long,ChatRoom> chatRooms;
+    private Map<UUID,ChatRoom> chatRooms;
 
     @PostConstruct
     private void init(){
@@ -32,21 +32,16 @@ public class ChatService {
         return chatRooms.get(productId);
     }
 
-    public ChatRoom createRoom(String name,Long productId){
 
-    public ChatRoom findRoomById(String roomId){
-        return chatRooms.get(roomId);
-    }
-
-    public ChatRoom createRoom(String name){
+    public ChatRoom createRoom(String name,UUID productUuid){
         String roomId = UUID.randomUUID().toString();
 
         ChatRoom room = ChatRoom.builder()
                 .roomId(roomId)
-                .productId(productId)
+                .productUuId(productUuid)
                 .name(name)
                 .build();
-        chatRooms.put(productId, room);
+        chatRooms.put(productUuid, room);
 
 
         return room;

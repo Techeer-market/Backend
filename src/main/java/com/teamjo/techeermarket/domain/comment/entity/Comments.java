@@ -40,4 +40,8 @@ public class Comments extends BaseEntity {
     @Column(name = "content")
     private String content;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "users")
+    private Users users;
+
 }

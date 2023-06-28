@@ -6,17 +6,18 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 public class ChatRoom {
-    private Long productId;
+    private UUID productUuId;
     private String roomId;
     private String name;
     private Set<WebSocketSession> sessions = new HashSet<>();
 
     @Builder
-    public ChatRoom(String roomId, String name, Long productId){
-        this.productId = productId;
+    public ChatRoom(String roomId, String name, UUID productUuId){
+        this.productUuId = productUuId;
         this.roomId = roomId;
         this.name = name;
     }
