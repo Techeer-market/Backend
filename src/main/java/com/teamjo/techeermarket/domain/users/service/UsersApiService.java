@@ -86,13 +86,13 @@ public class UsersApiService {
                 return null;
             } else {
                 String thumbnailImageUrl;
-
-                // 파일 존재 여부 확인 후 thumbnailImageUrl 설정
-                if (usersSignupRequestDto.getThumbnailImage() != null && !usersSignupRequestDto.getThumbnailImage().isEmpty()) {
-                    thumbnailImageUrl = s3ProfileService.uploadImage(usersSignupRequestDto.getThumbnailImage());
-                } else {
-                    thumbnailImageUrl = "https://techeer-market-bucket.s3.ap-northeast-2.amazonaws.com/95288297.png";
-                }
+//
+//                // 파일 존재 여부 확인 후 thumbnailImageUrl 설정
+//                if (usersSignupRequestDto.getThumbnailImage() != null && !usersSignupRequestDto.getThumbnailImage().isEmpty()) {
+//                    thumbnailImageUrl = s3ProfileService.uploadImage(usersSignupRequestDto.getThumbnailImage());
+//                } else {
+//                    thumbnailImageUrl = "https://techeer-market-bucket.s3.ap-northeast-2.amazonaws.com/95288297.png";
+//                }
 
 //                usersSignupRequestDto.setThumbnailImageUrl(thumbnailImageUrl);
                 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
