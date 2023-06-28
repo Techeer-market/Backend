@@ -10,7 +10,8 @@ import com.teamjo.techeermarket.domain.users.repository.UserNotFoundException;
 import com.teamjo.techeermarket.domain.users.repository.UserRepository;
 //import com.teamjo.techeermarket.global.jwt.JwtTokenProvider;
 //import com.teamjo.techeermarket.global.jwt.TokenInfo;
-//import com.teamjo.techeermarket.global.s3.S3Service;
+//import com.teamjo.techeermarket.global.s3.S3ProfileService;
+import com.teamjo.techeermarket.global.s3.S3ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -66,7 +67,7 @@ public class UsersApiService {
 
 //    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-//    private final S3Service s3Service;
+    private final S3ProfileService s3ProfileService;
 
     private final Environment env;
 
@@ -87,11 +88,11 @@ public class UsersApiService {
                 String thumbnailImageUrl;
 
                 // 파일 존재 여부 확인 후 thumbnailImageUrl 설정
-//                if (usersSignupRequestDto.getThumbnailImage() != null && !usersSignupRequestDto.getThumbnailImage().isEmpty()) {
-//                    thumbnailImageUrl = s3Service.uploadImage(usersSignupRequestDto.getThumbnailImage());
-//                } else {
-                    thumbnailImageUrl = "https://techeermarket-bucket.s3.ap-northeast-2.amazonaws.com/thumbnails/bfe7def1-2f96-4a0e-a4a8-0255ee6bd874/default_profile.png";
-//                }
+                if (usersSignupRequestDto.getThumbnailImage() != null && !usersSignupRequestDto.getThumbnailImage().isEmpty()) {
+                    thumbnailImageUrl = s3ProfileService.uploadImage(usersSignupRequestDto.getThumbnailImage());
+                } else {
+                    thumbnailImageUrl = "https://techeer-market-bucket.s3.ap-northeast-2.amazonaws.com/95288297.png";
+                }
 
 //                usersSignupRequestDto.setThumbnailImageUrl(thumbnailImageUrl);
                 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -99,6 +100,7 @@ public class UsersApiService {
                 usersSignupRequestDto.setPassword(password);
 //                String password = passwordEncoder.encode(usersSignupRequestDto.getPassword());
 //                usersSignupRequestDto.setPassword(password);
+
 
                 return userRepository.save(usersMapper.toEntity(usersSignupRequestDto));
             }

@@ -26,13 +26,14 @@ public class ProductController {
 
     // 차후에 세션 추가해서 User 정보 product entity에 저장하기
     @PostMapping
-    public ProductResponseDto postProduct(@Validated @RequestBody ProductRequestDto productRequestDto){
+    public ProductResponseDto postProduct(@Validated @ModelAttribute ProductRequestDto productRequestDto){
 
         Products product = productService.postProduct(productRequestDto);
         return productMapper.fromEntity(product);
     }
 
-    // 목차 상품 목록 조회 : 제목, 가격, 상태 확인 가능
+
+    // 목차 상품 목록 조회 : 제목, 가격, 상태, 사진1 확인 가능
     @GetMapping("/list")
     public ResponseEntity<List<ProductInfoDto>> getAllProductsListByPagnation(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -54,6 +55,27 @@ public class ProductController {
         }
     }
 
+
+    // 카테고리별 상품 목록 조회
+    @GetMapping("/category/list/{categoryUuid}")
+    public ResponseEntity<List<ProductInfoDto>> getCategoryProductListByPagination(
+            @PathVariable UUID categoryUuid,
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        List<ProductInfoDto> productsList = productService.getCategoryProductList(categoryUuid, pageNo, pageSize);
+        return ResponseEntity.ok(productsList);
+    }
+
+
+    // 유저별 상품 목록 조회
+    @GetMapping("/my/{userUuid}")
+    public ResponseEntity<List<ProductInfoDto>> getMyProductsListByPagination(
+            @PathVariable UUID userUuid,
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        List<ProductInfoDto> productsList = productService.getMyProductsList(userUuid, pageNo, pageSize);
+        return ResponseEntity.ok(productsList);
+    }
 
 
     // 상품 게시물 삭제
@@ -82,7 +104,7 @@ public class ProductController {
     @PutMapping("/{productUuid}")
     public ResponseEntity<ProductResponseDto> updateProduct(
             @PathVariable UUID productUuid,
-            @RequestBody ProductRequestDto productRequestDto) {
+            @ModelAttribute ProductRequestDto productRequestDto) {
         try {
             ProductResponseDto updatedProduct = productService.updateProduct(productUuid, productRequestDto);
             return ResponseEntity.ok(updatedProduct);
@@ -90,10 +112,6 @@ public class ProductController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
-
-
 
 
 

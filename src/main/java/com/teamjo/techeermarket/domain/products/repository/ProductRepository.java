@@ -1,6 +1,8 @@
 package com.teamjo.techeermarket.domain.products.repository;
 
+import com.teamjo.techeermarket.domain.category.entity.Categorys;
 import com.teamjo.techeermarket.domain.products.entity.Products;
+import com.teamjo.techeermarket.domain.users.entity.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,4 +23,7 @@ public interface ProductRepository extends JpaRepository<Products, Long> {
 
     Page<Products> findAllByIsDeletedFalse(Pageable pageable);
 
+    Page<Products> findByCategorysAndIsDeletedFalse(Categorys category, Pageable pageable);
+
+    Page<Products> findByUsersAndIsDeletedFalse(Users users, Pageable pageable);
 }

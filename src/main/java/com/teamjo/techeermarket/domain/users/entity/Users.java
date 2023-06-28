@@ -1,5 +1,6 @@
 package com.teamjo.techeermarket.domain.users.entity;
 
+import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.global.common.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -7,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -47,6 +49,9 @@ public class Users extends BaseEntity {
 
     @Column(name = "thumbnail_url",length = 500)
     private String thumbnailUrl;
+
+    @OneToMany (mappedBy = "users")
+    private List<Products> products;
 
 //    public String getRoleKey() {
 //        return this.role.getKey();
