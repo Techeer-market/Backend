@@ -11,6 +11,10 @@ spring:
 #    password: 1234
 #    driverClassName: org.postgresql.Driver
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
   datasource:
     driver-class-name: org.postgresql.Driver

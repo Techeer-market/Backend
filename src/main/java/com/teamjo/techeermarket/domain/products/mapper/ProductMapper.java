@@ -48,11 +48,12 @@ public class ProductMapper {
 
     public ProductInfoDto fromListEntity(Products products){
         return ProductInfoDto.builder()
-              .title(products.getTitle())
-              .price(products.getPrice())
-              .productState(products.getProductState())
+                .title(products.getTitle())
+                .price(products.getPrice())
+                .productState(products.getProductState())
                 .tradeType(products.getTradeType())
-              .build();
+                .image_url_1(products.getImage_url_1())
+                .build();
     }
 
 

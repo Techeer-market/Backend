@@ -32,7 +32,8 @@ public class ProductController {
         return productMapper.fromEntity(product);
     }
 
-    // 목차 상품 목록 조회 : 제목, 가격, 상태 확인 가능
+
+    // 목차 상품 목록 조회 : 제목, 가격, 상태, 사진1 확인 가능
     @GetMapping("/list")
     public ResponseEntity<List<ProductInfoDto>> getAllProductsListByPagnation(
             @RequestParam(defaultValue = "0") int pageNo,
@@ -52,6 +53,17 @@ public class ProductController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+
+    // 카테고리별 상품 목록 조회
+    @GetMapping("/category/list/{categoryUuid}")
+    public ResponseEntity<List<ProductInfoDto>> getCategoryProductListByPagination(
+            @PathVariable UUID categoryUuid,
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        List<ProductInfoDto> productsList = productService.getCategoryProductList(categoryUuid, pageNo, pageSize);
+        return ResponseEntity.ok(productsList);
     }
 
 

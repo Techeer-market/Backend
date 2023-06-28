@@ -28,7 +28,7 @@ public class S3MarketService {
         this.s3Client = s3Client;
     }
 
-    public String uploadImage(MultipartFile file) {
+    public String uploadImage(MultipartFile file, String fileName) {
         try {
             // 파일의 사이즈를 알려줌
             InputStream inputStream = new ByteArrayInputStream(file.getBytes());
@@ -37,8 +37,8 @@ public class S3MarketService {
             metadata.setContentType(file.getContentType());
 
             // 버킷 이름과 파일 경로 지정
-            String fileUUID = UUID.randomUUID().toString(); // 파일 이름 생성
-            String filePath = "markets/" + fileUUID ;
+//            String fileUUID = UUID.randomUUID().toString(); // 파일 이름 생성
+            String filePath = "markets/" + fileName ;
 //            String folderName = "markets/"+fileUUID;
 //            String filePath = folderName + file.getOriginalFilename();
 

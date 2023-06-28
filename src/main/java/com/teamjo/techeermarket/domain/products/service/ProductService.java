@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,34 +51,41 @@ public class ProductService {
         Products product = productMapper.toEntity(productRequestDto, findcategory);
         product.setProductState(ProductState.SALE); // ProductState를 "SALE"로 설정
 
-        if (productRequestDto.getImage_1() != null && !productRequestDto.getImage_1().isEmpty()) {
-            String imageUrl = s3MarketService.uploadImage(productRequestDto.getImage_1());
-            product.setImage_url_1(imageUrl);
-        }
+        MultipartFile[] images = {
+                productRequestDto.getImage_1(), productRequestDto.getImage_2(),
+                productRequestDto.getImage_3(), productRequestDto.getImage_4()
+        };
 
-        if (productRequestDto.getImage_2() != null && !productRequestDto.getImage_2().isEmpty()) {
-            String imageUrl = s3MarketService.uploadImage(productRequestDto.getImage_2());
-            product.setImage_url_2(imageUrl);
-        }
-
-        if (productRequestDto.getImage_3() != null && !productRequestDto.getImage_3().isEmpty()) {
-            String imageUrl = s3MarketService.uploadImage(productRequestDto.getImage_3());
-            product.setImage_url_3(imageUrl);
-        }
-
-        if (productRequestDto.getImage_4() != null && !productRequestDto.getImage_4().isEmpty()) {
-            String imageUrl = s3MarketService.uploadImage(productRequestDto.getImage_4());
-            product.setImage_url_4(imageUrl);
+        for (int i = 0; i < images.length; i++) {
+            MultipartFile image = images[i];
+            if (image != null && !image.isEmpty()) {
+                String imageUrl = s3MarketService.uploadImage(image, product.getProductUuid().toString() + "_" + (i + 1));
+                switch (i) {
+                    case 0:
+                        product.setImage_url_1(imageUrl);
+                        break;
+                    case 1:
+                        product.setImage_url_2(imageUrl);
+                        break;
+                    case 2:
+                        product.setImage_url_3(imageUrl);
+                        break;
+                    case 3:
+                        product.setImage_url_4(imageUrl);
+                        break;
+                }
+            }
         }
 
         return productRepository.save(product);
     }
 
 
+
     // 상품 게시물 목록 페이지 전체 조회
     @Transactional(readOnly = true)
     public List<ProductInfoDto> getAllProductList(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("id").descending());
         Page<Products> productPage = productRepository.findAllByIsDeletedFalse(pageable);
         return productPage.stream()
                 .map(productMapper::fromListEntity)
@@ -96,6 +104,24 @@ public class ProductService {
             throw new ProductNotFoundException("Product not found" + productUuid);
         }
     }
+
+
+    // 카테고리별 상품 목록 페이지 전체 조회
+    @Transactional(readOnly = true)
+    public List<ProductInfoDto> getCategoryProductList(UUID categoryUuid, int pageNo, int pageSize) {
+        Categorys category = categoryRepository.findByCategoryUuid(categoryUuid);
+        if (category == null) {
+            throw new IllegalArgumentException("Invalid category UUID: " + categoryUuid);
+        }
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("id").descending());
+        Page<Products> productPage = productRepository.findByCategorysAndIsDeletedFalse(category, pageable);
+        return productPage.stream()
+                .map(productMapper::fromListEntity)
+                .collect(Collectors.toList());
+    }
+
+
 
 
     // 상품 게시물 삭제
