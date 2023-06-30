@@ -2,12 +2,14 @@ package com.teamjo.techeermarket.socket;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Slf4j
 @Data
 public class ChatRoom {
     private UUID productUuId;
@@ -28,6 +30,11 @@ public class ChatRoom {
             chatDTO.setMessage(chatDTO.getSender() + " 님이 입장하셨습니다.");
             sendMessage(chatDTO,service);
         }else if(chatDTO.getType().equals(ChatDTO.MessageType.TALK)){
+            if(!sessions.contains(session)) {
+                log.info("session added :: {}",session);
+                sessions.add(session);
+            }
+            log.info("handleAction :: chatDTO :: {}",chatDTO);
             sendMessage(chatDTO,service);
         }
     }

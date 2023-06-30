@@ -8,6 +8,7 @@ import com.teamjo.techeermarket.domain.products.mapper.ProductMapper;
 import com.teamjo.techeermarket.domain.products.repository.ProductNotFoundException;
 import com.teamjo.techeermarket.domain.products.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("/api/products")
 public class ProductController {
 
@@ -27,7 +29,7 @@ public class ProductController {
     // 차후에 세션 추가해서 User 정보 product entity에 저장하기
     @PostMapping
     public ProductResponseDto postProduct(@Validated @ModelAttribute ProductRequestDto productRequestDto){
-
+        log.info("ProductRequestDto :: {} ", productRequestDto);
         Products product = productService.postProduct(productRequestDto);
         return productMapper.fromEntity(product);
     }
