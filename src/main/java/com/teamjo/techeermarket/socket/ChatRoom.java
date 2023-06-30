@@ -15,7 +15,7 @@ public class ChatRoom {
     private UUID productUuId;
     private String roomId;
     private String name;
-    private Set<WebSocketSession> sessions = new HashSet<>();
+    static Set<WebSocketSession> sessions = new HashSet<>();
 
     @Builder
     public ChatRoom(String roomId, String name, UUID productUuId){
@@ -25,9 +25,11 @@ public class ChatRoom {
     }
 
     public void handleAction(WebSocketSession session, ChatDTO chatDTO, ChatService service){
+        log.info("session :: {}", session);
         if(chatDTO.getType().equals(ChatDTO.MessageType.ENTER)){
             sessions.add(session);
             chatDTO.setMessage(chatDTO.getSender() + " 님이 입장하셨습니다.");
+            log.info("session length :: {}", sessions.size());
             sendMessage(chatDTO,service);
         }else if(chatDTO.getType().equals(ChatDTO.MessageType.TALK)){
 //            if(!sessions.contains(session)) {

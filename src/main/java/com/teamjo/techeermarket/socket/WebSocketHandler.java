@@ -20,6 +20,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         String payload = message.getPayload();
         log.info("handleTextMessage :: payload :: {}", payload);
+        log.info("handleTextMessage :: session :: {}", session);
 
         ChatDTO chatMessage = mapper.readValue(payload, ChatDTO.class);
         log.info("handlerTextMessage :: chatDTO :: {}", chatMessage.toString());
