@@ -15,9 +15,11 @@ import java.util.UUID;
 @RequestMapping("/chat")
 public class ChatController {
     private final ChatService service;
-
     @PostMapping
-    public ChatRoom createRoom(@RequestParam String email, UUID productUuId){
+    public ChatRoom createRoom(@RequestParam String email,@RequestParam("productUuid") String productUuidString){
+        log.info("Uuid :: {}",productUuidString);
+        UUID productUuId = UUID.fromString(productUuidString);
+        log.info("email :: {}",email);
         return service.createRoom(email,productUuId);
     }
 
