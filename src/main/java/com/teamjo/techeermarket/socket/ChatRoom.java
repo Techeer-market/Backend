@@ -30,10 +30,10 @@ public class ChatRoom {
             chatDTO.setMessage(chatDTO.getSender() + " 님이 입장하셨습니다.");
             sendMessage(chatDTO,service);
         }else if(chatDTO.getType().equals(ChatDTO.MessageType.TALK)){
-            if(!sessions.contains(session)) {
-                log.info("session added :: {}",session);
-                sessions.add(session);
-            }
+//            if(!sessions.contains(session)) {
+//                log.info("session added :: {}",session);
+//                sessions.add(session);
+//            }
             log.info("handleAction :: chatDTO :: {}",chatDTO);
             sendMessage(chatDTO,service);
         }
