@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 public class ChatDTO {
@@ -12,7 +14,7 @@ public class ChatDTO {
         ENTER,TALK
     }
 
-    private Long productId;
+    private UUID productUuid;
     private MessageType type;
     private String roomId;
     private String sender;

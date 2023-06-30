@@ -28,8 +28,8 @@ public class ChatService {
     }
 
 
-    public ChatRoom findRoomByProductId(Long productId){
-        return chatRooms.get(productId);
+    public ChatRoom findRoomByProductId(UUID productUuid){
+        return chatRooms.get(productUuid);
     }
 
 
