@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.teamjo.techeermarket.domain.users.dto.request.AuthTokenRequest;
 import com.teamjo.techeermarket.domain.users.dto.request.UsersLoginRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.request.UsersSignupRequestDto;
+import com.teamjo.techeermarket.domain.users.dto.response.UsersResponseDto;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.mapper.UsersMapper;
 import com.teamjo.techeermarket.domain.users.repository.UserNotFoundException;
@@ -110,15 +111,21 @@ public class UsersApiService {
         return null;
     }
 
-    public Users login(UsersLoginRequestDto usersLoginRequestDto){
+    public UsersResponseDto login(UsersLoginRequestDto usersLoginRequestDto){
         String email = usersLoginRequestDto.getEmail();
         String password = usersLoginRequestDto.getPassword();
 
         Users users = userRepository.findByEmail(email);
         log.info("UsersApiService :: login :: users :: {}",users);
 
+        UsersResponseDto usersResponseDto = UsersResponseDto.builder()
+                .name(users.getName())
+                .email(users.getEmail())
+                .userUuid(users.getUserUuid())
+                .build();
+
         if(users != null && passwordMatches(password,users.getPassword())){
-            return users;
+            return usersResponseDto;
         }
         return null;
     }

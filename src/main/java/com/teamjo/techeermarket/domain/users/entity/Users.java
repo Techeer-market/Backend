@@ -11,13 +11,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
+
 @NoArgsConstructor
 @Entity
 @Builder
 @AllArgsConstructor
 @ToString
 @Setter
+@Getter
 public class Users extends BaseEntity {
 
     @Id

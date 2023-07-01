@@ -2,6 +2,7 @@ package com.teamjo.techeermarket.domain.users.controller;
 
 import com.teamjo.techeermarket.domain.users.dto.request.UsersLoginRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.request.UsersSignupRequestDto;
+import com.teamjo.techeermarket.domain.users.dto.response.UsersResponseDto;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.mapper.UsersMapper;
 import com.teamjo.techeermarket.domain.users.service.UsersApiService;
@@ -61,8 +62,10 @@ public class UsersApiController {
     }
 
     @PostMapping("/login")
-    public Users login(@RequestBody @Valid UsersLoginRequestDto usersLoginRequestDto) {
-        return usersApiService.login(usersLoginRequestDto);
+    public UsersResponseDto login(@RequestBody @Valid UsersLoginRequestDto usersLoginRequestDto) {
+        UsersResponseDto usersResponseDto = usersApiService.login(usersLoginRequestDto);
+        log.info("UsersApiController :: Login :: UserResponseDto :: {} ", usersResponseDto);
+        return usersResponseDto;
     }
 
     @DeleteMapping("/{userUuid}")
