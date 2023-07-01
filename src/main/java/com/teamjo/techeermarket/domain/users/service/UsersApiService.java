@@ -124,7 +124,7 @@ public class UsersApiService {
                 .userUuid(users.getUserUuid())
                 .build();
 
-        if(users != null && passwordMatches(password,users.getPassword())){
+        if(passwordMatches(password,users.getPassword())){
             return usersResponseDto;
         }
         return null;

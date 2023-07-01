@@ -28,7 +28,7 @@ public class ProductController {
 
     // 차후에 세션 추가해서 User 정보 product entity에 저장하기
     @PostMapping
-    public ProductResponseDto postProduct(@Validated @ModelAttribute ProductRequestDto productRequestDto){
+    public ProductResponseDto postProduct(@ModelAttribute ProductRequestDto productRequestDto){
         log.info("ProductRequestDto :: {} ", productRequestDto);
         Products product = productService.postProduct(productRequestDto);
         return productMapper.fromEntity(product);

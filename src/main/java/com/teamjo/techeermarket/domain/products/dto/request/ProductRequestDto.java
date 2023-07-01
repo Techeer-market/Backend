@@ -26,7 +26,7 @@ public class ProductRequestDto {
 
     private int price;
 
-    private TradeType tradeType ;
+    private TradeType tradeType;
 
     private MultipartFile image_1;
 
