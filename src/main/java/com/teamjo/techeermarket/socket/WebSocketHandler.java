@@ -22,9 +22,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
         log.info("handleTextMessage :: payload :: {}", payload);
         log.info("handleTextMessage :: session :: {}", session);
 
-        ChatDTO chatMessage = mapper.readValue(payload, ChatDTO.class);
+        ChatMessage chatMessage = mapper.readValue(payload, ChatMessage.class);
         log.info("handlerTextMessage :: chatDTO :: {}", chatMessage.toString());
         ChatRoom room = chatService.findRoomByProductId(chatMessage.getProductUuid());
+        chatMessage.setChatRoom(room);
+        room.getMessages().add(chatMessage);
+
+
         log.info("handlerTextMessage :: room :: {}", room.toString());
 
         room.handleAction(session, chatMessage, chatService);

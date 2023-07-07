@@ -8,6 +8,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.*;
 
@@ -17,6 +18,13 @@ import java.util.*;
 public class ChatService {
     private final ObjectMapper mapper;
     private Map<UUID,ChatRoom> chatRooms;
+    private final ChatRoomRepository chatRoomRepository;
+    private final EntityManager entityManager;
+    public ChatService(ObjectMapper mapper,ChatRoomRepository chatRoomRepository, EntityManager entityManager){
+        this.mapper = mapper;
+        this.chatRoomRepository= chatRoomRepository;
+        this.entityManager = entityManager;
+    }
 
     @PostConstruct
     private void init(){
@@ -27,23 +35,31 @@ public class ChatService {
         return new ArrayList<>(chatRooms.values());
     }
 
-
-    public ChatRoom findRoomByProductId(UUID productUuid){
-        return chatRooms.get(productUuid);
+    public void updateChatRoom(ChatMessage newMessage, UUID productUuid){
+        ChatRoom chatRoom = chatRoomRepository.findChatRoomByProductUuId(productUuid);
+        List<ChatMessage> messages = chatRoom.getMessages();
+        messages.add(newMessage);
+        chatRoom.setMessages(messages);
+        chatRoomRepository.
     }
 
 
+    public ChatRoom findRoomByProductId(UUID productUuid) {
+        return chatRoomRepository.findChatRoomByProductUuId(productUuid);
+    }
+
     public ChatRoom createRoom(String name,UUID productUuid){
-        String roomId = UUID.randomUUID().toString();
+        UUID roomId = UUID.randomUUID();
 
         ChatRoom room = ChatRoom.builder()
-                .roomId(roomId)
+                .roomUuId(roomId)
                 .productUuId(productUuid)
                 .name(name)
                 .build();
         chatRooms.put(productUuid, room);
-
-
+        if(!chatRoomRepository.existsByProductUuId(productUuid)) {
+            chatRoomRepository.save(room);
+        }
         return room;
     }
 
