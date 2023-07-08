@@ -11,7 +11,4 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     ChatRoom findChatRoomByProductUuId(UUID productUuid);
     boolean existsByProductUuId(UUID productUuid);
 
-    @Modifying
-    @Query("UPDATE chat_room c SET c.messages")
-
 }

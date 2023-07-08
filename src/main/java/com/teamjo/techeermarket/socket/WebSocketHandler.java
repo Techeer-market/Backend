@@ -26,12 +26,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
         log.info("handlerTextMessage :: chatDTO :: {}", chatMessage.toString());
         ChatRoom room = chatService.findRoomByProductId(chatMessage.getProductUuid());
         chatMessage.setChatRoom(room);
-        room.getMessages().add(chatMessage);
-
-
+        chatService.updateChatRoom(chatMessage,chatMessage.getProductUuid());
         log.info("handlerTextMessage :: room :: {}", room.toString());
-
         room.handleAction(session, chatMessage, chatService);
-
     }
 }

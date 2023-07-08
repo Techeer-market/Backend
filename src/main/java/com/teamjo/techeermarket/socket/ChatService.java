@@ -37,10 +37,14 @@ public class ChatService {
 
     public void updateChatRoom(ChatMessage newMessage, UUID productUuid){
         ChatRoom chatRoom = chatRoomRepository.findChatRoomByProductUuId(productUuid);
-        List<ChatMessage> messages = chatRoom.getMessages();
-        messages.add(newMessage);
-        chatRoom.setMessages(messages);
-        chatRoomRepository.
+        if(chatRoom != null){
+            List<ChatMessage> messages = chatRoom.getMessages();
+            messages.add(newMessage);
+            chatRoom.setMessages(messages);
+            chatRoomRepository.save(chatRoom);
+        }else {
+            log.info("updateChatRoom :: chatRoom is null");
+        }
     }
 
 
@@ -49,17 +53,17 @@ public class ChatService {
     }
 
     public ChatRoom createRoom(String name,UUID productUuid){
+        if(chatRoomRepository.existsByProductUuId(productUuid)) {
+            return chatRoomRepository.findChatRoomByProductUuId(productUuid);
+        }
         UUID roomId = UUID.randomUUID();
-
         ChatRoom room = ChatRoom.builder()
                 .roomUuId(roomId)
                 .productUuId(productUuid)
                 .name(name)
                 .build();
         chatRooms.put(productUuid, room);
-        if(!chatRoomRepository.existsByProductUuId(productUuid)) {
-            chatRoomRepository.save(room);
-        }
+        chatRoomRepository.save(room);
         return room;
     }
 

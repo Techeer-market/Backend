@@ -1,5 +1,6 @@
 package com.teamjo.techeermarket.socket;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.teamjo.techeermarket.global.common.BaseEntity;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +30,9 @@ public class ChatRoom extends BaseEntity {
 
     private UUID productUuId;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ChatMessage> messages;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ChatMessage> messages = new ArrayList<>();
 
     static Set<WebSocketSession> sessions = new HashSet<>();
 

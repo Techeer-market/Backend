@@ -1,5 +1,6 @@
 package com.teamjo.techeermarket.socket;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.teamjo.techeermarket.global.common.BaseEntity;
 import lombok.*;
 
@@ -26,6 +27,7 @@ public class ChatMessage extends BaseEntity {
     private String time;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom;
 }
