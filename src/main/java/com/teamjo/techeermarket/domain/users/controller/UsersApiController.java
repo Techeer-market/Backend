@@ -1,5 +1,6 @@
 package com.teamjo.techeermarket.domain.users.controller;
 
+import com.amazonaws.Response;
 import com.teamjo.techeermarket.domain.users.dto.request.UsersLoginRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.request.UsersSignupRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.response.UsersResponseDto;
@@ -15,6 +16,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.UUID;
 
@@ -66,6 +68,12 @@ public class UsersApiController {
         UsersResponseDto usersResponseDto = usersApiService.login(usersLoginRequestDto);
         log.info("UsersApiController :: Login :: UserResponseDto :: {} ", usersResponseDto);
         return usersResponseDto;
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session){
+        session.invalidate();
+        return ResponseEntity.ok("Logged out successfully");
     }
 
     @DeleteMapping("/{userUuid}")
