@@ -17,17 +17,21 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception{
+        try {
+            String payload = message.getPayload();
+            log.info("handleTextMessage :: payload :: {}", payload);
+            log.info("handleTextMessage :: session :: {}", session);
 
-        String payload = message.getPayload();
-        log.info("handleTextMessage :: payload :: {}", payload);
-        log.info("handleTextMessage :: session :: {}", session);
+            ChatMessage chatMessage = mapper.readValue(payload, ChatMessage.class);
+            log.info("handlerTextMessage :: chatDTO :: {}", chatMessage.toString());
+            ChatRoom room = chatService.findRoomByProductId(chatMessage.getProductUuid());
+            chatMessage.setChatRoom(room);
+            chatService.updateChatRoom(chatMessage,chatMessage.getProductUuid());
+            log.info("handlerTextMessage :: room :: {}", room.toString());
+            room.handleAction(session, chatMessage, chatService);
+        }catch (Exception e){
+            log.info("handleTextMessage :: Error :: {}", e);
+        }
 
-        ChatMessage chatMessage = mapper.readValue(payload, ChatMessage.class);
-        log.info("handlerTextMessage :: chatDTO :: {}", chatMessage.toString());
-        ChatRoom room = chatService.findRoomByProductId(chatMessage.getProductUuid());
-        chatMessage.setChatRoom(room);
-        chatService.updateChatRoom(chatMessage,chatMessage.getProductUuid());
-        log.info("handlerTextMessage :: room :: {}", room.toString());
-        room.handleAction(session, chatMessage, chatService);
     }
 }
