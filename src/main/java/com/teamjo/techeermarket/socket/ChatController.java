@@ -23,6 +23,11 @@ public class ChatController {
         return service.createRoom(email,productUuId);
     }
 
+    public ChatRoom joinRoom(@RequestParam String buyerEmail, @RequestParam("productUuid") String productUuidString){
+        UUID productId = UUID.fromString(productUuidString);
+
+    }
+
     @GetMapping
     public List<ChatRoom> findAllRooms(){
         return service.findAllRoom();

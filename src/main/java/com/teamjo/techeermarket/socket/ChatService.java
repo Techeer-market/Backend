@@ -67,6 +67,9 @@ public class ChatService {
         return room;
     }
 
+
+
+
     public <T> void sendMessage(WebSocketSession session, T message){
         try{
             session.sendMessage(new TextMessage(mapper.writeValueAsString(message)));

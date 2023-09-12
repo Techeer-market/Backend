@@ -26,7 +26,8 @@ public class ChatRoom extends BaseEntity {
     @Column(name = "room_uuid", length = 36, nullable = false, updatable = false)
     private UUID roomUuId;
 
-    private String name;
+    private String sellerEmail;
+    private String buyerEmail;
 
     private UUID productUuId;
 
@@ -40,7 +41,7 @@ public class ChatRoom extends BaseEntity {
     public ChatRoom(UUID roomUuId, String name, UUID productUuId){
         this.productUuId = productUuId;
         this.roomUuId = roomUuId;
-        this.name = name;
+        this.sellerEmail = name;
     }
 
     public void handleAction(WebSocketSession session, ChatMessage chatMessage, ChatService service){
