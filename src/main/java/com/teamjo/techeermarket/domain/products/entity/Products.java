@@ -1,8 +1,6 @@
 package com.teamjo.techeermarket.domain.products.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.teamjo.techeermarket.domain.category.entity.Categorys;
-import com.teamjo.techeermarket.domain.comment.entity.Comments;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.global.common.BaseEntity;
 
@@ -36,54 +34,22 @@ public class Products extends BaseEntity {
     @JoinColumn(name = "categorys")
     private Categorys categorys;
 
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(name = "product_uuid" ,length = 36, nullable = false, updatable = false)  // uuid 나중에 추가
-    private UUID productUuid ;
-
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description", nullable = false)
-    private String description;
+    @Column(name = "content", nullable = false)
+    private String content;
 
     @Column(name = "price", nullable = false)
     private int price;
 
-    @Column(name = "state", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ProductState productState ;
-
-    @Column(name = "type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private TradeType tradeType ;
-
     @Column(name = "views", nullable = false)
     private int views;
 
-    @Column(name = "image_url_1",length = 500)
-    private String image_url_1;
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ProductState productState ;
 
-    @Column(name = "image_url_2",length = 500)
-    private String image_url_2;
-
-    @Column(name = "image_url_3",length = 500)
-    private String image_url_3;
-
-    @Column(name = "image_url_4",length = 500)
-    private String image_url_4;
-
-
-//    @OneToMany(mappedBy = "products")
-//    private List<ProductImage> productImage;
-
-    @OneToMany(mappedBy = "products")
-    @JsonIgnoreProperties({"products"})
-    private List<Comments> comments;
-
-
-    public void setIsDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
 
 
 }
