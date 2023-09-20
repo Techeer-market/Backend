@@ -18,6 +18,7 @@ import java.util.UUID;
 @ToString
 @Setter
 @Getter
+@Table(name="users")
 public class Users extends BaseEntity {
 
     @Id
@@ -25,35 +26,27 @@ public class Users extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    private UUID userUuid;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "password")
     private String password;
 
+    @Column(name = "birthday")
+    private String birthday ;
+
+    @Column(name = "profile_url")
+    private String profileUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "social", nullable = false)
     private Social social;
 
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "birthday")
-    private LocalDateTime birthday;
-
-    @Column(name = "thumbnail_url", length = 500)
-    private String thumbnailUrl;
 
     @OneToMany(mappedBy = "users")
     private List<Products> products;
 
-
-
-
-    public void setIsDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
-    }
 }
