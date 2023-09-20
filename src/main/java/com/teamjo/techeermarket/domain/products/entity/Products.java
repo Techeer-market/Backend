@@ -31,7 +31,7 @@ public class Products extends BaseEntity {
     private Users users;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "categorys")
+    @JoinColumn(name = "category_id")
     private Categorys categorys;
 
     @Column(name = "title", nullable = false)

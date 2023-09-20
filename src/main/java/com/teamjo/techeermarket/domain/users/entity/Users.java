@@ -38,7 +38,7 @@ public class Users extends BaseEntity {
     @Column(name = "birthday")
     private String birthday ;
 
-    @Column(name = "profileurl")
+    @Column(name = "profile_url")
     private String profileUrl;
 
     @Enumerated(EnumType.STRING)
