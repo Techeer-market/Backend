@@ -88,7 +88,6 @@ public class ProductService {
     }
 
 
-
     // 상품 게시물 목록 페이지 전체 조회
     @Transactional(readOnly = true)
     public List<ProductInfoDto> getAllProductList(int pageNo, int pageSize) {
@@ -98,6 +97,7 @@ public class ProductService {
                 .map(productMapper::fromListEntity)
                 .collect(Collectors.toList());
     }
+
 
 
     // 상품 게시물 상세 조회

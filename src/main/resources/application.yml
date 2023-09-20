@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${CLOUD_AWS_DB_HOST}:5432/${CLOUD_AWS_DB_DATABASE_NAME}
-    username: ${CLOUD_AWS_DB_USERNAME}
-    password: ${CLOUD_AWS_DB_PASSWORD}
+    url: jdbc:postgresql://175.118.95.185:5432/techeermarket
+    username: postgres
+    password: 1234
     driverClassName: org.postgresql.Driver
 
 #  datasource:
@@ -10,7 +10,6 @@ spring:
 #    username: postgres
 #    password: 1234
 #    driverClassName: org.postgresql.Driver
-
   servlet:
     multipart:
       max-file-size: 1000MB

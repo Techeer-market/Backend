@@ -26,5 +26,4 @@ public class ProductInfoDto {
 
     private TradeType tradeType;
 
-
 }
