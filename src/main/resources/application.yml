@@ -15,30 +15,22 @@ spring:
       max-file-size: 1000MB
       max-request-size: 1000MB
 
-#  datasource:
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://localhost:5432/market
-#    platform: postgres
-#    username: techeer_market
-#    password: techeer1234
-
-
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
 
-cloud:
-  aws:
-    credentials:
-      accessKey: ${CLOUD_AWS_ACCESS_KEY_ID}
-      secretKey: ${CLOUD_AWS_SECRET_ACCESS_KEY}
-    s3:
-      bucket: ${CLOUD_AWS_S3_BUCKETNAME}
-    region:
-      static: ${CLOUD_AWS_S3_REGION}
-    stack:
-      auto: false
+#cloud:
+#  aws:
+#    credentials:
+#      accessKey: ${CLOUD_AWS_ACCESS_KEY_ID}
+#      secretKey: ${CLOUD_AWS_SECRET_ACCESS_KEY}
+#    s3:
+#      bucket: ${CLOUD_AWS_S3_BUCKETNAME}
+#    region:
+#      static: ${CLOUD_AWS_S3_REGION}
+#    stack:
+#      auto: false
 
 
 #security:

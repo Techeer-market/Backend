@@ -12,7 +12,7 @@ import com.teamjo.techeermarket.domain.users.repository.UserRepository;
 //import com.teamjo.techeermarket.global.jwt.JwtTokenProvider;
 //import com.teamjo.techeermarket.global.jwt.TokenInfo;
 //import com.teamjo.techeermarket.global.s3.S3ProfileService;
-import com.teamjo.techeermarket.global.s3.S3ProfileService;
+//import com.teamjo.techeermarket.global.s3.S3ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -68,7 +68,7 @@ public class UsersApiService {
 
 //    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    private final S3ProfileService s3ProfileService;
+//    private final S3ProfileService s3ProfileService;
 
     private final Environment env;
 

@@ -16,7 +16,7 @@ import com.teamjo.techeermarket.domain.products.repository.ProductRepository;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.repository.UserNotFoundException;
 import com.teamjo.techeermarket.domain.users.repository.UserRepository;
-import com.teamjo.techeermarket.global.s3.S3MarketService;
+//import com.teamjo.techeermarket.global.s3.S3MarketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,7 +46,7 @@ public class ProductService {
 
     private final ProductMapper productMapper;
 
-    private final S3MarketService s3MarketService;
+//    private final S3MarketService s3MarketService;
 
     // 상품 게시물 저장
     @Transactional
@@ -63,26 +63,26 @@ public class ProductService {
                 productRequestDto.getImage_3(), productRequestDto.getImage_4()
         };
 
-        for (int i = 0; i < images.length; i++) {
-            MultipartFile image = images[i];
-            if (image != null && !image.isEmpty()) {
-                String imageUrl = s3MarketService.uploadImage(image, product.getProductUuid().toString() + "_" + (i + 1));
-                switch (i) {
-                    case 0:
-                        product.setImage_url_1(imageUrl);
-                        break;
-                    case 1:
-                        product.setImage_url_2(imageUrl);
-                        break;
-                    case 2:
-                        product.setImage_url_3(imageUrl);
-                        break;
-                    case 3:
-                        product.setImage_url_4(imageUrl);
-                        break;
-                }
-            }
-        }
+//        for (int i = 0; i < images.length; i++) {
+//            MultipartFile image = images[i];
+//            if (image != null && !image.isEmpty()) {
+//                String imageUrl = s3MarketService.uploadImage(image, product.getProductUuid().toString() + "_" + (i + 1));
+//                switch (i) {
+//                    case 0:
+//                        product.setImage_url_1(imageUrl);
+//                        break;
+//                    case 1:
+//                        product.setImage_url_2(imageUrl);
+//                        break;
+//                    case 2:
+//                        product.setImage_url_3(imageUrl);
+//                        break;
+//                    case 3:
+//                        product.setImage_url_4(imageUrl);
+//                        break;
+//                }
+//            }
+//        }
 
         return productRepository.save(product);
     }
@@ -216,26 +216,26 @@ public class ProductService {
                 productRequestDto.getImage_3(), productRequestDto.getImage_4()
         };
 
-        for (int i = 0; i < images.length; i++) {
-            MultipartFile image = images[i];
-            if (image != null && !image.isEmpty()) {
-                String imageUrl = s3MarketService.uploadImage(image, products.getProductUuid().toString() + "_" + (i + 1));
-                switch (i) {
-                    case 0:
-                        products.setImage_url_1(imageUrl);
-                        break;
-                    case 1:
-                        products.setImage_url_2(imageUrl);
-                        break;
-                    case 2:
-                        products.setImage_url_3(imageUrl);
-                        break;
-                    case 3:
-                        products.setImage_url_4(imageUrl);
-                        break;
-                }
-            }
-        }
+//        for (int i = 0; i < images.length; i++) {
+//            MultipartFile image = images[i];
+//            if (image != null && !image.isEmpty()) {
+//                String imageUrl = s3MarketService.uploadImage(image, products.getProductUuid().toString() + "_" + (i + 1));
+//                switch (i) {
+//                    case 0:
+//                        products.setImage_url_1(imageUrl);
+//                        break;
+//                    case 1:
+//                        products.setImage_url_2(imageUrl);
+//                        break;
+//                    case 2:
+//                        products.setImage_url_3(imageUrl);
+//                        break;
+//                    case 3:
+//                        products.setImage_url_4(imageUrl);
+//                        break;
+//                }
+//            }
+//        }
 
 
         productMapper.updateProductFromDto(products, productRequestDto, user, category);
