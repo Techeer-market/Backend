@@ -1,6 +1,7 @@
 package com.teamjo.techeermarket.domain.mypage.entity;
 
 import com.teamjo.techeermarket.domain.products.entity.Products;
+import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.global.common.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -23,14 +23,17 @@ public class UserPurchase extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany (mappedBy = "users")
-    private List<Products> products;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")   // 상품
+    private Products products;
 
-    @Column(name = "seller_id", nullable = false)   // FK user 연결
-    private String sellerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id")   // 판매자
+    private Users sellerId;
 
-    @Column(name = "buyer_id", nullable = false)    // FK user 연결
-    private String buyerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "buyer_id")    // 구매자
+    private Users buyerId;
 
 
 }

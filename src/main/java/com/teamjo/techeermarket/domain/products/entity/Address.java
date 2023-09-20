@@ -1,9 +1,11 @@
-package com.teamjo.techeermarket.domain.users.entity;
+package com.teamjo.techeermarket.domain.products.entity;
 
 import com.teamjo.techeermarket.global.common.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
+
+import static javax.persistence.FetchType.LAZY;
 
 @NoArgsConstructor
 @Entity
@@ -19,6 +21,10 @@ public class Address extends BaseEntity {
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "product_id")
+    private Products products;
 
     @Column(name = "address", nullable = false)
     private String address;
