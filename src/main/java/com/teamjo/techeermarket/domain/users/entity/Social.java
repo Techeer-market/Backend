@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Role {
-    GUEST("ROLE_GUEST", "손님"),
-    USER("ROLE_USER", "일반 사용자");
+public enum Social {
+    LOCAl("LOCAL", "일반 로그인"),
+    GOOGLE("GOOGLE", "구글 로그인");
 
     private final String key;
     private final String title;

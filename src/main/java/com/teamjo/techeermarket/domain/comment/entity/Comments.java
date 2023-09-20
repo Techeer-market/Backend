@@ -25,17 +25,12 @@ public class Comments extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "users")
-//    private Users users;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "products")
-    private Products products;
-
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "comment_uuid", length = 36, nullable = false, updatable = false)
     private UUID commentUuid;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "products")
+    private Products products;
 
     @Column(name = "content")
     private String content;

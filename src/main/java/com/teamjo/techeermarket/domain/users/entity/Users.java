@@ -7,7 +7,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,12 +34,9 @@ public class Users extends BaseEntity {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "social")
-    private String social;
-
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "role", nullable = false)
-//    private Role role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "social", nullable = false)
+    private Social social;
 
     @Column(name = "name")
     private String name;
@@ -48,16 +44,13 @@ public class Users extends BaseEntity {
     @Column(name = "birthday")
     private LocalDateTime birthday;
 
-    @Column(name = "thumbnail_url",length = 500)
+    @Column(name = "thumbnail_url", length = 500)
     private String thumbnailUrl;
 
-    @OneToMany (mappedBy = "users")
+    @OneToMany(mappedBy = "users")
     private List<Products> products;
 
-//    public String getRoleKey() {
-//        return this.role.getKey();
-//    }
-//}
+
 
 
     public void setIsDeleted(boolean isDeleted) {
