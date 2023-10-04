@@ -26,7 +26,7 @@ public class Users extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false)  // 이름
     private String name;
 
     @Column(name = "email", nullable = false)
@@ -42,9 +42,8 @@ public class Users extends BaseEntity {
     private String profileUrl;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "social", nullable = false)
+    @Column(name = "social")
     private Social social;
-
 
     @OneToMany(mappedBy = "users")
     private List<Products> products;
