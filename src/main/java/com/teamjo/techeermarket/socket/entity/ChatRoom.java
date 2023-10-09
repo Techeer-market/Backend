@@ -23,6 +23,9 @@ public class ChatRoom extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "chatRoomName", unique = true, nullable = false)
+    private String chatRoomName;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "product_id")
     private Products products;
