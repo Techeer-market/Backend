@@ -52,14 +52,12 @@ public class WebSecurityConfig {
                         authorizeRequests
                                 .antMatchers(AUTH_WHITE_LIST).permitAll()
                                 .anyRequest().authenticated()
-                );
-
-        // JwtCheckFilter를 "/api/**" 경로에만 적용
-        http.antMatcher("/api/post/**")
-                .addFilterBefore(new JwtCheckFilter(jwtUtill), UsernamePasswordAuthenticationFilter.class);
+                )
+                .addFilterBefore(new JwtCheckFilter(jwtUtill), UsernamePasswordAuthenticationFilter.class); // 이 부분을 수정
 
         return http.build();
     }
+
 
 
 }

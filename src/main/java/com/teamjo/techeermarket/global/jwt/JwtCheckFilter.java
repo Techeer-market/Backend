@@ -1,11 +1,8 @@
 package com.teamjo.techeermarket.global.jwt;
 
-import com.teamjo.techeermarket.domain.users.entity.Users;
-import com.teamjo.techeermarket.domain.users.mapper.UserMapper;
 import com.teamjo.techeermarket.domain.users.repository.UserRepository;
 import com.teamjo.techeermarket.global.exception.user.InvalidTokenException;
-import com.teamjo.techeermarket.global.exception.user.UserNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.teamjo.techeermarket.global.jwt.JWTUtill;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -17,92 +14,45 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Optional;
+
 
 public class JwtCheckFilter extends OncePerRequestFilter {
-
     private final JWTUtill jwtUtill;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    public JwtCheckFilter(JWTUtill jwtUtill) {
+    public JwtCheckFilter(JWTUtill jwtUtill, UserRepository userRepository) {
         this.jwtUtill = jwtUtill;
+        this.userRepository = userRepository;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+            throws ServletException, IOException, InvalidTokenException {
         String accessToken = null;
-        String refreshToken = null;
 
-        // 쿠키에서 토큰 추출
+        // 쿠키에서 액세스 토큰 추출
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if ("access_token".equals(cookie.getName())) {
                     accessToken = cookie.getValue();
-                } else if ("refresh_token".equals(cookie.getName())) {
-                    refreshToken = cookie.getValue();
                 }
             }
         }
 
-        try {
-            // 액세스 토큰이 있는 경우, 토큰을 검증하고 사용자를 인증
-            if (accessToken != null) {
-                jwtUtill.validateToken(accessToken); // Validate access token
+        // 액세스 토큰이 있는 경우, 토큰을 검증
+        if (accessToken != null) {
+            jwtUtill.validateToken(accessToken);
 
-                String username = jwtUtill.getEmailFromToken(accessToken);
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
-                // 액세스 토큰이 없고 리프레시 토큰이 있는 경우, 리프레시 토큰을 검증하고 새 액세스 토큰을 발급
-            } else if (refreshToken != null) {
-                jwtUtill.validateToken(refreshToken);
-
-                // 리프레시 토큰이 유효하다면 새로운 액세스 토큰을 생성
-                String username = jwtUtill.getEmailFromToken(refreshToken);
-                Users user = userRepository.findByEmail(username)
-                        .orElseThrow(() -> new UserNotFoundException());
-
-
-                String newAccessToken = jwtUtill.makeAccessToken(user);
-
-                // 새로운 액세스 토큰을 HTTP 응답의 쿠키에 추가
-                Cookie newAccessTokenCookie = new Cookie("access_token", newAccessToken);
-                response.addCookie(newAccessTokenCookie);
-            } else {
-                throw new InvalidTokenException();
-            }
-
-
-        } catch (InvalidTokenException e) {    // 엑세스 토큰이 유효하지 않을 때, 오류 처리
-            if (refreshToken != null) {
-                // 리프레시 토큰이 유효하다면 새로운 액세스 토큰을 발급
-                jwtUtill.validateToken(refreshToken);
-
-                // 리프레시 토큰이 유효하다면 새로운 액세스 토큰을 생성
-                String username = jwtUtill.getEmailFromToken(refreshToken);
-                Users user = userRepository.findByEmail(username)
-                        .orElseThrow(() -> new UserNotFoundException());
-
-
-                String newAccessToken = jwtUtill.makeAccessToken(user);
-
-                // 새로운 액세스 토큰을 HTTP 응답의 쿠키에 추가
-                Cookie newAccessTokenCookie = new Cookie("access_token", newAccessToken);
-                response.addCookie(newAccessTokenCookie);
-
-            } else {
-                // 리프레시 토큰이 없다면 오류 처리
-                throw new InvalidTokenException();
-            }
+            String username = jwtUtill.getEmailFromToken(accessToken);
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        filterChain.doFilter(request, response);  //JWT 토큰의 유효성을 확인한 후, 필터 체인을 계속 진행하여 요청을 처리
+        filterChain.doFilter(request, response);
     }
+
+
 
 }
