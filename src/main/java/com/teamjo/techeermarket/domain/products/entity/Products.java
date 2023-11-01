@@ -1,12 +1,14 @@
 package com.teamjo.techeermarket.domain.products.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.teamjo.techeermarket.domain.images.entity.ProductImage;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.global.common.BaseEntity;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,7 +43,7 @@ public class Products extends BaseEntity {
     private String content;
 
     @Column(name = "price", nullable = false)
-    private int price;
+    private String price;
 
     @Column(name = "views", nullable = false)
     private int views;
@@ -50,6 +52,11 @@ public class Products extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ProductState productState ;
 
+    @Column(name = "thumbnail")
+    private String thumbnail;
+
+    @OneToMany(mappedBy = "products", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    List<ProductImage> productImages = new ArrayList<>();
 
 
 }

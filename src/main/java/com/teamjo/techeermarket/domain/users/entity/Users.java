@@ -3,12 +3,8 @@ package com.teamjo.techeermarket.domain.users.entity;
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.global.common.BaseEntity;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 
 @NoArgsConstructor
@@ -45,7 +41,7 @@ public class Users extends BaseEntity {
     @Column(name = "social")
     private Social social;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users",fetch = FetchType.EAGER)
     private List<Products> products;
 
 }

@@ -17,4 +17,6 @@ public class UserDetailResponseDto {
     private String birthday ;
 
     private Social social;
+
+    private String profileUrl;
 }

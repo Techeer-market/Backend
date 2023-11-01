@@ -4,25 +4,34 @@ import com.teamjo.techeermarket.domain.users.dto.LoginRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.SignUpRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.UserDetailResponseDto;
 import com.teamjo.techeermarket.domain.users.service.UserService;
-import com.teamjo.techeermarket.global.config.CustomUserDetailsImpl;
+import com.teamjo.techeermarket.global.config.UserDetailsImpl;
 import com.teamjo.techeermarket.global.exception.user.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
-
+@Slf4j
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
     @Autowired
     private UserService userService;
+
+    /*
+    //  test API
+    */
+    @GetMapping("/test")
+    public ResponseEntity<String> privateEndpoint(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+        System.out.println("이메일 출력 = " + userDetailsImpl.getUsername());
+        String user = userDetailsImpl.getUsername();
+        return ResponseEntity.ok(user);
+    }
+
 
     /*
     //  회원가입 API
@@ -34,14 +43,17 @@ public class UserController {
     }
 
 
-
     /*
-    //  로그인 API
+    //  유저 정보 조회
     */
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        return userService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword(), response);
+    @GetMapping("/")
+    public ResponseEntity<UserDetailResponseDto> getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+        System.out.println("Email: " + userDetailsImpl.getUsername());  // 로그 추가
+        return ResponseEntity.ok(userService.getUserInfo(userDetailsImpl.getUsername()));
     }
+
+
+
 
 
 
@@ -71,14 +83,7 @@ public class UserController {
 
 
 
-    /*
-    //  유저 정보 조회
-    */
-    @GetMapping("/")
-    public ResponseEntity<UserDetailResponseDto> getUser(@AuthenticationPrincipal CustomUserDetailsImpl customUserDetailsImpl) {
-        System.out.println("Email: " + customUserDetailsImpl.getUsername());  // 로그 추가
-        return ResponseEntity.ok(userService.getUser(customUserDetailsImpl.getUsername()));
-    }
+
 
 
 
