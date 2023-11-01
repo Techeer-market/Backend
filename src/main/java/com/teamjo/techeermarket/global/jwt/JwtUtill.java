@@ -6,38 +6,31 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-
-import com.teamjo.techeermarket.global.exception.user.InvalidTokenException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.time.Instant;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class JWTUtill {
+public class JwtUtill {
     private static final long AUTH_TIME = 3 * 60 * 60 * 1000L;       // 3 hours
     private static final long REFRESH_TIME = 30 * 24 * 60 * 60 * 1000L;   // 30 days
 
-    @Value("${jwt.secret}")  // Get the secret key from application.properties
-    private String secretKey;
+//    @Value("${jwt.secret}")
+//    private static String secretKey;
+//    public static final Algorithm ALGORITHM = Algorithm.HMAC256(secretKey);
+    public static final Algorithm ALGORITHM = Algorithm.HMAC256("hahaha");
 
-    private Algorithm algorithm;
-
-    @PostConstruct
-    private void init() {
-        this.algorithm = Algorithm.HMAC512(secretKey);
-    }
 
     // 사용자 정보를 받아와서 인증 토큰을 생성
     public String makeAccessToken(Users user) {
 
         return JWT.create()
                 .withSubject(user.getEmail())
-                .withExpiresAt(new Date(System.currentTimeMillis() + AUTH_TIME))
-                .sign(algorithm);
+                .withClaim("exp", Instant.now().getEpochSecond() + AUTH_TIME)
+                .sign(ALGORITHM);
     }
 
     // 사용자 정보를 받아와서 리프레시 토큰을 생성
@@ -45,21 +38,36 @@ public class JWTUtill {
 
         return JWT.create()
                 .withSubject(user.getEmail())
-                .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TIME))
-                .sign(algorithm);
+                .withClaim("exp", Instant.now().getEpochSecond() + REFRESH_TIME)
+                .sign(ALGORITHM);
     }
 
-    // 토큰 검증
-    public void validateToken(String token) {
+    // 주어진 JWT 토큰을 검증
+    public static VerifyResultDto verify(String token) {
         try {
-            JWTVerifier verifier = JWT.require(algorithm).build();
+            DecodedJWT verify = JWT.require(ALGORITHM).build().verify(token);
+            return VerifyResultDto.builder().success(true)
+                    .userEmail(verify.getSubject()).build();
+
+        } catch (Exception ex) {
+            DecodedJWT decode = JWT.decode(token);
+            return VerifyResultDto.builder()
+                    .success(false)
+                    .userEmail(decode.getSubject())
+                    .build();
+        }
+    }
+
+
+
+    // 토큰이 유효한지 검증
+    public boolean validateToken(String token) {
+        try {
+            JWTVerifier verifier = JWT.require(ALGORITHM).build();
             DecodedJWT jwt = verifier.verify(token);
-            if (!jwt.getExpiresAt().after(Date.from(Instant.now()))) {
-                throw new InvalidTokenException(); // 만료된 토큰
-            }
+            return jwt.getExpiresAt().after(Date.from(Instant.now()));
         } catch (JWTVerificationException e) {
-            // 토큰이 유효하지 않을 때의 처리
-            throw new InvalidTokenException(); // 유효하지 않은 토큰
+            return false; // 토큰이 유효하지 않음
         }
     }
 
