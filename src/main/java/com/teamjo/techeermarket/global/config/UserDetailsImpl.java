@@ -1,26 +1,31 @@
 package com.teamjo.techeermarket.global.config;
 
 import com.teamjo.techeermarket.domain.users.entity.Users;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Collections;
 
-
-public class CustomUserDetailsImpl implements UserDetails {
+@Slf4j
+@Getter
+@RequiredArgsConstructor
+public class UserDetailsImpl implements UserDetails {
 
     private final Users user;
 
-    public CustomUserDetailsImpl(Users user) {
-        this.user = user;
-    }
+//    public UserDetailsImpl(Users user) {
+//        this.user = user;
+//    }
 
-    public Users getUser() {
-        return user;
-    }
-
+//    @Override
+//    public Users getUser() {
+//        return user;
+//    }
 
     @Override
     public String getPassword() {
@@ -55,7 +60,9 @@ public class CustomUserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();
+//        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
-}
 
+
+}
