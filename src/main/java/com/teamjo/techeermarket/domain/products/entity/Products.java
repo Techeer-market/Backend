@@ -43,7 +43,7 @@ public class Products extends BaseEntity {
     private String content;
 
     @Column(name = "price", nullable = false)
-    private String price;
+    private int price;
 
     @Column(name = "views", nullable = false)
     private int views;

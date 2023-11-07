@@ -25,7 +25,7 @@ public class Users extends BaseEntity {
     @Column(name = "name", nullable = false)  // 이름
     private String name;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false)  // 이메일
     private String email;
 
     @Column(name = "password")

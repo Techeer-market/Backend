@@ -23,8 +23,7 @@ public class ProductRequestDto {
 
     private String categoryName;
 
-    @NotEmpty(message = "가격 입력은 필수 입니다.")
-    private String price;
+    private int price;
 
     private List<MultipartFile> productImages;
 

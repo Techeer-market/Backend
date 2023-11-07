@@ -47,7 +47,7 @@ public class ProductService  {
     }
 
 
-    // 게시물 조회
+    // 게시물 전체 조회
 
 
 
