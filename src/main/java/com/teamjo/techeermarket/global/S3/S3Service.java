@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,6 +38,18 @@ public class S3Service {
         amazonS3.putObject(bucket, s3FileName, multipartFile.getInputStream(), objMeta);
         return amazonS3.getUrl(bucket, s3FileName).toString();
     }
+
+
+    // 이미지 리스트 형식 업로드
+    public List<String> uploadProductImageList(BucketDir bucketDir, List<MultipartFile> imageFiles) throws IOException {
+        List<String> imageUrls = new ArrayList<>();
+        for (MultipartFile imageFile : imageFiles) {
+            String imageUrl = uploadImage(bucketDir, imageFile);
+            imageUrls.add(imageUrl);
+        }
+        return imageUrls;
+    }
+
 
 
     // 이미지 삭제
