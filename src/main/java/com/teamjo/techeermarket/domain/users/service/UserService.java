@@ -1,6 +1,7 @@
 package com.teamjo.techeermarket.domain.users.service;
 
 import com.teamjo.techeermarket.domain.users.dto.SignUpRequestDto;
+import com.teamjo.techeermarket.domain.users.dto.UserChangeInfoDto;
 import com.teamjo.techeermarket.domain.users.dto.UserDetailResponseDto;
 import com.teamjo.techeermarket.domain.users.entity.Social;
 import com.teamjo.techeermarket.domain.users.entity.Users;
@@ -71,6 +72,45 @@ public class UserService {
 
         return UserFromMapper.fromEntity(userEntity);
     }
+
+
+
+    /*
+    //  유저 정보 수정
+     */
+    @Transactional
+    public UserDetailResponseDto updateUserInfo(String currentEmail, UserChangeInfoDto changeInfoDto) {
+        Users userEntity = userRepository.findUserByEmail(currentEmail)
+                .orElseThrow(UserNotFoundException::new);
+
+        // UserChangeInfoDto에 따라 유저 정보 업데이트
+        if (changeInfoDto.getPassword() != null) {
+            userEntity.setPassword(passwordEncoder.encode(changeInfoDto.getPassword()));
+        }
+        if (changeInfoDto.getBirthday() != null) {
+            userEntity.setBirthday(changeInfoDto.getBirthday());
+        }
+
+        String newEmail = changeInfoDto.getEmail();
+        // 이메일 업데이트
+        if (newEmail != null && !newEmail.equals(currentEmail)) {
+            // 새 이메일이 기존과 다르면서 중복되지 않을 경우에만 업데이트
+            if (!userRepository.existsByEmail(newEmail)) {
+                userEntity.setEmail(newEmail);
+            } else {
+                throw new UserEmailAlreadyExistsException();
+            }
+        }
+
+        // 업데이트된 유저 정보 저장
+        Users updatedUser = userRepository.save(userEntity);
+
+        // 업데이트된 유저 정보를 DTO 형식으로 반환
+        return UserFromMapper.fromEntity(updatedUser);
+    }
+
+
+
 
 
     /*
