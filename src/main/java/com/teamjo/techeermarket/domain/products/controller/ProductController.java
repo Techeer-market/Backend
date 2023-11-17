@@ -68,4 +68,30 @@ public class ProductController {
     }
 
 
+
+    /*
+    //  게시물 좋아요 누르기
+    */
+    @PostMapping("/like/{productId}")
+    public HttpStatus likeProduct (@PathVariable Long productId,
+                                   @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
+        String email = userDetailsImpl.getUsername();
+        productSubService.likeProduct(email, productId);
+        return HttpStatus.OK;
+    }
+
+
+    /*
+    //  게시물 좋아요 취소 누르기
+    */
+    @DeleteMapping("/like/{productId}")
+    public HttpStatus unlikeProduct (@PathVariable Long productId,
+                                   @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
+        String email = userDetailsImpl.getUsername();
+        productSubService.unlikeProduct(email, productId);
+        return HttpStatus.OK;
+    }
+
+
+
 }

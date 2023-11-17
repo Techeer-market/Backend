@@ -48,7 +48,8 @@ public class ProductService  {
      */
     @Transactional
     public Long saveProduct(ProductRequestDto request, String email) throws IOException {
-        Users findUsers = userRepository.findByEmail(email);
+        Users findUsers = userRepository.findUserByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
         Categorys findCategory = categoryRepository.findIdByName(request.getCategoryName());
 
         Products products = productMapper.saveToEntity(request, findCategory);
