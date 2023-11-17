@@ -39,7 +39,7 @@ public class Products extends BaseEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, length = 512)
     private String content;
 
     @Column(name = "price", nullable = false)
@@ -52,11 +52,21 @@ public class Products extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ProductState productState ;
 
-    @Column(name = "thumbnail")
+    @Column(name = "thumbnail", length = 512)
     private String thumbnail;
 
     @OneToMany(mappedBy = "products", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     List<ProductImage> productImages = new ArrayList<>();
+
+
+
+
+//    ///
+//    // 썸네일 등록
+//    public void setThumbnail(List<ProductImage> productImages) {
+//        this.thumbnail = productImages.get(0).getImageUrl();
+//        this.productImages = productImages;
+//    }
 
 
 }
