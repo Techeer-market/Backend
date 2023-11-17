@@ -26,13 +26,13 @@ public class ProductImage extends BaseEntity {
     @JoinColumn(name = "product_id")
     private Products products;
 
-    @Column(name = "image_name", nullable = false)
+    @Column(name = "image_name", nullable = false, length = 512)
     private String imageName;
 
-    @Column(name = "image_num", nullable = false)
+    @Column(name = "image_num", nullable = false, length = 512)
     private int imageNum;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", length = 512)
     private String imageUrl;
 
 

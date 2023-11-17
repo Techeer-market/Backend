@@ -28,6 +28,8 @@ public class WebSecurityConfig {
     private static final String[] AUTH_WHITE_LIST = {
             "/api/users/signup",
             "/api/users/login",
+            "/api/category/**",
+            "/api/test/**",
             "/error",
             "/h2-console/**"
     };

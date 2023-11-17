@@ -2,6 +2,7 @@ package com.teamjo.techeermarket.domain.users.controller;
 
 import com.teamjo.techeermarket.domain.users.dto.LoginRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.SignUpRequestDto;
+import com.teamjo.techeermarket.domain.users.dto.UserChangeInfoDto;
 import com.teamjo.techeermarket.domain.users.dto.UserDetailResponseDto;
 import com.teamjo.techeermarket.domain.users.service.UserService;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
@@ -52,6 +53,17 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserInfo(userDetailsImpl.getUsername()));
     }
 
+
+    /*
+    //  유저 정보 수정
+    */
+    @PatchMapping("/update")
+    public ResponseEntity<UserDetailResponseDto> updateUserInformation(@RequestBody UserChangeInfoDto changeInfoDto,
+                                                                       @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+        String userEmail = userDetailsImpl.getUsername();
+        UserDetailResponseDto updatedUserInfo = userService.updateUserInfo(userEmail, changeInfoDto);
+        return ResponseEntity.ok(updatedUserInfo);
+    }
 
 
 
