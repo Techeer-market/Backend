@@ -34,8 +34,8 @@ public class ProductController {
         // 상품 DB에 저장
         Long productId = productService.saveProduct(productRequstDto, email);
 
-        // UserPurchase DB에 저장
-        // 상품 id + userid(seller-id) 만 저장
+        // UserPurchase DB에 => 상품 id + (seller-id) 만 저장
+        productSubService.updateProductSeller(email,productId);
 
         // 상품 상세 조회로 redirect
 //        redirectAttributes.addAttribute("productId", productId);

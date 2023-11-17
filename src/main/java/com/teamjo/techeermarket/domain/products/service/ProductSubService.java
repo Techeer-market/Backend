@@ -3,7 +3,9 @@ package com.teamjo.techeermarket.domain.products.service;
 import com.teamjo.techeermarket.domain.images.repository.ProductImageRepository;
 import com.teamjo.techeermarket.domain.images.service.ProductImageService;
 import com.teamjo.techeermarket.domain.mypage.entity.UserLike;
+import com.teamjo.techeermarket.domain.mypage.entity.UserPurchase;
 import com.teamjo.techeermarket.domain.mypage.repository.UserLikeRepository;
+import com.teamjo.techeermarket.domain.mypage.repository.UserPurchaseRepository;
 import com.teamjo.techeermarket.domain.products.entity.ProductState;
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.domain.products.mapper.ProductMapper;
@@ -29,6 +31,7 @@ public class ProductSubService  {
     private final ProductRepository productRepository;
     private final ProductImageService productImageService;
     private final UserLikeRepository userLikeRepository;
+    private final UserPurchaseRepository userPurchaseRepository;
     private final UserRepository userRepository;
     @Autowired
     private final ProductMapper productMapper;
@@ -40,6 +43,26 @@ public class ProductSubService  {
     private final ProductImageRepository productImageRepository;
 
 
+    /*
+    // 게시물 작성후 userPurchase table에 추가
+    */
+    @Transactional
+    public void updateProductSeller(String email, Long productId){
+        // 유저 정보 가져옴
+        Users seller = userRepository.findUserByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+        // 상품 정보를 가져옴
+        Products products = productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+        // UserPurchase 테이블에 저장
+        if (!userPurchaseRepository.existsBySellerIdAndProducts(seller, products)){
+            UserPurchase userPurchase = new UserPurchase();
+            userPurchase.setProducts(products);
+            userPurchase.setSellerId(seller);
+            userPurchaseRepository.save(userPurchase);
+        }
+    }
+
 
 
     /*
@@ -49,7 +72,7 @@ public class ProductSubService  {
     public void increaseViewCount (Long productId) {
         // 상품을 데이터베이스에서 찾음
         Products product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException());
+                .orElseThrow(ProductNotFoundException::new);
         int views = product.getViews();
         product.setViews(views+1);
 
@@ -66,7 +89,7 @@ public class ProductSubService  {
                 .orElseThrow(UserNotFoundException::new);
         // 상품을 데이터베이스에서 찾음
         Products product = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException());
+                .orElseThrow(ProductNotFoundException::new);
 
         // 현재 로그인한 사용자의 게시물인지 확인
         if (!product.getUsers().getEmail().equals(email)) {
@@ -87,7 +110,7 @@ public class ProductSubService  {
                 .orElseThrow(UserNotFoundException::new);
         // 상품 정보를 가져옴
         Products products = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException());
+                .orElseThrow(ProductNotFoundException::new);
 
         // 사용자가 해당 상품에 이미 좋아요를 누른 적이 없으면
         if (!userLikeRepository.existsByUsersAndProducts(users, products)) {
@@ -110,7 +133,7 @@ public class ProductSubService  {
                 .orElseThrow(UserNotFoundException::new);
         // 상품 정보를 가져옴
         Products products = productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException());
+                .orElseThrow(ProductNotFoundException::new);
 
         // 사용자가 해당 상품에 좋아요를 누른 적이 있다면
         userLikeRepository.findByUsersAndProducts(users, products)
