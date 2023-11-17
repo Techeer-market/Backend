@@ -57,7 +57,7 @@ public class UserController {
     /*
     //  유저 정보 수정
     */
-    @PatchMapping
+    @PatchMapping("/update")
     public ResponseEntity<UserDetailResponseDto> updateUserInformation(@RequestBody UserChangeInfoDto changeInfoDto,
                                                                        @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         String userEmail = userDetailsImpl.getUsername();

@@ -20,7 +20,7 @@ public class ProductPreViewDto {
 
     private String name;  // 작성자
 
-    private String price ;
+    private int price ;
 
     private String createdAt ;
 
