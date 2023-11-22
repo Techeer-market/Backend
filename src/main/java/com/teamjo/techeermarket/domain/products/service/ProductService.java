@@ -43,10 +43,13 @@ public class ProductService  {
     private final ProductImageRepository productImageRepository;
 
 
-    // 상품 저장 ( = 게시물 저장)
+    /*
+     // 상품 저장 ( = 게시물 저장)
+     */
     @Transactional
     public Long saveProduct(ProductRequestDto request, String email) throws IOException {
-        Users findUsers = userRepository.findByEmail(email);
+        Users findUsers = userRepository.findUserByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
         Categorys findCategory = categoryRepository.findIdByName(request.getCategoryName());
 
         Products products = productMapper.saveToEntity(request, findCategory);
@@ -71,12 +74,10 @@ public class ProductService  {
             ProductImage productImage = new ProductImage();
             productImage.setProducts(products);  // products가 Products 엔터티의 인스턴스여야 합니다.
             productImage.setImageUrl(imageUrls.get(i));
-
             // 이미지 이름 설정
             productImage.setImageName(newProductID +"Image#" + (i+1));
             // 이미지 번호 설정
             productImage.setImageNum(i+1);
-
             // ProductImage 저장
             productImageRepository.save(productImage);
         }
@@ -86,41 +87,24 @@ public class ProductService  {
 
 
 
+
+
+     /*
+     // 상품 게시물 상세 조회
+     */
+
+
+
+
+
     // 게시물 전체 조회
 
 
 
 
 
-    // 썸네일 업데이트
-//    @Transactional
-//    public void updateThumbnail(List<ProductImage> images, Long productId) {
-//        Products product = productRepository.findById(productId).get();
-//        product.setThumbnail(images);
-//    }
 
 
-    // 게시물에서 이미지 저장
-//    @Transactional
-//    public List<ProductImage> getProductImage(List<MultipartFile> productImages, Products product){
-//        return productImages.stream()
-//                .map((image) -> {
-//                    try {
-//                        s3Service.uploadProductImageList(BucketDir.PRODUCT, imageFiles);
-//                        return ProductImage.builder()
-//                                .imageUrl(url)
-//                                .fileName(s3Uploader.getFileName(url))
-//                                .product(product)
-//                                .build();
-//                        return productImageService.save(productImageService.convert(image, product));
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                })
-//                .collect(Collectors.toList());
-//    }
 
-//            List<MultipartFile> imageFiles = request.getProductImages();
-//            List<String> imageUrls = s3Service.uploadProductImageList(BucketDir.PRODUCT, imageFiles);
 
 }
