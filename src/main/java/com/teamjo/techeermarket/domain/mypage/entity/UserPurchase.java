@@ -3,10 +3,7 @@ package com.teamjo.techeermarket.domain.mypage.entity;
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.global.common.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,6 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Builder
+@Setter
 @NoArgsConstructor
 @Table(name="user_purchase")
 public class UserPurchase extends BaseEntity {

@@ -2,10 +2,7 @@ package com.teamjo.techeermarket.domain.mypage.entity;
 
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.domain.users.entity.Users;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,6 +11,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @AllArgsConstructor
 @Entity
+@Setter
 @Builder
 @NoArgsConstructor
 @Table(name="user_product_like")
