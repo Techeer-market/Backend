@@ -1,15 +1,15 @@
   spring:
-    datasource:
-      url: jdbc:postgresql://${CLOUD_AWS_DB_HOST}:5432/${CLOUD_AWS_DB_DATABASE_NAME}
-      username: ${CLOUD_AWS_DB_USERNAME}
-      password: ${CLOUD_AWS_DB_PASSWORD}
-      driverClassName: org.postgresql.Driver
-
 #    datasource:
-#      url: jdbc:postgresql://localhost:5432/techeermarket
-#      username: postgres
-#      password: 1234
+#      url: jdbc:postgresql://${CLOUD_AWS_DB_HOST}:5432/${CLOUD_AWS_DB_DATABASE_NAME}
+#      username: ${CLOUD_AWS_DB_USERNAME}
+#      password: ${CLOUD_AWS_DB_PASSWORD}
 #      driverClassName: org.postgresql.Driver
+
+    datasource:
+      url: jdbc:postgresql://175.118.95.185:5432/techeermarket
+      username: postgres
+      password: 1234
+      driverClassName: org.postgresql.Driver
 
     jpa:
       database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -28,7 +28,7 @@
 
 
 
-  jwt.secret : kJlkhRU-b-p3nwYgbeNpgVii1rssccUKOP4yaUjeHbM
+#  jwt.secret : kJlkhRU-b-p3nwYgbeNpgVii1rssccUKOP4yaUjeHbM
 
   logging:
     level:
@@ -39,12 +39,12 @@
   cloud:
     aws:
       credentials:
-        accessKey: ${CLOUD_AWS_ACCESS_KEY_ID}
-        secretKey: ${CLOUD_AWS_SECRET_ACCESS_KEY}
+        accessKey: AKIAYAKWPGGBKQV2OEMZ
+        secretKey: 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
       s3:
-        bucket: ${CLOUD_AWS_S3_BUCKETNAME}
+        bucket: techeer-market-bucket
       region:
-        static: ${CLOUD_AWS_S3_REGION}
+        static: ap-northeast-2
       stack:
         auto: false
 
