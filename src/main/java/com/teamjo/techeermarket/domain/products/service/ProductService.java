@@ -2,7 +2,6 @@ package com.teamjo.techeermarket.domain.products.service;
 
 import com.teamjo.techeermarket.domain.images.entity.ProductImage;
 import com.teamjo.techeermarket.domain.images.repository.ProductImageRepository;
-import com.teamjo.techeermarket.domain.images.service.ProductImageService;
 import com.teamjo.techeermarket.domain.products.dto.request.ProductRequestDto;
 import com.teamjo.techeermarket.domain.products.entity.Categorys;
 import com.teamjo.techeermarket.domain.products.entity.ProductState;
@@ -30,7 +29,6 @@ import java.util.stream.Collectors;
 public class ProductService  {
 
     private final ProductRepository productRepository;
-    private final ProductImageService productImageService;
     @Autowired
     private final UserRepository userRepository;
     @Autowired
@@ -97,7 +95,9 @@ public class ProductService  {
 
 
 
-    // 게시물 전체 조회
+     /*
+     // 상품 게시물 전체 조회
+     */
 
 
 

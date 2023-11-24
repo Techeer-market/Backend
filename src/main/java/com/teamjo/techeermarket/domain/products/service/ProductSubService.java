@@ -112,6 +112,13 @@ public class ProductSubService  {
         Products products = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
+        /*
+        아래 조건 추가 하도록 수정
+        //addGoodPoint는 좋아요를 추가하는 메소드로써 이미 좋아요가 되어있는 글이라면 예외처리된다.
+        //deleteGoodPoint는 좋아요를 철회하는 메소드로써 좋아요된 이력이 없다면 예외처리된다.
+        // 커스텀 익셉션은 추후에 추가하기로하고 임시방편으로 런타임 익셉션을 사용하도록 하였다.
+        */
+
         // 사용자가 해당 상품에 이미 좋아요를 누른 적이 없으면
         if (!userLikeRepository.existsByUsersAndProducts(users, products)) {
             // 좋아요 정보를 생성하여 저장
