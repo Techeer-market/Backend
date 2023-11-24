@@ -7,8 +7,8 @@
 
 #    datasource:
 #      url: jdbc:postgresql://localhost:5432/techeermarket
-#      username: postgres
-#      password: 1234
+#      username:
+#      password: 
 #      driverClassName: org.postgresql.Driver
 
     jpa:
