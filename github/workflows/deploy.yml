@@ -1,5 +1,5 @@
 
-name: techeer-market
+name: techeermarket
 
 on:
   push:
@@ -22,16 +22,16 @@ jobs:
           distribution: 'adopt'
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x ./gradlew   # gradle wrapper를 실행할 수 있도록 권한 부여
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew clean build    # 프로젝트 빌드
         shell: bash
 
       - name: Get build time
         id: current-time
-        uses: 1466587594/get-current-time@v2
+        uses: 1466587594/get-current-time@v2   # 빌드 완료 시간 가져오기 
         with:
           format: 'YYYY-MM-DDTHH-mm-ss'
           utcOffset: '+09:00'
