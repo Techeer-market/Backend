@@ -3,6 +3,7 @@ package com.teamjo.techeermarket.domain.products.service;
 import com.teamjo.techeermarket.domain.images.entity.ProductImage;
 import com.teamjo.techeermarket.domain.images.repository.ProductImageRepository;
 import com.teamjo.techeermarket.domain.products.dto.request.ProductRequestDto;
+import com.teamjo.techeermarket.domain.products.dto.response.ProductPreViewDto;
 import com.teamjo.techeermarket.domain.products.entity.Categorys;
 import com.teamjo.techeermarket.domain.products.entity.ProductState;
 import com.teamjo.techeermarket.domain.products.entity.Products;
@@ -13,9 +14,14 @@ import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.repository.UserRepository;
 import com.teamjo.techeermarket.global.S3.BucketDir;
 import com.teamjo.techeermarket.global.S3.S3Service;
+import com.teamjo.techeermarket.global.exception.product.CategoryNotFoundException;
 import com.teamjo.techeermarket.global.exception.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,6 +55,9 @@ public class ProductService  {
         Users findUsers = userRepository.findUserByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
         Categorys findCategory = categoryRepository.findIdByName(request.getCategoryName());
+        if (findCategory == null) {
+            throw new CategoryNotFoundException();    // 카테고리 확인
+        }
 
         Products products = productMapper.saveToEntity(request, findCategory);
         products.setUsers(findUsers);
@@ -85,6 +94,18 @@ public class ProductService  {
 
 
 
+    /*
+    // 게시물 전체 목록 보기
+    */
+    @Transactional(readOnly = true)
+    public List<ProductPreViewDto> getAllProductList (int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by("id").descending());  // 1페이지부터 시작하도록
+        Page<Products> productPage = productRepository.findAll(pageable);
+        return productPage.stream()
+                .map(productMapper::fromListEntity)
+                .collect(Collectors.toList());
+    }
+
 
 
      /*
@@ -94,10 +115,6 @@ public class ProductService  {
 
 
 
-
-     /*
-     // 상품 게시물 전체 조회
-     */
 
 
 

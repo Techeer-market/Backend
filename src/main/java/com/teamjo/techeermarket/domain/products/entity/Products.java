@@ -48,6 +48,9 @@ public class Products extends BaseEntity {
     @Column(name = "views", nullable = false)
     private int views;
 
+    @Column(name = "heart")
+    private int heart;
+
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private ProductState productState ;
