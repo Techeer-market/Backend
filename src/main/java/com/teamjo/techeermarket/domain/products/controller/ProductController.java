@@ -1,6 +1,8 @@
 package com.teamjo.techeermarket.domain.products.controller;
 
+import com.teamjo.techeermarket.domain.mypage.service.MyPageService;
 import com.teamjo.techeermarket.domain.products.dto.request.ProductRequestDto;
+import com.teamjo.techeermarket.domain.products.dto.response.ProductPreViewDto;
 import com.teamjo.techeermarket.domain.products.entity.ProductState;
 import com.teamjo.techeermarket.domain.products.service.ProductService;
 import com.teamjo.techeermarket.domain.products.service.ProductSubService;
@@ -14,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import static com.teamjo.techeermarket.global.exception.ErrorCode.INVALID_PRODUCT_STATE;
@@ -26,6 +29,8 @@ public class ProductController {
 
     private final ProductService productService;
     private final ProductSubService productSubService;
+
+    private final MyPageService myPageService;
 
     @PostMapping
     public HttpStatus saveProduct (@Validated @ModelAttribute ProductRequestDto productRequstDto,
@@ -43,6 +48,7 @@ public class ProductController {
 
         return HttpStatus.OK;
     }
+
 
 
     /*
@@ -70,15 +76,29 @@ public class ProductController {
 
 
     /*
+    //  게시물 전체 목록 보기
+     */
+    @GetMapping("/list")
+    public ResponseEntity<List<ProductPreViewDto>> getAllProductListByPagination(
+            @RequestParam(defaultValue = "1") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        List<ProductPreViewDto> productsList = productService.getAllProductList(pageNo, pageSize);
+        return ResponseEntity.ok(productsList);
+    }
+
+
+
+    /*
     //  게시물 좋아요 누르기
     */
     @PostMapping("/like/{productId}")
     public HttpStatus likeProduct (@PathVariable Long productId,
                                    @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
         String email = userDetailsImpl.getUsername();
-        productSubService.likeProduct(email, productId);
+        myPageService.likeProduct(email, productId);
         return HttpStatus.OK;
     }
+
 
 
     /*
@@ -88,7 +108,7 @@ public class ProductController {
     public HttpStatus unlikeProduct (@PathVariable Long productId,
                                    @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
         String email = userDetailsImpl.getUsername();
-        productSubService.unlikeProduct(email, productId);
+        myPageService.unlikeProduct(email, productId);
         return HttpStatus.OK;
     }
 
