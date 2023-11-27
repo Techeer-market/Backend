@@ -34,6 +34,7 @@ public class UserController {
     }
 
 
+
     /*
     //  회원가입 API
     */
@@ -44,14 +45,16 @@ public class UserController {
     }
 
 
+
     /*
     //  유저 정보 조회
     */
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<UserDetailResponseDto> getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         System.out.println("Email: " + userDetailsImpl.getUsername());  // 로그 추가
         return ResponseEntity.ok(userService.getUserInfo(userDetailsImpl.getUsername()));
     }
+
 
 
     /*
