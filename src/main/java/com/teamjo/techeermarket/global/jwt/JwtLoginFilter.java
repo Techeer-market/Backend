@@ -107,9 +107,10 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         SecurityContextHolder.clearContext();
 
 //        super.unsuccessfulAuthentication(request, response, failed);
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다");
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED, "사용자를 찾을 수 없습니다");
         response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         response.getOutputStream().write(objectMapper.writeValueAsBytes(errorResponse));
+        response.setStatus(401);
 
 
     }

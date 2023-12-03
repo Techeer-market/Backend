@@ -30,9 +30,9 @@ public class ProductMapper {
                 .name(product.getUsers().getName())
                 .price(product.getPrice())
                 .createdAt(product.getCreatedAt())
+                .likes(product.getHeart())
                 .views(product.getViews())
                 .build();
     }
-
 
 }

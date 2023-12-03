@@ -6,7 +6,9 @@ import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.domain.products.mapper.ProductMapper;
 import com.teamjo.techeermarket.domain.products.repository.CategoryRepository;
 import com.teamjo.techeermarket.domain.products.repository.ProductRepository;
+import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.global.exception.product.CategoryNotFoundException;
+import com.teamjo.techeermarket.global.exception.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,7 +40,7 @@ public class CategoryService {
     public List<ProductPreViewDto> getCategoryList (Long categoryId, int pageNo, int pageSize) {
         Categorys category = categoryRepository.findCategorysById(categoryId);
         if (category == null) {
-            throw new CategoryNotFoundException();
+            throw new CategoryNotFoundException();    // 카테고리 확인
         }
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by("id").descending());  // 1페이지부터 시작하도록
         Page<Products> productPage = productRepository.findByCategorys(category,pageable);
@@ -47,6 +49,15 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-
+/*
+        return productPage.stream()
+                .map(product -> {
+                    ProductPreViewDto productPreViewDto = productMapper.fromListEntity(product);
+                    productPreViewDto.setLikes(userLikeService.getLikesCountByProduct(product));
+                    return productPreViewDto;
+                })
+                .collect(Collectors.toList());
+    }
+ */
 
 }

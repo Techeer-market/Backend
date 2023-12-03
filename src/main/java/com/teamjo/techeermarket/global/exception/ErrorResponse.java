@@ -25,4 +25,5 @@ public class ErrorResponse {
         this.code = code.getCode();
     }
 
+
 }

@@ -19,13 +19,12 @@
         hibernate:
           format_sql: true
 
-
-
   servlet:
     multipart:
       max-file-size: 1000MB
       max-request-size: 1000MB
 
+  jwt.secret : kJlkhRU-b-p3nwYgbeNpgVii1rssccUKOP4yaUjeHbM
 
 
 #  jwt.secret : kJlkhRU-b-p3nwYgbeNpgVii1rssccUKOP4yaUjeHbM
@@ -39,12 +38,12 @@
   cloud:
     aws:
       credentials:
-        accessKey: AKIAYAKWPGGBKQV2OEMZ
-        secretKey: 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
+        accessKey: ${CLOUD_AWS_ACCESS_KEY_ID}
+        secretKey: ${CLOUD_AWS_SECRET_ACCESS_KEY}
       s3:
-        bucket: techeer-market-bucket
+        bucket: ${CLOUD_AWS_S3_BUCKETNAME}
       region:
-        static: ap-northeast-2
+        static: ${CLOUD_AWS_S3_REGION}
       stack:
         auto: false
 
