@@ -6,7 +6,7 @@
 #      driverClassName: org.postgresql.Driver
 
     datasource:
-      url: jdbc:postgresql://175.118.95.185:5432/techeermarket
+      url: jdbc:postgresql://192.168.0.13:5432/techeermarket
       username: postgres
       password: 1234
       driverClassName: org.postgresql.Driver

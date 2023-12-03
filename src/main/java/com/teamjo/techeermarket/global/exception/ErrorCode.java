@@ -22,6 +22,8 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND (HttpStatus.NOT_FOUND, "P001", "상품을 찾을 수 없습니다."),
     CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST, "P002", "카테고리를 찾을 수 없습니다."),
     INVALID_PRODUCT_STATE (HttpStatus.BAD_REQUEST, "P003", "상품 상태 정보가 올바르지 않습니다."),
+    INVALID_PRODUCT_REQUEST (HttpStatus.BAD_REQUEST, "P004","상품페이지의 올바르지 못한 요청입니다."),
+
 
     // 이미지 관련
     IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "I001", "유효하지 않은 이미지입니다.");
