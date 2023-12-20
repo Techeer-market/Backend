@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Set;
 
 public interface ProductRepository extends JpaRepository<Products, Long> {
@@ -23,5 +24,9 @@ public interface ProductRepository extends JpaRepository<Products, Long> {
     void decrementHeartCount(@Param("product") Products product);
 
     Page<Products> findByIdIn(Set<Long> productIds, Pageable pageable);
+
+    List<Products> findByTitleContainingOrderByIdDesc(String search);
+
+    List<Products> findByCategorysAndTitleContainingIgnoreCaseOrderByIdDesc(Categorys category, String title);
 
 }
