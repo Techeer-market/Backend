@@ -18,8 +18,6 @@ public class ProductPreViewDto {
 
     private String name;  // 작성자
 
-    private Long userId ; // 작성자 id
-
     private int price ;
 
     private String createdAt ;

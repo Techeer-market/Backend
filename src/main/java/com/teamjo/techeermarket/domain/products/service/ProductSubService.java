@@ -140,23 +140,6 @@ public class ProductSubService  {
                 .ifPresent(userLikeRepository::delete); // 좋아요 정보를 삭제
     }
 
-    /*
-    // 게시물 조회수 업데이트
-     */
-    @Transactional
-    public void increaseViewsCount (Long productId) {
-        // 상품 정보를 가져옴
-        Products products = productRepository.findById(productId)
-                .orElseThrow(ProductNotFoundException::new);
-
-        int views = products.getViews();
-        products.setViews(views + 1);
-
-        productRepository.save(products);  // 상태 변경 저장
-    }
-
-
-
 
 
 }

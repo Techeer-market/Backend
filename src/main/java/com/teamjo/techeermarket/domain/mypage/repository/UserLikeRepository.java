@@ -11,9 +11,4 @@ public interface UserLikeRepository extends JpaRepository<UserLike, Long> {
     boolean existsByUsersAndProducts(Users users, Products products);
 
     Optional<UserLike> findByUsersAndProducts(Users users, Products products);
-
-    List<UserLike> findByUsers(Users findUsers);
-
-    void deleteByProducts(Products products);
-
 }
