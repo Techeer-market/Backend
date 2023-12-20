@@ -19,16 +19,28 @@ public class CategoryController {
     private final CategoryService categoryService ;
     private final ProductMapper productMapper;
 
-    /*
+    /**
      // 카테고리별 상품 목록 조회
      */
-    @GetMapping("/{categoryId}")
+    @GetMapping("/list/{categoryId}")
     public ResponseEntity<List<ProductPreViewDto>> getCategoryListByPagination(
             @PathVariable Long categoryId,
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
         List<ProductPreViewDto> productsList = categoryService.getCategoryList(categoryId, pageNo, pageSize);
         return ResponseEntity.ok(productsList);
+    }
+
+
+    /**
+    // 카테고리 내에서 제목으로 상품 게시물 검색
+    */
+    @GetMapping("/{categoryId}/")
+    public ResponseEntity<List<ProductPreViewDto>> searchProductsByTitleInCategory(
+            @PathVariable Long categoryId,
+            @RequestParam String search) {
+        List<ProductPreViewDto> searchResult = categoryService.searchByTitleInCategory(categoryId, search);
+        return ResponseEntity.ok(searchResult);
     }
 
 

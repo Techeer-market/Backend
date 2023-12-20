@@ -25,6 +25,8 @@ public class ProductRequestDto {
 
     private int price;
 
+    private String location;
+
     private List<MultipartFile> productImages;
 
 }

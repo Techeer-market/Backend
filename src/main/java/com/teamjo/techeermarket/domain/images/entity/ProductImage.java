@@ -29,7 +29,7 @@ public class ProductImage extends BaseEntity {
     @Column(name = "image_name", nullable = false, length = 512)
     private String imageName;
 
-    @Column(name = "image_num", nullable = false, length = 512)
+    @Column(name = "image_num", nullable = false)
     private int imageNum;
 
     @Column(name = "image_url", length = 512)

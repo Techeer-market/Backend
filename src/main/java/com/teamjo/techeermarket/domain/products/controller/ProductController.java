@@ -2,6 +2,8 @@ package com.teamjo.techeermarket.domain.products.controller;
 
 import com.teamjo.techeermarket.domain.mypage.service.MyPageService;
 import com.teamjo.techeermarket.domain.products.dto.request.ProductRequestDto;
+import com.teamjo.techeermarket.domain.products.dto.request.ProductUpdateRequestDto;
+import com.teamjo.techeermarket.domain.products.dto.response.ProductDetailViewDto;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductPreViewDto;
 import com.teamjo.techeermarket.domain.products.entity.ProductState;
 import com.teamjo.techeermarket.domain.products.service.ProductService;
@@ -19,8 +21,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static com.teamjo.techeermarket.global.exception.ErrorCode.INVALID_PRODUCT_STATE;
-
 
 @RequiredArgsConstructor
 @RestController
@@ -32,9 +32,12 @@ public class ProductController {
 
     private final MyPageService myPageService;
 
+    /**
+    // 게시물 작성하기
+     **/
     @PostMapping
-    public HttpStatus saveProduct (@Validated @ModelAttribute ProductRequestDto productRequstDto,
-                                   @AuthenticationPrincipal UserDetailsImpl userDetailsImpl ) throws IOException {
+    public ResponseEntity<?> saveProduct (@Validated @ModelAttribute ProductRequestDto productRequstDto,
+                                          @AuthenticationPrincipal UserDetailsImpl userDetailsImpl ) throws IOException {
         String email = userDetailsImpl.getUsername();
         // 상품 DB에 저장
         Long productId = productService.saveProduct(productRequstDto, email);
@@ -42,18 +45,15 @@ public class ProductController {
         // UserPurchase DB에 => 상품 id + (seller-id) 만 저장
         productSubService.updateProductSeller(email,productId);
 
-        // 상품 상세 조회로 redirect
-//        redirectAttributes.addAttribute("productId", productId);
-//        return "redirect:/products/list/{productId}";
-
-        return HttpStatus.OK;
+        // 상품 ID 리턴
+        return ResponseEntity.ok(Map.of("productId", productId));
     }
 
 
 
-    /*
+    /**
     // 상품 게시물 상태 변경
-     */
+     **/
     @PutMapping("/state/{productId}")
     public ResponseEntity<String> updateProductState(
             @PathVariable Long productId,
@@ -75,9 +75,9 @@ public class ProductController {
 
 
 
-    /*
+    /**
     //  게시물 전체 목록 보기
-     */
+     **/
     @GetMapping("/list")
     public ResponseEntity<List<ProductPreViewDto>> getAllProductListByPagination(
             @RequestParam(defaultValue = "1") int pageNo,
@@ -88,9 +88,68 @@ public class ProductController {
 
 
 
-    /*
+    /**
+     //   판매완료된 상품 제외 - 게시물 전체 목록 보기
+     **/
+    @GetMapping("/list/sell")
+    public ResponseEntity<List<ProductPreViewDto>> getListExceptSold(
+            @RequestParam(defaultValue = "1") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        List<ProductPreViewDto> productsList = productService.getListExceptSold(pageNo, pageSize);
+        return ResponseEntity.ok(productsList);
+    }
+
+
+
+    /**
+    // 게시물 상세 보기
+     **/
+    @GetMapping("/list/{productId}")
+    public ResponseEntity<ProductDetailViewDto> getProductDetail (@PathVariable Long productId,
+                                                                  @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+        String email = userDetailsImpl.getUsername();
+        ProductDetailViewDto productDetailDto = productService.getProductDetail(email, productId);
+
+        // 조회수 증가
+        productSubService.increaseViewsCount(productId);
+
+        return ResponseEntity.ok(productDetailDto);
+    }
+
+
+
+    /**
+    // 게시물 삭제하기
+     **/
+    @DeleteMapping("/{productId}")
+    public HttpStatus deleteProduct(@PathVariable Long productId,
+                                    @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String email = userDetails.getUsername();
+        productService.deleteProduct(productId, email);
+
+        return HttpStatus.OK ;
+    }
+
+
+    /**
+    // 게시물 수정하기
+     **/
+//    @PutMapping("/{productId}")
+//    public ResponseEntity<?> updateProduct(@PathVariable Long productId,
+//                                           @Validated @ModelAttribute ProductUpdateRequestDto updateRequest,
+//                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+//        String email = userDetails.getUsername();
+//        productService.updateProduct(productId, updateRequest, email);
+//
+//        // 상품 ID 리턴
+//        return ResponseEntity.ok(Map.of("productId", productId));
+//    }
+
+
+
+    /**
     //  게시물 좋아요 누르기
-    */
+    **/
     @PostMapping("/like/{productId}")
     public HttpStatus likeProduct (@PathVariable Long productId,
                                    @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
@@ -101,15 +160,27 @@ public class ProductController {
 
 
 
-    /*
+    /**
     //  게시물 좋아요 취소 누르기
-    */
+    **/
     @DeleteMapping("/like/{productId}")
     public HttpStatus unlikeProduct (@PathVariable Long productId,
-                                   @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
+                                     @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
         String email = userDetailsImpl.getUsername();
         myPageService.unlikeProduct(email, productId);
         return HttpStatus.OK;
+    }
+
+
+
+    /**
+     // 게시물 제목으로 검색하기
+     **/
+    @GetMapping
+    public ResponseEntity<List<ProductPreViewDto>> searchProductsTitle(
+            @RequestParam String search) {
+        List<ProductPreViewDto> searchResult = productService.searchProductsTitle(search);
+        return ResponseEntity.ok(searchResult);
     }
 
 

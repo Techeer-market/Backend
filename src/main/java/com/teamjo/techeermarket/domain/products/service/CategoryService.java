@@ -2,6 +2,7 @@ package com.teamjo.techeermarket.domain.products.service;
 
 import com.teamjo.techeermarket.domain.products.dto.response.ProductPreViewDto;
 import com.teamjo.techeermarket.domain.products.entity.Categorys;
+import com.teamjo.techeermarket.domain.products.entity.ProductState;
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.domain.products.mapper.ProductMapper;
 import com.teamjo.techeermarket.domain.products.repository.CategoryRepository;
@@ -33,7 +34,7 @@ public class CategoryService {
 
 
 
-    /*
+    /**
     // 카테고리 별 상품 게시물 목록 조회
      */
     @Transactional(readOnly = true)
@@ -49,15 +50,28 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-/*
-        return productPage.stream()
-                .map(product -> {
-                    ProductPreViewDto productPreViewDto = productMapper.fromListEntity(product);
-                    productPreViewDto.setLikes(userLikeService.getLikesCountByProduct(product));
-                    return productPreViewDto;
-                })
+
+    /**
+    // 카테고리 내에서 제목으로 상품 게시물 검색
+    */
+    @Transactional(readOnly = true)
+    public List<ProductPreViewDto> searchByTitleInCategory(Long categoryId, String search) {
+        Categorys category = categoryRepository.findCategorysById(categoryId);
+        if (category == null) {
+            throw new CategoryNotFoundException();    // 카테고리 확인
+        }
+
+        List<Products> products = productRepository.findByCategorysAndTitleContainingIgnoreCaseOrderByIdDesc(category, search);
+
+        return products.stream()
+//                .filter(product -> product.getProductState() != ProductState.SOLD)
+                .map(productMapper::fromListEntity)
                 .collect(Collectors.toList());
     }
- */
+
+
+
+
+
 
 }

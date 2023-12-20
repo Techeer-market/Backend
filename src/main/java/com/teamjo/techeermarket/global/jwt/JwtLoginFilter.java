@@ -6,6 +6,7 @@ import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
 import com.teamjo.techeermarket.global.exception.ErrorResponse;
 import lombok.SneakyThrows;
+import org.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -85,12 +86,16 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
         Users user = userDetails.getUser();
 
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("userId", user.getId());
+
         response.setHeader("Refresh-Token", "refresh_token:" + jwt.makeRefreshToken(user));
         response.setHeader("Access-Token", "access_token:" + jwt.makeAccessToken(user));
 
         response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
-//        response.getOutputStream().write(objectMapper.writeValueAsBytes(user));
+        // JSON 으로 유저 id 출력
+        response.getWriter().write(jsonResponse.toString());
         response.setStatus(HttpServletResponse.SC_OK);
 
     }
@@ -115,79 +120,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     }
 
+
+
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
-//
-//    private final AuthenticationManager authenticationManager;
-//    private final JwtUtill jwtUtill = new JwtUtill();
-//
-//    public JwtLoginFilter(AuthenticationManager authenticationManager) {
-//        this.authenticationManager = authenticationManager;
-//        setFilterProcessesUrl("/api/users/login");
-//    }
-//
-//    // 사용자의 로그인 정보를 받아 인증을 시도
-//    @Override
-//    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-//
-////        UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
-//
-//
-//        try {
-//            Users user = new ObjectMapper().readValue(request.getInputStream(), Users.class);
-//            return authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(
-//                            user.getEmail(),
-//                            user.getPassword(),
-//                            new ArrayList<>()
-//                    )
-//            );
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    // 인증에 성공한 경우 JWT 토큰을 생성하여 헤더에 설정
-//    @Override
-//    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-//        Users user = (Users) authResult.getPrincipal();
-//        String accessToken = jwtUtill.makeAccessToken(user);
-//        String refreshToken = jwtUtill.makeRefreshToken(user);
-//
-//        response.setHeader("Refresh-Token", "refresh_token:" + accessToken);
-//        response.setHeader("Access-Token", "access_token:" + refreshToken);
-//        response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-//    }
-//
-//    // 인증에 실패한 경우 처리
-//    @Override
-//    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-//        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication failed");
-//    }
-//
-//}

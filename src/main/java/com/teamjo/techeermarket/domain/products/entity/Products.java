@@ -51,6 +51,9 @@ public class Products extends BaseEntity {
     @Column(name = "heart")
     private int heart;
 
+    @Column(name = "location", length = 512)
+    private String location;
+
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private ProductState productState ;
@@ -58,18 +61,9 @@ public class Products extends BaseEntity {
     @Column(name = "thumbnail", length = 512)
     private String thumbnail;
 
+    @Builder.Default
     @OneToMany(mappedBy = "products", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     List<ProductImage> productImages = new ArrayList<>();
-
-
-
-
-//    ///
-//    // 썸네일 등록
-//    public void setThumbnail(List<ProductImage> productImages) {
-//        this.thumbnail = productImages.get(0).getImageUrl();
-//        this.productImages = productImages;
-//    }
 
 
 }

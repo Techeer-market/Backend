@@ -15,4 +15,5 @@ public interface UserLikeRepository extends JpaRepository<UserLike, Long> {
 
     List<UserLike> findByUsers(Users findUsers);
 
+    void deleteByProducts(Products products);
 }
