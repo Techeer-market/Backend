@@ -69,6 +69,7 @@ public class ProductMapper {
                 .views(product.getViews())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
+                .myheart(false)
                 .build();
     }
 

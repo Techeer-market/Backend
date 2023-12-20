@@ -103,7 +103,7 @@ public class ProductController {
 
 
     /**
-    // 게시물 상세 보기
+     //  상품 게시물 상세 조회
      **/
     @GetMapping("/list/{productId}")
     public ResponseEntity<ProductDetailViewDto> getProductDetail (@PathVariable Long productId,

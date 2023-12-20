@@ -34,6 +34,8 @@ public class ProductDetailViewDto {
 
     private int likes ; // 좋아요수
 
+    private boolean myheart ; // 내가 좋아요를 누른 유무
+
     private int views;  // 뷰 수
 
     private String createdAt ;

@@ -23,6 +23,7 @@ import com.teamjo.techeermarket.global.exception.product.FailedToDeleteProductEx
 import com.teamjo.techeermarket.global.exception.product.NotYourProductException;
 import com.teamjo.techeermarket.global.exception.product.ProductNotFoundException;
 import com.teamjo.techeermarket.global.exception.user.UserNotFoundException;
+import com.teamjo.techeermarket.socket.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,6 +53,8 @@ public class ProductService {
     private final UserRepository userRepository;
     @Autowired
     private final CategoryRepository categoryRepository;
+    @Autowired
+    private final ChatRoomRepository chatRoomRepository ;
     @Autowired
     private final UserLikeRepository userLikeRepository;
     @Autowired
@@ -149,9 +152,16 @@ public class ProductService {
         Products products = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
-        return productMapper.fromDetailEntity(products);
+        // 내가 좋아요 눌렀는지 유무
+        boolean myheart = userLikeRepository.existsByUsersAndProducts(findUsers, products);
 
+        ProductDetailViewDto productDetailViewDto = productMapper.fromDetailEntity(products);
+        productDetailViewDto.setMyheart(myheart);
+
+        return productDetailViewDto;
     }
+
+
 
 
     /**
@@ -182,6 +192,12 @@ public class ProductService {
                 String imageUrl = productImage.getImageUrl();
                 s3Service.deleteImage(imageUrl);
             }
+            // 게시물에 연결된 채팅방 삭제
+            chatRoomRepository.deleteByProducts(products);
+            /**
+             * 추후에 채팅 유저, 채팅 까지 삭제해야할지 고려하기
+             */
+
 
             // 게시물 삭제
             productRepository.delete(products);
