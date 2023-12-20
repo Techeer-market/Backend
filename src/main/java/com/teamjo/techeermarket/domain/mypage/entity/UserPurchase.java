@@ -4,7 +4,6 @@ import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.global.common.BaseEntity;
 import lombok.*;
-import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 

@@ -25,8 +25,11 @@ public enum ErrorCode {
     INVALID_PRODUCT_REQUEST (HttpStatus.BAD_REQUEST, "P004","상품페이지의 올바르지 못한 요청입니다."),
     FAILED_DELETE_PRODUCT (HttpStatus.BAD_REQUEST, "P005","상품 게시물 삭제에 실패했습니다. "),
 
+
     // 이미지 관련
     IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "I001", "유효하지 않은 이미지입니다.");
+
+    //
 
 
 

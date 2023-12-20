@@ -80,7 +80,6 @@ public class ProductSubService  {
     }
 
 
-
     /*
     // 상품 게시물 상태 변경
      */
@@ -102,6 +101,44 @@ public class ProductSubService  {
     }
 
 
+    /*
+    // 상품에 좋아요를 누르는 메서드
+    */
+    public void likeProduct(String email, Long productId) {
+        // 유저 정보 가져옴
+        Users users = userRepository.findUserByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+        // 상품 정보를 가져옴
+        Products products = productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+
+        // 사용자가 해당 상품에 이미 좋아요를 누른 적이 없으면
+        if (!userLikeRepository.existsByUsersAndProducts(users, products)) {
+            // 좋아요 정보를 생성하여 저장
+            UserLike userLike = new UserLike();
+            userLike.setUsers(users);
+            userLike.setProducts(products);
+            userLikeRepository.save(userLike);
+        }
+    }
+
+
+
+    /*
+    // 상품에 좋아요를 취소하는 메서드
+     */
+    public void unlikeProduct(String email, Long productId) {
+        // 유저 정보 가져옴
+        Users users = userRepository.findUserByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+        // 상품 정보를 가져옴
+        Products products = productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+
+        // 사용자가 해당 상품에 좋아요를 누른 적이 있다면
+        userLikeRepository.findByUsersAndProducts(users, products)
+                .ifPresent(userLikeRepository::delete); // 좋아요 정보를 삭제
+    }
 
     /*
     // 게시물 조회수 업데이트
