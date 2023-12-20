@@ -1,6 +1,7 @@
 package com.teamjo.techeermarket.domain.products.repository;
 
 import com.teamjo.techeermarket.domain.products.entity.Categorys;
+import com.teamjo.techeermarket.domain.products.entity.ProductState;
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,4 +28,6 @@ public interface ProductRepository extends JpaRepository<Products, Long> {
     Page<Products> findByCategorysAndTitleContainingIgnoreCaseOrderByIdDesc(Categorys category, String title, Pageable pageable);
 
     Page<Products> findAllByTitleContainingOrderByIdDesc(String search, Pageable pageable);
+
+    Page<Products> findByProductStateNot(ProductState sold, Pageable pageable);
 }

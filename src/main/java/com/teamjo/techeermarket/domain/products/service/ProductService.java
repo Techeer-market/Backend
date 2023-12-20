@@ -127,17 +127,15 @@ public class ProductService {
     @Transactional(readOnly = true)
     public List<ProductPreViewDto> getListExceptSold(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by("id").descending());  // 1페이지부터 시작하도록
-        Page<Products> productPage = productRepository.findAll(pageable);
 
-        // 판매 완료 된 상품 제외
-        List<Products> filteredProducts = productPage.stream()
-                .filter(product -> product.getProductState() != ProductState.SOLD)
-                .collect(Collectors.toList());
+        // 판매 완료된 상품 제외한 목록을 페이징된 상태로 가져오기
+        Page<Products> productPage = productRepository.findByProductStateNot(ProductState.SOLD, pageable);
 
-        return filteredProducts.stream()
+        return productPage.stream()
                 .map(productMapper::fromListEntity)
                 .collect(Collectors.toList());
     }
+
 
 
     /**
