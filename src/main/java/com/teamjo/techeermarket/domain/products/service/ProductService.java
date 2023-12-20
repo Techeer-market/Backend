@@ -197,18 +197,13 @@ public class ProductService {
      //  게시물 검색하기
      **/
     @Transactional(readOnly = true)
-    public List<ProductPreViewDto> searchProductsTitle(String search) {
-        List<Products> products = productRepository.findByTitleContainingOrderByIdDesc(search);
+    public Page<ProductPreViewDto> searchProductsTitle(int pageNo, int pageSize, String search) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by("id").descending());  // 1페이지부터 시작하도록
 
-        // 판매된 상품 제외
-        List<Products> filteredProducts = products.stream()
-                .filter(product -> product.getProductState() != ProductState.SOLD)
-                .collect(Collectors.toList());
-
-        return filteredProducts.stream()
-                .map(productMapper::fromListEntity)
-                .collect(Collectors.toList());
+        return productRepository.findAllByTitleContainingOrderByIdDesc(search, pageable)
+                .map(productMapper::fromListEntity);
     }
+
 
 
     /**

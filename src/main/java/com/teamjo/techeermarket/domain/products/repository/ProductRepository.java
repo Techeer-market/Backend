@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 import java.util.Set;
 
 public interface ProductRepository extends JpaRepository<Products, Long> {
@@ -25,8 +24,7 @@ public interface ProductRepository extends JpaRepository<Products, Long> {
 
     Page<Products> findByIdIn(Set<Long> productIds, Pageable pageable);
 
-    List<Products> findByTitleContainingOrderByIdDesc(String search);
+    Page<Products> findByCategorysAndTitleContainingIgnoreCaseOrderByIdDesc(Categorys category, String title, Pageable pageable);
 
-    List<Products> findByCategorysAndTitleContainingIgnoreCaseOrderByIdDesc(Categorys category, String title);
-
+    Page<Products> findAllByTitleContainingOrderByIdDesc(String search, Pageable pageable);
 }

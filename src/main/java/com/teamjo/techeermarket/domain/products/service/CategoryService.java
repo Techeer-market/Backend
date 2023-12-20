@@ -55,18 +55,19 @@ public class CategoryService {
     // 카테고리 내에서 제목으로 상품 게시물 검색
     */
     @Transactional(readOnly = true)
-    public List<ProductPreViewDto> searchByTitleInCategory(Long categoryId, String search) {
+    public Page<ProductPreViewDto> searchByTitleInCategory(Long categoryId, int pageNo, int pageSize, String search) {
         Categorys category = categoryRepository.findCategorysById(categoryId);
         if (category == null) {
             throw new CategoryNotFoundException();    // 카테고리 확인
         }
 
-        List<Products> products = productRepository.findByCategorysAndTitleContainingIgnoreCaseOrderByIdDesc(category, search);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by("id").descending());
 
-        return products.stream()
-//                .filter(product -> product.getProductState() != ProductState.SOLD)
-                .map(productMapper::fromListEntity)
-                .collect(Collectors.toList());
+        Page<ProductPreViewDto> productPage = productRepository
+                .findByCategorysAndTitleContainingIgnoreCaseOrderByIdDesc(category, search, pageable)
+                .map(productMapper::fromListEntity);
+
+        return productPage;
     }
 
 

@@ -5,6 +5,7 @@ import com.teamjo.techeermarket.domain.products.mapper.ProductMapper;
 import com.teamjo.techeermarket.domain.products.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,12 +36,16 @@ public class CategoryController {
     /**
     // 카테고리 내에서 제목으로 상품 게시물 검색
     */
-    @GetMapping("/{categoryId}/")
-    public ResponseEntity<List<ProductPreViewDto>> searchProductsByTitleInCategory(
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<List<ProductPreViewDto>>  searchProductsByTitleInCategory(
             @PathVariable Long categoryId,
-            @RequestParam String search) {
-        List<ProductPreViewDto> searchResult = categoryService.searchByTitleInCategory(categoryId, search);
-        return ResponseEntity.ok(searchResult);
+            @RequestParam(defaultValue = "1") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam String search ) {
+        Page<ProductPreViewDto> searchResult = categoryService.searchByTitleInCategory(categoryId, pageNo, pageSize, search);
+
+        List<ProductPreViewDto> productList = searchResult.getContent();
+        return ResponseEntity.ok(productList);
     }
 
 

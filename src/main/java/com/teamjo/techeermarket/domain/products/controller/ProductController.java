@@ -11,6 +11,7 @@ import com.teamjo.techeermarket.domain.products.service.ProductSubService;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
 import com.teamjo.techeermarket.global.exception.product.InvalidProductStateException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -178,9 +179,13 @@ public class ProductController {
      **/
     @GetMapping
     public ResponseEntity<List<ProductPreViewDto>> searchProductsTitle(
+            @RequestParam(defaultValue = "1") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam String search) {
-        List<ProductPreViewDto> searchResult = productService.searchProductsTitle(search);
-        return ResponseEntity.ok(searchResult);
+        Page<ProductPreViewDto> productPage = productService.searchProductsTitle(pageNo, pageSize, search);
+
+        List<ProductPreViewDto> productList = productPage.getContent();
+        return ResponseEntity.ok(productList);
     }
 
 
