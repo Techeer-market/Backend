@@ -40,6 +40,7 @@ public class ProductMapper {
                 .thumbnailURL(product.getThumbnail())
                 .name(product.getUsers().getName())
                 .price(product.getPrice())
+                .userId(product.getUsers().getId())
                 .createdAt(product.getCreatedAt())
                 .likes(product.getHeart())
                 .views(product.getViews())
