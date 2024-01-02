@@ -5,6 +5,7 @@ import com.teamjo.techeermarket.domain.mypage.entity.UserPurchase;
 import com.teamjo.techeermarket.domain.mypage.repository.UserLikeRepository;
 import com.teamjo.techeermarket.domain.mypage.repository.UserPurchaseRepository;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductPreViewDto;
+import com.teamjo.techeermarket.domain.products.entity.ProductState;
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.domain.products.mapper.ProductMapper;
 import com.teamjo.techeermarket.domain.products.repository.ProductRepository;
@@ -24,9 +25,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +40,7 @@ public class MyPageService {
     private final ProductMapper productMapper;
 
 
-    /*
+    /**
     // 상품에 좋아요를 누르는 메서드
     */
     @Transactional
@@ -69,7 +69,7 @@ public class MyPageService {
 
 
 
-    /*
+    /**
     // 상품에 좋아요를 취소하는 메서드
      */
     @Transactional
@@ -96,7 +96,7 @@ public class MyPageService {
 
 
 
-    /*
+    /**
     //  내가 좋아요 누른 목록 리스트 보기
      */
     @Transactional(readOnly = true)
@@ -122,7 +122,7 @@ public class MyPageService {
 
 
 
-    /*
+    /**
     //  내가 구매한 상품 목록 조회
      */
     @Transactional(readOnly = true)
@@ -141,6 +141,49 @@ public class MyPageService {
                 .map(userPurchase -> productMapper.fromListEntity(userPurchase.getProducts()))
                 .collect(Collectors.toList());
     }
+
+
+
+    /**
+     * 나의 판매 내역 조회
+     */
+    @Transactional(readOnly = true)
+    public Map<String, List<ProductPreViewDto>> getSellProducts(String email, int pageNo, int pageSize) {
+        Users findUsers = userRepository.findUserByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+
+        // 페이징 처리를 위해 Pageable 객체 생성
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by("id").descending());
+
+        // 판매 가능한 상품 목록 조회 (SALE, RESERVED)
+        List<ProductPreViewDto> sellableProducts = getProductsByState(findUsers, Arrays.asList(ProductState.SALE, ProductState.RESERVED), pageable);
+
+        // 거래 완료된 상품 목록 조회 (SOLD)
+        List<ProductPreViewDto> soldProducts = getProductsByState(findUsers, Collections.singletonList(ProductState.SOLD), pageable);
+
+        // 결과를 Map으로 묶어 반환
+        Map<String, List<ProductPreViewDto>> result = new HashMap<>();
+        result.put("판매중", sellableProducts);
+        result.put("거래완료", soldProducts);
+
+        return result;
+    }
+
+
+    // 특정 상태의 상품 목록 조회 메서드
+    private List<ProductPreViewDto> getProductsByState(Users findUsers, List<ProductState> states, Pageable pageable) {
+        return productRepository
+                .findByUsersAndProductStateIn(findUsers, states, pageable)
+                .stream()
+                .map(product -> productMapper.fromListEntity((Products) product))
+                .collect(Collectors.toList());
+    }
+
+
+
+
+
+
 
 
 }

@@ -132,19 +132,21 @@ public class ProductController {
     }
 
 
+
+
     /**
     // 게시물 수정하기
      **/
-//    @PutMapping("/{productId}")
-//    public ResponseEntity<?> updateProduct(@PathVariable Long productId,
-//                                           @Validated @ModelAttribute ProductUpdateRequestDto updateRequest,
-//                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
-//        String email = userDetails.getUsername();
-//        productService.updateProduct(productId, updateRequest, email);
-//
-//        // 상품 ID 리턴
-//        return ResponseEntity.ok(Map.of("productId", productId));
-//    }
+    @PutMapping("/{productId}")
+    public ResponseEntity<?> updateProduct(@PathVariable Long productId,
+                                           @Validated @ModelAttribute ProductRequestDto updateRequest,
+                                           @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
+        String email = userDetailsImpl.getUsername();
+        productService.updateProduct(productId, updateRequest, email);
+
+        // 상품 ID 리턴
+        return ResponseEntity.ok(Map.of("productId", productId));
+    }
 
 
 
