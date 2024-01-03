@@ -66,6 +66,7 @@ public class ProductMapper {
                 .content(product.getContent())
                 .price(product.getPrice())
                 .productState(product.getProductState())
+                .location(product.getLocation())
                 .likes(product.getHeart())
                 .views(product.getViews())
                 .createdAt(product.getCreatedAt())
