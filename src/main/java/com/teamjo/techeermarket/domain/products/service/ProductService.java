@@ -93,20 +93,11 @@ public class ProductService {
 
 
         // 나머지 이미지들을 ProductImage 엔터티로 생성하여 저장
-        for (int i = 0; i < imageUrls.size(); i++) {
-            ProductImage productImage = new ProductImage();
-            productImage.setProducts(products);  // products가 Products 엔터티의 인스턴스여야 합니다.
-            productImage.setImageUrl(imageUrls.get(i));
-            // 이미지 이름 설정
-            productImage.setImageName(newProductID + "Image#" + (i + 1));
-            // 이미지 번호 설정
-            productImage.setImageNum(i + 1);
-            // ProductImage 저장
-            productImageRepository.save(productImage);
-        }
+        setProductImg(products, imageUrls, newProductID);
 
         return products.getId();
     }
+
 
 
     /**
@@ -120,6 +111,8 @@ public class ProductService {
                 .map(productMapper::fromListEntity)
                 .collect(Collectors.toList());
     }
+
+
 
     /**
      * // 판매완료된 상품 제외 - 게시물 전체 목록 보기
@@ -223,65 +216,74 @@ public class ProductService {
     /**
      //  게시물 수정하기
      **/
-//    @Transactional
-//    public Long updateProduct (Long productId, ProductUpdateRequestDto updateRequest, String email) throws IOException {
-//        // 유저 정보 가져옴
-//        Users findUsers = userRepository.findUserByEmail(email)
-//                .orElseThrow(UserNotFoundException::new);
-//        // 상품 정보를 가져옴
-//        Products existingProduct = productRepository.findById(productId)
-//                .orElseThrow(ProductNotFoundException::new);
-//        // 현재 사용자가 게시물 작성자인지 확인
-//        if (!existingProduct.getUsers().equals(findUsers)) {
-//            throw new NotYourProductException();
-//        }
-//        // 게시물 수정
-//        Categorys newCategory = categoryRepository.findIdByName(updateRequest.getCategoryName());
-//        if (newCategory == null) {
-//            throw new CategoryNotFoundException();
-//        }
-//
-//        // 이미지 수정
-//        List<MultipartFile> newImages = updateRequest.getNewProductImages();
-//        if (newImages != null && !newImages.isEmpty()) {
-//            // 새로운 이미지 s3 업로드
-//            List<String> newImageUrls = s3Service.uploadProductImageList(BucketDir.PRODUCT, newImages);
-//
-//            // 기존 이미지 유지 및 새로운 이미지 추가
-//            List<String> updatedImages = updateRequest.getExistProductImages();
-//            updatedImages.addAll(newImageUrls);
-//
-//            // 첫번째(썸네일용) 사진이 바뀌었다면 수정 - 그냥 무조건 1번 사진이 바뀌면 수정을 해야하나..?
-//            existingProduct.setThumbnail(updatedImages.get(0));
-//
-//            // 이전에 사용하지 않는 사진들은 삭제해줘야 하고
-//            // s3Service.deleteImage(imageUrl);
-//
-//            // 새로 오는 jpg 사진과 url 사진을 순서를 어떻게 알수 있는지 잘 모르겠다.
-//
-//            // 새로운 이미지들을 ProductImage 엔터티로 생성하여 저장
-//            for (int i = 0; i < newImageUrls.size(); i++) {
-//                ProductImage productImage = new ProductImage();
-//                productImage.setProducts(existingProduct);  // products가 Products 엔터티의 인스턴스
-//                productImage.setImageUrl(newImageUrls.get(i));
-//                // 이미지 이름 설정
-//                productImage.setImageName(productId +"Image#" + (i+1));  // 그냥 +1 로 하는게 아니라 자신의 번호에 맞춰서 저장되야 할거같다.
-//                // 이미지 번호 설정
-//                productImage.setImageNum(i+1);  // 얘도 자신의 번호에 맞게 어떻게 해야 할지 모르겠다
-//                // ProductImage 저장
-//                productImageRepository.save(productImage);
-//            }
-//        }
-//
-//        // 수정된 내용 저장
-//        productMapper.updateProductFromDto(existingProduct, updateRequest, newCategory);
-//        productRepository.save(existingProduct);
-//
-//        // 상품 게시물 id 값 반환
-//        return existingProduct.getId();
-//    }
+    @Transactional
+    public Long updateProduct (Long productId, ProductRequestDto updateRequest, String email) throws IOException {
+        // 유저 정보 가져옴
+        Users findUsers = userRepository.findUserByEmail(email)
+                .orElseThrow(UserNotFoundException::new);
+        // 상품 정보를 가져옴
+        Products existingProduct = productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+        // 현재 사용자가 게시물 작성자인지 확인
+        if (!existingProduct.getUsers().equals(findUsers)) {
+            throw new NotYourProductException();
+        }
+        // 게시물 수정
+        Categorys newCategory = categoryRepository.findIdByName(updateRequest.getCategoryName());
+        if (newCategory == null) {
+            throw new CategoryNotFoundException();
+        }
+
+        // 이미지 삭제
+        // 게시물에 연결된 이전 이미지들을 s3에서 삭제
+        List<ProductImage> productImages = existingProduct.getProductImages();
+        for (ProductImage productImage : productImages) {
+            String imageUrl = productImage.getImageUrl();
+            s3Service.deleteImage(imageUrl);
+        }
+        // 게시물에 연결된 이전 이미지들 db에서 삭제
+         existingProduct.getProductImages().clear();
 
 
+        // 수정된 내용 저장
+        productMapper.updateProductFromDto(existingProduct, updateRequest, newCategory);
+
+        // 이미지 업로드 및 저장
+        List<MultipartFile> imageFiles = updateRequest.getProductImages();
+        List<String> imageUrls = s3Service.uploadProductImageList(BucketDir.PRODUCT, imageFiles);
+        // 첫 번째 이미지를 thumbnail로 수정
+        if (!imageUrls.isEmpty()) {
+            existingProduct.setThumbnail(imageUrls.get(0));}
+
+        // 새로운 이미지들을 ProductImage 엔터티로 생성하여 저장
+        setProductImg(existingProduct, imageUrls, productId);
+
+        // 수정된 내용 저장
+        productRepository.save(existingProduct);
+
+        // 상품 게시물 id 값 반환
+        return existingProduct.getId();
+    }
+
+
+
+
+    /**
+        새로운 이미지 ProductImage 엔티티로 생성하여 저장하는 메소드
+     */
+    private void setProductImg(Products products, List<String> imageUrls, Long newProductID) {
+        for (int i = 0; i < imageUrls.size(); i++) {
+            ProductImage productImage = new ProductImage();
+            productImage.setProducts(products);  // products가 Products 엔터티의 인스턴스여야 합니다.
+            productImage.setImageUrl(imageUrls.get(i));
+            // 이미지 이름 설정
+            productImage.setImageName(newProductID + "Image#" + (i + 1));
+            // 이미지 번호 설정
+            productImage.setImageNum(i + 1);
+            // ProductImage 저장
+            productImageRepository.save(productImage);
+        }
+    }
 
 
 

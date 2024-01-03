@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class MyPageController {
 
 //    private final ProductRepository productRepository;
 
-    /*
+    /**
     // 내가 누른 좋아요 목록 보기
     */
     @GetMapping("/like")
@@ -36,7 +37,9 @@ public class MyPageController {
         return ResponseEntity.ok(likedProducts);
     }
 
-    /*
+
+
+    /**
     // 내가 구매한 상품 목록 보기
      */
     @GetMapping("/purchase")
@@ -47,6 +50,21 @@ public class MyPageController {
         String email = userDetailsImpl.getUsername();
         List<ProductPreViewDto> purchasedProducts = myPageService.getMyPurchasedProducts(email, pageNo, pageSize);
         return ResponseEntity.ok(purchasedProducts);
+    }
+
+
+    /**
+     * 나의 판매 내역 조회
+     */
+    @GetMapping("/sell/{userId}")
+    public ResponseEntity<Map<String, List<ProductPreViewDto>>> getSellProducts(
+            @PathVariable Long userId,
+            @AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+            @RequestParam(defaultValue = "1") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        String email = userDetailsImpl.getUsername();
+        Map<String, List<ProductPreViewDto>> sellProducts = myPageService.getSellProducts(userId, pageNo, pageSize);
+        return ResponseEntity.ok(sellProducts);
     }
 
 

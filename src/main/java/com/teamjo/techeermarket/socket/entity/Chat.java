@@ -22,9 +22,13 @@ public class Chat extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private ChatType type;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
@@ -32,6 +36,12 @@ public class Chat extends BaseEntity {
 
     @Column(name = "message", nullable = false)
     private String message;
+
+
+    /* 연관관계 편의 메서드 */
+    public void addChat(ChatRoom chatRoom){
+        this.chatRoom = chatRoom;
+    }
 
 }
 

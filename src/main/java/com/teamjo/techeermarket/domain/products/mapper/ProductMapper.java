@@ -66,6 +66,7 @@ public class ProductMapper {
                 .content(product.getContent())
                 .price(product.getPrice())
                 .productState(product.getProductState())
+                .location(product.getLocation())
                 .likes(product.getHeart())
                 .views(product.getViews())
                 .createdAt(product.getCreatedAt())
@@ -76,12 +77,12 @@ public class ProductMapper {
 
 
     // 상품 업데이트
-    public void updateProductFromDto (Products products, ProductUpdateRequestDto dto, Categorys categorys){
-        products.setTitle(dto.getTitle());
-        products.setContent(dto.getContent());
+    public void updateProductFromDto (Products products, ProductRequestDto updateDto, Categorys categorys){
+        products.setTitle(updateDto.getTitle());
+        products.setContent(updateDto.getContent());
         products.setCategorys(categorys);
-        products.setPrice(dto.getPrice());
-        products.setLocation(dto.getLocation());
+        products.setPrice(updateDto.getPrice());
+        products.setLocation(updateDto.getLocation());
     }
 
 

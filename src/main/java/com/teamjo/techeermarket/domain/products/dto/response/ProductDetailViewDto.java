@@ -28,6 +28,8 @@ public class ProductDetailViewDto {
 
     private String content ;
 
+    private String location ; // 위치
+
     private int price ;
 
     private ProductState productState;  // 상품 상태

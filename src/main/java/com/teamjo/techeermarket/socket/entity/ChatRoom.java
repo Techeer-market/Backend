@@ -7,6 +7,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
@@ -30,6 +33,9 @@ public class ChatRoom extends BaseEntity {
     @JoinColumn(name = "product_id")
     private Products products;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Chat> chats = new ArrayList<>();
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "reciver_id")
     private Users reciverId;
@@ -38,6 +44,11 @@ public class ChatRoom extends BaseEntity {
     @JoinColumn(name = "sender_id")
     private Users senderId;
 
+
+    /* 비즈니스 로직 */
+    public Chat getLastChat(){
+        return getChats().get(getChats().size()-1);
+    }
 
 }
 
