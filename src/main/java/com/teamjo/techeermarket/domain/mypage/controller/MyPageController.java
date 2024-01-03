@@ -56,13 +56,14 @@ public class MyPageController {
     /**
      * 나의 판매 내역 조회
      */
-    @GetMapping("/sell")
+    @GetMapping("/sell/{userId}")
     public ResponseEntity<Map<String, List<ProductPreViewDto>>> getSellProducts(
+            @PathVariable Long userId,
             @AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
         String email = userDetailsImpl.getUsername();
-        Map<String, List<ProductPreViewDto>> sellProducts = myPageService.getSellProducts(email, pageNo, pageSize);
+        Map<String, List<ProductPreViewDto>> sellProducts = myPageService.getSellProducts(userId, pageNo, pageSize);
         return ResponseEntity.ok(sellProducts);
     }
 

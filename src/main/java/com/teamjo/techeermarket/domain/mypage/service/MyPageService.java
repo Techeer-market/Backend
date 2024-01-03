@@ -148,8 +148,8 @@ public class MyPageService {
      * 나의 판매 내역 조회
      */
     @Transactional(readOnly = true)
-    public Map<String, List<ProductPreViewDto>> getSellProducts(String email, int pageNo, int pageSize) {
-        Users findUsers = userRepository.findUserByEmail(email)
+    public Map<String, List<ProductPreViewDto>> getSellProducts(Long userId, int pageNo, int pageSize) {
+        Users findUsers = userRepository.findUserById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         // 페이징 처리를 위해 Pageable 객체 생성
