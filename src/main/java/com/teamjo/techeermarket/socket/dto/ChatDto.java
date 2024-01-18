@@ -11,13 +11,16 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 public class ChatDto {
+
     private Long roomId;
     private ChatType type;
+    private String name;
     private String message;
 
     public Chat toEntity(ChatRoom chatRoom){
         Chat chat = Chat.builder()
                 .type(this.type)
+                .name(this.name)
                 .message(this.message)
                 .build();
         chat.addChat(chatRoom);

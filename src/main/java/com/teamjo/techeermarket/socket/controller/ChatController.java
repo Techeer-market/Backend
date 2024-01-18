@@ -1,43 +1,38 @@
 package com.teamjo.techeermarket.socket.controller;
 
-import com.teamjo.techeermarket.socket.chatService.ChatService;
-import com.teamjo.techeermarket.socket.entity.Chat;
-import com.teamjo.techeermarket.socket.entity.ChatRoom;
-import com.teamjo.techeermarket.socket.repository.ChatRepository;
-import com.teamjo.techeermarket.socket.repository.ChatRoomRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import com.teamjo.techeermarket.socket.dto.ChatDto;
+import com.teamjo.techeermarket.socket.entity.ChatType;
+import com.teamjo.techeermarket.socket.service.ChatService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 @Controller
-@Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ChatController {
-    private final SimpMessagingTemplate messagingTemplate;
-    private final ChatRoomRepository chatRoomRepository;
-    private final ChatRepository chatRepository;
+
+    private final SimpMessagingTemplate template;
+
     private final ChatService chatService;
 
-    @MessageMapping("/chat.sendMessage")
-    public void sendMessage(@Payload Chat chat) {
-//        log.info("chat");
-        chatService.saveChatMessage(chat);
-//        log.info(chat);
-        messagingTemplate.convertAndSend("/topic/public/" + chat.getChatRoom().getChatRoomName() , chat);
+    /**
+     *  채팅방 입장
+     */
+    @MessageMapping(value = "/chat/enter")
+    public void enter (ChatDto chatDto) {
+        chatDto.setMessage(chatDto.getName() + "님이 채팅방에 참여하셨습니다."); // 추후 삭제..?
+        chatDto.setType(ChatType.JOIN);
+        template.convertAndSend("/sub/chat/room" + chatDto.getRoomId(),chatDto);
     }
 
-    @MessageMapping("/chat.addUser")
-    public void addUser(@Payload Chat chat, SimpMessageHeaderAccessor headerAccessor) {
-        headerAccessor.getSessionAttributes().put("userName", chat.getUsers());
-        messagingTemplate.convertAndSend("/topic/public/" + chat.getChatRoom().getChatRoomName(), chat);
+
+    /**
+     * 채팅 메시지 보내기
+     */
+    @MessageMapping(value = "/chat/send")
+    public void send(ChatDto chatDto) {
+        chatService.saveChat(chatDto);
+        template.convertAndSend("/sub/chat/room" + chatDto.getRoomId(),chatDto);
     }
 
-    @MessageMapping("/chat.createChatRoom")
-    public void createChatRoom(@Payload ChatRoom chatRoom){
-        ChatRoom createdRoom = chatService.createChatRoom(chatRoom.getChatRoomName());
-        messagingTemplate.convertAndSend("/topic/public/", createdRoom);
-    }
 }

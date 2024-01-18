@@ -111,6 +111,12 @@ public class UserService {
 
 
 
+    /**
+    *   유저 찾기 + 오류 처리
+     */
+    public Users findUser (String email) {
+        return userRepository.findUserByEmail(email).orElseThrow(UserNotFoundException::new);
+    }
 
 
     /*
