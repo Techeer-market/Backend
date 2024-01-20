@@ -18,15 +18,15 @@ public class ChatRoomResponseDto {
 
     private List<Chat> chatList;
 
-    private Long roomId;
+    private String roomName;
 
-    private String nickname;
+    private String name;
 
-    public ChatRoomResponseDto(Products products, List<Chat> chatList, Long roomId, String nickname) {
+    public ChatRoomResponseDto(Products products, List<Chat> chatList, String roomName, String name) {
         this.products = products;
         this.chatList = chatList;
-        this.roomId = roomId;
-        this.nickname = nickname;
+        this.roomName = roomName;
+        this.name = name;
     }
 
 }

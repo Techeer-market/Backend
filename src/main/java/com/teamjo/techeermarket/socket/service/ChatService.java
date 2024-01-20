@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,7 +81,7 @@ public class ChatService {
     public ChatRoom findChatRoomByName(Users users, String roomName, Long productId){
         Optional<ChatRoom> findChatRoom = chatRoomRepository.findByChatRoomName(roomName);
         Products products = productRepository.findById(productId).get();
-        if(!findChatRoom.isPresent()){
+        if(findChatRoom.isEmpty()){
             ChatRoom newChatRoom = ChatRoom.builder()
                     .chatRoomName(roomName)
                     .buyer(users)
@@ -91,6 +92,7 @@ public class ChatService {
         }
         return findChatRoom.get();
     }
+
 
 
 
