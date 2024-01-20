@@ -13,12 +13,10 @@ import java.util.UUID;
 
 import static javax.persistence.FetchType.LAZY;
 
-@Getter
-//@AllArgsConstructor
-@Entity
-@Setter
 //@NoArgsConstructor
-@Table(name="chat_room")
+@Entity
+@Table(name = "chat_room")
+@Getter
 public class ChatRoom extends BaseEntity {
 
     @Id
@@ -26,7 +24,7 @@ public class ChatRoom extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "chat_room_name")
+    @Column(name = "chat_room_name", unique = true)
     private String chatRoomName;
 
     @ManyToOne(fetch = LAZY)
@@ -43,6 +41,7 @@ public class ChatRoom extends BaseEntity {
 
     public ChatRoom() {
         this.chatRoomName = UUID.randomUUID().toString();
+        System.out.println("Generated UUID: " + this.chatRoomName); //주석처리
     }
 
     @Builder

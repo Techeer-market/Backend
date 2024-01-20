@@ -25,9 +25,9 @@ public class ChatRoomController {
     private final UserService userService;
 
     /**
-     *  채팅방에 입장하는 페이지 렌더링
+     *  채팅방에 입장
      */
-    @GetMapping("/room")
+    @PostMapping("/room")
     public ResponseEntity<ChatRoomResponseDto> enterChatRoom(@RequestParam("productId") Long productId,
                                                              @RequestParam("roomName") String chatRoomName,
                                                              @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
@@ -35,7 +35,7 @@ public class ChatRoomController {
         ChatRoom chatRoom = chatService.findChatRoomByName(users,chatRoomName,productId);
 
         ChatRoomResponseDto responseDto = new ChatRoomResponseDto(chatRoom.getProducts(), chatService.findChatList(chatRoom.getId()),
-                chatRoom.getId(), users.getName());
+                chatRoom.getChatRoomName(), users.getName());
         return ResponseEntity.ok(responseDto);
     }
 
@@ -60,6 +60,14 @@ public class ChatRoomController {
 
         return ResponseEntity.ok(buyerIds);
     }
+
+
+    /**
+     * 상품 구매 -> user_purchase table에 buyer_id로 추가
+     * products state -> SOLD 로 변경
+     */
+//    @PostMapping("/buy/{productId}")
+//    public
 
 
 
