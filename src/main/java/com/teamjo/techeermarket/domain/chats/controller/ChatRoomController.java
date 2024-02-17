@@ -1,16 +1,11 @@
 package com.teamjo.techeermarket.domain.chats.controller;
 
 import com.teamjo.techeermarket.domain.chats.dto.request.ChatRoomCreateReq;
-import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomResponse;
-import com.teamjo.techeermarket.domain.chats.entity.ChatRoom;
+import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomRes;
 import com.teamjo.techeermarket.domain.chats.service.ChatRoomService;
-import com.teamjo.techeermarket.domain.products.dto.response.ProductDetailViewDto;
-import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.domain.products.service.ProductService;
-import com.teamjo.techeermarket.domain.users.dto.UserDetailResponseDto;
 import com.teamjo.techeermarket.domain.users.service.UserService;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
-import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -49,11 +44,11 @@ public class ChatRoomController {
    * @Describe : 채팅방 리스트 조회
    * @Param1 : userDetailsImpl(UserDetailsImpl) 로그인 유저
    */
-  @GetMapping
-  public ResponseEntity<List<ChatRoomResponse>> getAllChat(
+  @GetMapping("/room")
+  public ResponseEntity<List<ChatRoomRes>> getAllChatRoom(
       @AuthenticationPrincipal UserDetailsImpl userDetailsImpl
-  ) throws IOException {
-    List<ChatRoomResponse> chatRooms = chatRoomService.findChatRoomByUserId(userDetailsImpl.getUsername());
+  ) {
+    List<ChatRoomRes> chatRooms = chatRoomService.findChatRoomByUserId(userDetailsImpl.getUsername());
 
     return ResponseEntity.ok(chatRooms);
   }

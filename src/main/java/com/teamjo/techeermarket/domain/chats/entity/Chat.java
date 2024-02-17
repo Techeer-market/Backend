@@ -6,6 +6,7 @@ import lombok.*;
 
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Chat extends BaseEntity {

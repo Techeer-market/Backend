@@ -1,6 +1,5 @@
 package com.teamjo.techeermarket.domain.chats.repository;
 
-import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomResponse;
 import com.teamjo.techeermarket.domain.chats.entity.ChatRoom;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

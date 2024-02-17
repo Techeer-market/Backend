@@ -2,7 +2,7 @@ package com.teamjo.techeermarket.domain.chats.service;
 
 
 import com.teamjo.techeermarket.domain.chats.dto.request.ChatRoomCreateReq;
-import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomResponse;
+import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomRes;
 import com.teamjo.techeermarket.domain.chats.entity.ChatRoom;
 import com.teamjo.techeermarket.domain.chats.mapper.ChatRoomMapper;
 import com.teamjo.techeermarket.domain.chats.repository.ChatRoomRepository;
@@ -32,10 +32,10 @@ public class ChatRoomService {
     return save.getId();
   }
 
-  public List<ChatRoomResponse> findChatRoomByUserId(String userEmail) {
+  public List<ChatRoomRes> findChatRoomByUserId(String userEmail) {
     List<Object[]> results = chatRoomRepository.findByUserIn(userEmail);
 
-    List<ChatRoomResponse> ChatRoomResponses = new ArrayList<>();
+    List<ChatRoomRes> chatRoomRespons = new ArrayList<>();
     for (Object[] result : results) {
       Long id = (Long) result[0];
       Long productId = (Long) result[1];
@@ -46,11 +46,11 @@ public class ChatRoomService {
       String sellerEmail = (String) result[6];
       String buyerEmail = (String) result[7];
 
-      ChatRoomResponse response = new ChatRoomResponse(id, productId, productTitle, productLocation, productPrice, productThumbnail, sellerEmail, buyerEmail);
-      ChatRoomResponses.add(response);
+      ChatRoomRes response = new ChatRoomRes(id, productId, productTitle, productLocation, productPrice, productThumbnail, sellerEmail, buyerEmail);
+      chatRoomRespons.add(response);
     }
 
-    return ChatRoomResponses;
+    return chatRoomRespons;
   }
 
 }
