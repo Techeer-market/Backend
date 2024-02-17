@@ -16,6 +16,5 @@ public class ChatRoomRes {
   private String productLocation;
   private int productPrice;
   private String productThumbnail;
-  private String sellerEmail;
-  private String buyerEmail;
+  private String chatPartnerName;
 }

@@ -8,6 +8,8 @@ import com.teamjo.techeermarket.domain.chats.mapper.ChatRoomMapper;
 import com.teamjo.techeermarket.domain.chats.repository.ChatRoomRepository;
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.domain.products.repository.ProductRepository;
+import com.teamjo.techeermarket.domain.users.repository.UserRepository;
+import com.teamjo.techeermarket.global.exception.user.UserNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,13 +22,14 @@ public class ChatRoomService {
   private final ChatRoomRepository chatRoomRepository;
   private final ProductRepository productRepository;
   private final ChatRoomMapper chatRoomMapper;
+  private final UserRepository userRepository;
 
 
   public Long createChatRoom(ChatRoomCreateReq chatRoomCreateReq, String buyer) {
 
     Optional<Products> product = productRepository.findById(chatRoomCreateReq.getProductId());
 
-    ChatRoom chatRoom = chatRoomMapper.toEntity(product.get(), chatRoomCreateReq.getSellerEmail(), buyer);
+    ChatRoom chatRoom = chatRoomMapper.toEntity(product.get(), product.get().getUsers().getEmail(), buyer);
     ChatRoom save = chatRoomRepository.save(chatRoom);
 
     return save.getId();
@@ -35,7 +38,7 @@ public class ChatRoomService {
   public List<ChatRoomRes> findChatRoomByUserId(String userEmail) {
     List<Object[]> results = chatRoomRepository.findByUserIn(userEmail);
 
-    List<ChatRoomRes> chatRoomRespons = new ArrayList<>();
+    List<ChatRoomRes> chatRoomResponse = new ArrayList<>();
     for (Object[] result : results) {
       Long id = (Long) result[0];
       Long productId = (Long) result[1];
@@ -46,11 +49,15 @@ public class ChatRoomService {
       String sellerEmail = (String) result[6];
       String buyerEmail = (String) result[7];
 
-      ChatRoomRes response = new ChatRoomRes(id, productId, productTitle, productLocation, productPrice, productThumbnail, sellerEmail, buyerEmail);
-      chatRoomRespons.add(response);
+      String chatPartnerEmail = userEmail.equals(sellerEmail) ? buyerEmail : sellerEmail;
+      String chatPartnerName = userRepository.findUserByEmail(chatPartnerEmail).orElseThrow(
+          UserNotFoundException::new).getName();
+
+      ChatRoomRes response = new ChatRoomRes(id, productId, productTitle, productLocation, productPrice, productThumbnail, chatPartnerName);
+      chatRoomResponse.add(response);
     }
 
-    return chatRoomRespons;
+    return chatRoomResponse;
   }
 
 }

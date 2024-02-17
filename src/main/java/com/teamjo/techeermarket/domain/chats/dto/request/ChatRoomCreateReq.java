@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChatRoomCreateReq {
   private Long productId;
-  private String sellerEmail;
 
 }
