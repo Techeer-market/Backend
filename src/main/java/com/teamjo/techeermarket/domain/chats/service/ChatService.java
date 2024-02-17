@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class ChatService {
   private final ChatRepository chatRepository;
   private final ChatMapper chatMapper;
 
+  @Transactional
   public void saveMessage(ChatReq chatReq) {
     ChatRoom chatRoom = chatRoomRepository.findById(chatReq.getChatRoomId()).orElseThrow();
 
@@ -27,6 +29,7 @@ public class ChatService {
     chatRepository.save(chat);
   }
 
+  @Transactional(readOnly = true)
   public List<ChatRes> getMessage(Long chatRoomId) {
     List<Chat> chatList = chatRepository.findByChatRoomId(chatRoomId);
     List<ChatRes> response = chatList.stream()

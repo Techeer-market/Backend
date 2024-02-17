@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class ChatRoomService {
   private final ChatRoomMapper chatRoomMapper;
   private final UserRepository userRepository;
 
-
+  @Transactional
   public Long createChatRoom(ChatRoomCreateReq chatRoomCreateReq, String buyer) {
 
     Optional<Products> product = productRepository.findById(chatRoomCreateReq.getProductId());
@@ -35,6 +36,7 @@ public class ChatRoomService {
     return save.getId();
   }
 
+  @Transactional(readOnly = true)
   public List<ChatRoomRes> findChatRoomByUserId(String userEmail) {
     List<Object[]> results = chatRoomRepository.findByUserIn(userEmail);
 
