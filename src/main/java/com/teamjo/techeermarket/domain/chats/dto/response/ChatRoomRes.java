@@ -14,6 +14,7 @@ public class ChatRoomRes {
   private Long productId;
   private String productTitle;
   private String productLocation;
+  private String currentChatAt;
   private int productPrice;
   private String productThumbnail;
   private String chatPartnerName;

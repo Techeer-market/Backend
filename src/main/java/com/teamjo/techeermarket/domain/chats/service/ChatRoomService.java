@@ -1,10 +1,13 @@
 package com.teamjo.techeermarket.domain.chats.service;
 
 
-import com.teamjo.techeermarket.domain.chats.dto.request.ChatRoomCreateReq;
+import com.teamjo.techeermarket.domain.chats.dto.response.ChatCreateRes;
 import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomRes;
+import com.teamjo.techeermarket.domain.chats.dto.response.ProductInfo;
 import com.teamjo.techeermarket.domain.chats.entity.ChatRoom;
+import com.teamjo.techeermarket.domain.chats.mapper.ChatMapper;
 import com.teamjo.techeermarket.domain.chats.mapper.ChatRoomMapper;
+import com.teamjo.techeermarket.domain.chats.repository.ChatRepository;
 import com.teamjo.techeermarket.domain.chats.repository.ChatRoomRepository;
 import com.teamjo.techeermarket.domain.products.entity.Products;
 import com.teamjo.techeermarket.domain.products.repository.ProductRepository;
@@ -21,19 +24,28 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ChatRoomService {
   private final ChatRoomRepository chatRoomRepository;
+  private final ChatRepository chatRepository;
   private final ProductRepository productRepository;
   private final ChatRoomMapper chatRoomMapper;
   private final UserRepository userRepository;
+  private final ChatMapper chatMapper;
 
   @Transactional
-  public Long createChatRoom(ChatRoomCreateReq chatRoomCreateReq, String buyer) {
+  public ChatCreateRes createChatRoom(Long productId, String buyer) {
 
-    Optional<Products> product = productRepository.findById(chatRoomCreateReq.getProductId());
+    Optional<Products> product = productRepository.findById(productId);
 
     ChatRoom chatRoom = chatRoomMapper.toEntity(product.get(), product.get().getUsers().getEmail(), buyer);
     ChatRoom save = chatRoomRepository.save(chatRoom);
 
-    return save.getId();
+    Products products = productRepository.findById(productId).get();
+    ProductInfo productInfo = chatMapper.toProductInfo(products);
+
+    ChatCreateRes chatCreateRes = new ChatCreateRes();
+    chatCreateRes.setChatRoomId(save.getId());
+    chatCreateRes.setProductInfo(productInfo);
+
+    return chatCreateRes;
   }
 
   @Transactional(readOnly = true)
@@ -55,7 +67,15 @@ public class ChatRoomService {
       String chatPartnerName = userRepository.findUserByEmail(chatPartnerEmail).orElseThrow(
           UserNotFoundException::new).getName();
 
-      ChatRoomRes response = new ChatRoomRes(id, productId, productTitle, productLocation, productPrice, productThumbnail, chatPartnerName);
+      String currentAt = "";
+      List<String> currentAtByChatRoomId = chatRepository.findCurrentAtByChatRoomId(id);
+      if (currentAtByChatRoomId.isEmpty()) {
+        currentAt = null;
+      } else {
+        currentAt = currentAtByChatRoomId.get(0);
+      }
+
+      ChatRoomRes response = new ChatRoomRes(id, productId, productTitle, productLocation, currentAt, productPrice, productThumbnail, chatPartnerName);
       chatRoomResponse.add(response);
     }
 
