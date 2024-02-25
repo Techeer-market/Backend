@@ -2,9 +2,7 @@ package com.teamjo.techeermarket.domain.chats.controller;
 
 import com.teamjo.techeermarket.domain.chats.dto.request.ChatReq;
 import com.teamjo.techeermarket.domain.chats.dto.response.ChatRes;
-import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomRes;
 import com.teamjo.techeermarket.domain.chats.service.ChatService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -36,10 +34,10 @@ public class ChatController {
   }
 
   @GetMapping("/api/chat/{chatRoomId}")
-  public ResponseEntity<List<ChatRes>> getAllChat(
+  public ResponseEntity<ChatRes> getAllChat(
       @PathVariable Long chatRoomId
   ) {
-    List<ChatRes> response = chatService.getMessage(chatRoomId);
+    ChatRes response = chatService.getMessage(chatRoomId);
     return ResponseEntity.ok(response);
   }
 }
