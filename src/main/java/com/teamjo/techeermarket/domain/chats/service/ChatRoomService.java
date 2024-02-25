@@ -17,6 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,8 +53,9 @@ public class ChatRoomService {
   }
 
   @Transactional(readOnly = true)
-  public List<ChatRoomRes> findChatRoomByUserId(String userEmail) {
-    List<Object[]> results = chatRoomRepository.findByUserIn(userEmail);
+  public List<ChatRoomRes> findChatRoomByUserId(String userEmail, int pageNo, int pageSize) {
+    Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by("id").descending());  // 1페이지부터 시작하도록
+    Page<Object[]> results = chatRoomRepository.findByUserIn(userEmail, pageable);
 
     List<ChatRoomRes> chatRoomResponse = new ArrayList<>();
     for (Object[] result : results) {
