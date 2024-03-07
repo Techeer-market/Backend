@@ -68,7 +68,7 @@ public class ProductMapper {
                 .productState(product.getProductState())
                 .location(product.getLocation())
                 .likes(product.getHeart())
-                .views(product.getViews())
+                .views(product.getViews()+1)
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
                 .myheart(false)

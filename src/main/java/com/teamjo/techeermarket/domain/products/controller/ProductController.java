@@ -1,13 +1,12 @@
 package com.teamjo.techeermarket.domain.products.controller;
 
-import com.teamjo.techeermarket.domain.mypage.service.MyPageService;
+import com.teamjo.techeermarket.domain.mypage.service.MyPageServiceImpl;
 import com.teamjo.techeermarket.domain.products.dto.request.ProductRequestDto;
-import com.teamjo.techeermarket.domain.products.dto.request.ProductUpdateRequestDto;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductDetailViewDto;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductPreViewDto;
 import com.teamjo.techeermarket.domain.products.entity.ProductState;
-import com.teamjo.techeermarket.domain.products.service.ProductService;
-import com.teamjo.techeermarket.domain.products.service.ProductSubService;
+import com.teamjo.techeermarket.domain.products.service.ProductServiceImpl;
+import com.teamjo.techeermarket.domain.products.service.ProductSubServiceImpl;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
 import com.teamjo.techeermarket.global.exception.product.InvalidProductStateException;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +27,10 @@ import java.util.Map;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductService productService;
-    private final ProductSubService productSubService;
+    private final ProductServiceImpl productServiceImpl;
+    private final ProductSubServiceImpl productSubServiceImpl;
 
-    private final MyPageService myPageService;
+    private final MyPageServiceImpl myPageServiceImpl;
 
     /**
     // 게시물 작성하기
@@ -41,10 +40,10 @@ public class ProductController {
                                           @AuthenticationPrincipal UserDetailsImpl userDetailsImpl ) throws IOException {
         String email = userDetailsImpl.getUsername();
         // 상품 DB에 저장
-        Long productId = productService.saveProduct(productRequstDto, email);
+        Long productId = productServiceImpl.saveProduct(productRequstDto, email);
 
         // UserPurchase DB에 => 상품 id + (seller-id) 만 저장
-        productSubService.updateProductSeller(email,productId);
+        productSubServiceImpl.updateProductSeller(email,productId);
 
         // 상품 ID 리턴
         return ResponseEntity.ok(Map.of("productId", productId));
@@ -70,7 +69,7 @@ public class ProductController {
             throw new InvalidProductStateException() ; }
 
         // 서비스를 통해 상태 변경
-        productSubService.updateProductState(productId, ProductState.valueOf(state),email);
+        productSubServiceImpl.updateProductState(productId, ProductState.valueOf(state),email);
         return ResponseEntity.status(HttpStatus.OK).body("Product state updated successfully");
     }
 
@@ -83,7 +82,7 @@ public class ProductController {
     public ResponseEntity<List<ProductPreViewDto>> getAllProductListByPagination(
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
-        List<ProductPreViewDto> productsList = productService.getAllProductList(pageNo, pageSize);
+        List<ProductPreViewDto> productsList = productServiceImpl.getAllProductList(pageNo, pageSize);
         return ResponseEntity.ok(productsList);
     }
 
@@ -96,7 +95,7 @@ public class ProductController {
     public ResponseEntity<List<ProductPreViewDto>> getListExceptSold(
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
-        List<ProductPreViewDto> productsList = productService.getListExceptSold(pageNo, pageSize);
+        List<ProductPreViewDto> productsList = productServiceImpl.getListExceptSold(pageNo, pageSize);
         return ResponseEntity.ok(productsList);
     }
 
@@ -109,10 +108,10 @@ public class ProductController {
     public ResponseEntity<ProductDetailViewDto> getProductDetail (@PathVariable Long productId,
                                                                   @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         String email = userDetailsImpl.getUsername();
-        ProductDetailViewDto productDetailDto = productService.getProductDetail(email, productId);
+        ProductDetailViewDto productDetailDto = productServiceImpl.getProductDetail(email, productId);
 
         // 조회수 증가
-        productSubService.increaseViewsCount(productId);
+        productSubServiceImpl.increaseViewsCount(productId);
 
         return ResponseEntity.ok(productDetailDto);
     }
@@ -126,7 +125,7 @@ public class ProductController {
     public HttpStatus deleteProduct(@PathVariable Long productId,
                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String email = userDetails.getUsername();
-        productService.deleteProduct(productId, email);
+        productServiceImpl.deleteProduct(productId, email);
 
         return HttpStatus.OK ;
     }
@@ -142,7 +141,7 @@ public class ProductController {
                                            @Validated @ModelAttribute ProductRequestDto updateRequest,
                                            @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
         String email = userDetailsImpl.getUsername();
-        productService.updateProduct(productId, updateRequest, email);
+        productServiceImpl.updateProduct(productId, updateRequest, email);
 
         // 상품 ID 리턴
         return ResponseEntity.ok(Map.of("productId", productId));
@@ -157,7 +156,7 @@ public class ProductController {
     public HttpStatus likeProduct (@PathVariable Long productId,
                                    @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
         String email = userDetailsImpl.getUsername();
-        myPageService.likeProduct(email, productId);
+        myPageServiceImpl.likeProduct(email, productId);
         return HttpStatus.OK;
     }
 
@@ -170,7 +169,7 @@ public class ProductController {
     public HttpStatus unlikeProduct (@PathVariable Long productId,
                                      @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
         String email = userDetailsImpl.getUsername();
-        myPageService.unlikeProduct(email, productId);
+        myPageServiceImpl.unlikeProduct(email, productId);
         return HttpStatus.OK;
     }
 
@@ -184,7 +183,7 @@ public class ProductController {
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam String search) {
-        Page<ProductPreViewDto> productPage = productService.searchProductsTitle(pageNo, pageSize, search);
+        Page<ProductPreViewDto> productPage = productServiceImpl.searchProductsTitle(pageNo, pageSize, search);
 
         List<ProductPreViewDto> productList = productPage.getContent();
         return ResponseEntity.ok(productList);

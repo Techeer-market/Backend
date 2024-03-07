@@ -1,10 +1,7 @@
 package com.teamjo.techeermarket.domain.mypage.controller;
 
-import com.teamjo.techeermarket.domain.mypage.repository.UserLikeRepository;
-import com.teamjo.techeermarket.domain.mypage.service.MyPageService;
+import com.teamjo.techeermarket.domain.mypage.service.MyPageServiceImpl;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductPreViewDto;
-import com.teamjo.techeermarket.domain.products.entity.Products;
-import com.teamjo.techeermarket.domain.products.repository.ProductRepository;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +10,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/mypage")
 public class MyPageController {
 
-    private final  MyPageService myPageService;
+    private final MyPageServiceImpl myPageServiceImpl;
 
 //    private final ProductRepository productRepository;
 
@@ -33,7 +29,7 @@ public class MyPageController {
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
         String email = userDetailsImpl.getUsername();
-        List<ProductPreViewDto> likedProducts = myPageService.getLikedProducts(email, pageNo, pageSize);
+        List<ProductPreViewDto> likedProducts = myPageServiceImpl.getLikedProducts(email, pageNo, pageSize);
         return ResponseEntity.ok(likedProducts);
     }
 
@@ -48,7 +44,7 @@ public class MyPageController {
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
         String email = userDetailsImpl.getUsername();
-        List<ProductPreViewDto> purchasedProducts = myPageService.getMyPurchasedProducts(email, pageNo, pageSize);
+        List<ProductPreViewDto> purchasedProducts = myPageServiceImpl.getMyPurchasedProducts(email, pageNo, pageSize);
         return ResponseEntity.ok(purchasedProducts);
     }
 
@@ -63,7 +59,7 @@ public class MyPageController {
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
         String email = userDetailsImpl.getUsername();
-        Map<String, List<ProductPreViewDto>> sellProducts = myPageService.getSellProducts(userId, pageNo, pageSize);
+        Map<String, List<ProductPreViewDto>> sellProducts = myPageServiceImpl.getSellProducts(userId, pageNo, pageSize);
         return ResponseEntity.ok(sellProducts);
     }
 

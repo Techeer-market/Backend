@@ -16,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 @RequiredArgsConstructor
 @Configuration
@@ -62,6 +63,7 @@ public class WebSecurityConfig {
                     .addFilterAt(new JwtCheckFilter(manager, userDetailsServiceImpl), BasicAuthenticationFilter.class);
         }
     }
+
 
 }
 
