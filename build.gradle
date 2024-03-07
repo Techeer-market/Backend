@@ -46,6 +46,9 @@ dependencies {
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.23'
 	runtimeOnly 'org.postgresql:postgresql'
 
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 	//MapStruct
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
 	testAnnotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")

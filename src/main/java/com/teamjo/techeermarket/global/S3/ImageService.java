@@ -11,14 +11,14 @@ import java.io.IOException;
 @Service
 public class ImageService {
 
-    private final S3Service s3Service;
+    private final S3ServiceImpl s3ServiceImpl;
 
     @Transactional
     public String reUploadImage(BucketDir bucketDir, MultipartFile newImage, String oriImage) throws IOException {
         if (newImage == null || newImage.isEmpty()) {
             return oriImage;
         }
-        s3Service.deleteImage(oriImage);
-        return s3Service.uploadImage(bucketDir,newImage);
+        s3ServiceImpl.deleteImage(oriImage);
+        return s3ServiceImpl.uploadImage(bucketDir,newImage);
     }
 }

@@ -1,7 +1,7 @@
 package com.teamjo.techeermarket.socket.controller;
 
 import com.teamjo.techeermarket.domain.users.entity.Users;
-import com.teamjo.techeermarket.domain.users.service.UserService;
+import com.teamjo.techeermarket.domain.users.service.UserServiceImpl;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
 import com.teamjo.techeermarket.socket.dto.ChatRoomResponseDto;
 import com.teamjo.techeermarket.socket.entity.ChatRoom;
@@ -9,7 +9,6 @@ import com.teamjo.techeermarket.socket.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 public class ChatRoomController {
 
     private final ChatService chatService;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
     /**
      *  채팅방에 입장
@@ -31,7 +30,7 @@ public class ChatRoomController {
     public ResponseEntity<ChatRoomResponseDto> enterChatRoom(@RequestParam("productId") Long productId,
                                                              @RequestParam("roomName") String chatRoomName,
                                                              @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-        Users users = userService.findUser(userDetailsImpl.getUsername());
+        Users users = userServiceImpl.findUser(userDetailsImpl.getUsername());
         ChatRoom chatRoom = chatService.findChatRoomByName(users,chatRoomName,productId);
 
         ChatRoomResponseDto responseDto = new ChatRoomResponseDto(chatRoom.getProducts(), chatService.findChatList(chatRoom.getId()),
