@@ -13,6 +13,10 @@
         hibernate:
           format_sql: true
 
+    redis:
+      host: 3.35.180.167
+      port: 6379
+
   servlet:
     multipart:
       max-file-size: 1000MB

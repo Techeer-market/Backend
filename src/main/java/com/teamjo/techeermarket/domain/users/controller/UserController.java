@@ -1,12 +1,10 @@
 package com.teamjo.techeermarket.domain.users.controller;
 
-import com.teamjo.techeermarket.domain.users.dto.LoginRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.SignUpRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.UserChangeInfoDto;
 import com.teamjo.techeermarket.domain.users.dto.UserDetailResponseDto;
-import com.teamjo.techeermarket.domain.users.service.UserService;
+import com.teamjo.techeermarket.domain.users.service.UserServiceImpl;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
-import com.teamjo.techeermarket.global.exception.user.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     /*
     //  test API
@@ -40,7 +38,7 @@ public class UserController {
     */
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
-        userService.signUp(signUpRequestDto);
+        userServiceImpl.signUp(signUpRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -52,7 +50,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<UserDetailResponseDto> getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         System.out.println("Email: " + userDetailsImpl.getUsername());  // 로그 추가
-        return ResponseEntity.ok(userService.getUserInfo(userDetailsImpl.getUsername()));
+        return ResponseEntity.ok(userServiceImpl.getUserInfo(userDetailsImpl.getUsername()));
     }
 
 
@@ -64,7 +62,7 @@ public class UserController {
     public ResponseEntity<UserDetailResponseDto> updateUserInformation(@RequestBody UserChangeInfoDto changeInfoDto,
                                                                        @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         String userEmail = userDetailsImpl.getUsername();
-        UserDetailResponseDto updatedUserInfo = userService.updateUserInfo(userEmail, changeInfoDto);
+        UserDetailResponseDto updatedUserInfo = userServiceImpl.updateUserInfo(userEmail, changeInfoDto);
         return ResponseEntity.ok(updatedUserInfo);
     }
 
