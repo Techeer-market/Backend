@@ -10,12 +10,15 @@ import com.teamjo.techeermarket.domain.chats.mapper.ChatMapper;
 import com.teamjo.techeermarket.domain.chats.repository.ChatRepository;
 import com.teamjo.techeermarket.domain.chats.repository.ChatRoomRepository;
 import com.teamjo.techeermarket.domain.products.entity.Products;
+import com.teamjo.techeermarket.domain.products.mapper.ProductMapper;
 import com.teamjo.techeermarket.domain.products.repository.ProductRepository;
+import com.teamjo.techeermarket.global.exception.product.ProductNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.teamjo.techeermarket.global.exception.chat.ChatNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +27,13 @@ public class ChatService {
   private final ProductRepository productRepository;
   private final ChatRepository chatRepository;
   private final ChatMapper chatMapper;
+  private final ProductMapper productMapper;
 
   @Transactional
   public void saveMessage(ChatReq chatReq) {
-    ChatRoom chatRoom = chatRoomRepository.findById(chatReq.getChatRoomId()).orElseThrow();
+
+    ChatRoom chatRoom = chatRoomRepository.findById(chatReq.getChatRoomId())
+        .orElseThrow(ChatNotFoundException::new);
 
     Chat chat = chatMapper.toEntity(chatRoom, chatReq.getSenderEmail(), chatReq.getMessage());
 
@@ -36,24 +42,25 @@ public class ChatService {
 
   @Transactional(readOnly = true)
   public ChatRes getMessage(Long chatRoomId) {
+    // DB 조회 (채팅 리스트, 제품)
     List<Chat> chatList = chatRepository.findByChatRoomId(chatRoomId);
-    Long productId = chatRoomRepository.findById(chatRoomId).get().getProducts().getId();
-    Products products = productRepository.findById(productId).get();
-    ChatRes chatRes = new ChatRes();
 
+    ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+        .orElseThrow(ChatNotFoundException::new);
+    Long productId = chatRoom.getId();
+
+    Products products = productRepository.findById(productId)
+        .orElseThrow(ProductNotFoundException::new);
+
+    // 반환값 제작 (채팅 기록, 제품 정보, 첫 채팅 시각)
     List<ChatInfo> response = chatList.stream()
         .map(chatMapper::toChatResDtoList)
         .collect(Collectors.toList());
 
-    ProductInfo productInfo = chatMapper.toProductInfo(products);
+    ProductInfo productInfo = productMapper.toProductInfo(products);
 
-    String chatCreateAt = chatRepository.findCreateAtByChatRoomId(chatRoomId).get(0);
+    String chatCreateAt = chatList.get(chatList.size() - 1).getCreatedAt();
 
-    chatRes.setChatInfoList(response);
-    chatRes.setProductInfo(productInfo);
-    chatRes.setChatCreateAt(chatCreateAt);
-
-
-    return chatRes;
+    return chatMapper.toChatResDto(response, productInfo, chatCreateAt);
   }
 }

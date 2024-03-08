@@ -27,7 +27,10 @@ public enum ErrorCode {
 
 
     // 이미지 관련
-    IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "I001", "유효하지 않은 이미지입니다.");
+    IMAGE_NOT_FOUND(HttpStatus.BAD_REQUEST, "I001", "유효하지 않은 이미지입니다."),
+
+    // 채팅 관련
+    CHAT_NOT_FOUND(HttpStatus.BAD_REQUEST, "C001", "채팅을 찾을 수 없습니다.");
 
     //
 

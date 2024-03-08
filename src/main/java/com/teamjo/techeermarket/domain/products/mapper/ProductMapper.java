@@ -1,5 +1,6 @@
 package com.teamjo.techeermarket.domain.products.mapper;
 
+import com.teamjo.techeermarket.domain.chats.dto.response.ProductInfo;
 import com.teamjo.techeermarket.domain.products.dto.request.ProductRequestDto;
 import com.teamjo.techeermarket.domain.products.dto.request.ProductUpdateRequestDto;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductDetailViewDto;
@@ -85,5 +86,19 @@ public class ProductMapper {
         products.setLocation(updateDto.getLocation());
     }
 
+    // 체팅에서 상품 정보 반환
+    public ProductInfo toProductInfo(Products product){
+        return ProductInfo.builder()
+            .productId(product.getId())
+            .title(product.getTitle())
+            .thumbnailURL(product.getThumbnail())
+            .name(product.getUsers().getName())
+            .userId(product.getUsers().getId())
+            .price(product.getPrice())
+            .createdAt(product.getCreatedAt())
+            .likes(product.getHeart())
+            .views(product.getViews())
+            .build();
+    }
 
 }

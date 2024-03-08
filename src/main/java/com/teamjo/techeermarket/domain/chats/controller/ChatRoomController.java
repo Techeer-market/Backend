@@ -41,8 +41,6 @@ public class ChatRoomController {
     return ResponseEntity.status(HttpStatus.CREATED).body(chatCreateRes);
   }
 
-
-
   /*
    * @Describe : 채팅방 리스트 조회
    * @Param1 : userDetailsImpl(UserDetailsImpl) 로그인 유저
