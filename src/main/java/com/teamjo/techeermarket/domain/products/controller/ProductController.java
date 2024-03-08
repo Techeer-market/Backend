@@ -63,6 +63,7 @@ public class ProductController {
         String email = userDetailsImpl.getUsername();
         // 요청 바디에서 state 값을 가져옴
         String state = requestBody.get("state");
+        String buyerEmail = requestBody.getOrDefault("buyerEmail" , null);
         // 상태가 올바른지 확인
         try{
             ProductState productState = ProductState.valueOf(state);
@@ -70,7 +71,7 @@ public class ProductController {
             throw new InvalidProductStateException() ; }
 
         // 서비스를 통해 상태 변경
-        productSubService.updateProductState(productId, ProductState.valueOf(state),email);
+        productSubService.updateProductState(productId, ProductState.valueOf(state), email, buyerEmail);
         return ResponseEntity.status(HttpStatus.OK).body("Product state updated successfully");
     }
 
