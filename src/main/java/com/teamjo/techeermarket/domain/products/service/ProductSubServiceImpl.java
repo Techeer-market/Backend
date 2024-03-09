@@ -1,5 +1,9 @@
 package com.teamjo.techeermarket.domain.products.service;
 
+import static com.teamjo.techeermarket.domain.products.entity.ProductState.RESERVED;
+import static com.teamjo.techeermarket.domain.products.entity.ProductState.SALE;
+import static com.teamjo.techeermarket.domain.products.entity.ProductState.SOLD;
+
 import com.teamjo.techeermarket.domain.images.repository.ProductImageRepository;
 import com.teamjo.techeermarket.domain.images.service.ProductImageServiceImpl;
 import com.teamjo.techeermarket.domain.mypage.entity.UserLike;
@@ -83,19 +87,31 @@ public class ProductSubServiceImpl implements ProductSubService {
     // 상품 게시물 상태 변경
      */
     @Override
-    public void updateProductState(Long productId, ProductState newState, String email) {
+    public void updateProductState(Long productId, ProductState newState, String email, String buyerEmail) {
         Users findUsers = userRepository.findUserByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
+            .orElseThrow(UserNotFoundException::new);
+
         // 상품을 데이터베이스에서 찾음
         Products product = productRepository.findById(productId)
-                .orElseThrow(ProductNotFoundException::new);
+            .orElseThrow(ProductNotFoundException::new);
 
         // 현재 로그인한 사용자의 게시물인지 확인
         if (!product.getUsers().getEmail().equals(email)) {
             throw new NotYourProductException();
         }
         // 상태 업데이트
-        product.setProductState(newState);
+        if (newState.equals(RESERVED) || newState.equals(SALE)) {
+            product.setProductState(newState);
+        } else if (newState.equals(SOLD)) { // 판매 경우
+            Users BuyerUsers = userRepository.findUserByEmail(buyerEmail)
+                .orElseThrow(UserNotFoundException::new);
+            product.setProductState(newState);
+
+            UserPurchase userPurchase = userPurchaseRepository.findUserPurchaseByProducts(productId)
+                .orElseThrow(ProductNotFoundException::new);
+            userPurchase.setBuyerId(BuyerUsers);
+        }
+
         productRepository.save(product);
     }
 

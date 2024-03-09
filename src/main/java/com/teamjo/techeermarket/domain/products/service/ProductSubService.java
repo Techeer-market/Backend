@@ -8,7 +8,7 @@ public interface ProductSubService {
 
     void increaseViewCount(Long productId);
 
-    void updateProductState(Long productId, ProductState newState, String email);
+    void updateProductState(Long productId, ProductState newState, String email, String buyerEmail);
 
     void likeProduct(String email, Long productId);
 
