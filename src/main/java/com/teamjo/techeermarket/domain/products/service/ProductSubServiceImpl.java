@@ -103,7 +103,7 @@ public class ProductSubServiceImpl implements ProductSubService {
         if (newState.equals(RESERVED) || newState.equals(SALE)) {
             product.setProductState(newState);
         } else if (newState.equals(SOLD)) { // 판매 경우
-            Users BuyerUsers = userRepository.findUserByEmail(email)
+            Users BuyerUsers = userRepository.findUserByEmail(buyerEmail)
                 .orElseThrow(UserNotFoundException::new);
             product.setProductState(newState);
 
