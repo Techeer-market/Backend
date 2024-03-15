@@ -80,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
         products.setProductState(ProductState.SALE); // ProductState를 "SALE"로 설정
 
         List<MultipartFile> imageFiles = request.getProductImages();
-        List<String> imageUrls = s3ServiceImpl.uploadProductImageList(BucketDir.PRODUCT, imageFiles); // 단순한 이미지 url 리스트 출력 -> 수정 필요
+        List<String> imageUrls = s3ServiceImpl.uploadResizeProductImageList(BucketDir.PRODUCT, imageFiles); // 단순한 이미지 url 리스트 출력 -> 수정 필요
 
         // 첫 번째 이미지를 thumbnail로 설정
         if (!imageUrls.isEmpty()) {

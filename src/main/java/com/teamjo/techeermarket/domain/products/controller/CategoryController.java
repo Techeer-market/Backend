@@ -2,6 +2,7 @@ package com.teamjo.techeermarket.domain.products.controller;
 
 import com.teamjo.techeermarket.domain.products.dto.response.ProductPreViewDto;
 import com.teamjo.techeermarket.domain.products.mapper.ProductMapper;
+import com.teamjo.techeermarket.domain.products.service.CategoryService;
 import com.teamjo.techeermarket.domain.products.service.CategoryServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,7 @@ import java.util.List;
 public class CategoryController {
 
 
-    private final CategoryServiceImpl categoryServiceImpl;
+    private final CategoryService categoryService;
     private final ProductMapper productMapper;
 
     /**
@@ -27,7 +28,7 @@ public class CategoryController {
             @PathVariable Long categoryId,
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
-        List<ProductPreViewDto> productsList = categoryServiceImpl.getCategoryList(categoryId, pageNo, pageSize);
+        List<ProductPreViewDto> productsList = categoryService.getCategoryList(categoryId, pageNo, pageSize);
         return ResponseEntity.ok(productsList);
     }
 
@@ -41,7 +42,7 @@ public class CategoryController {
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam String search ) {
-        Page<ProductPreViewDto> searchResult = categoryServiceImpl.searchByTitleInCategory(categoryId, pageNo, pageSize, search);
+        Page<ProductPreViewDto> searchResult = categoryService.searchByTitleInCategory(categoryId, pageNo, pageSize, search);
 
         List<ProductPreViewDto> productList = searchResult.getContent();
         return ResponseEntity.ok(productList);

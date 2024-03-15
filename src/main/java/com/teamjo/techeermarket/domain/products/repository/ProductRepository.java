@@ -34,6 +34,7 @@ public interface ProductRepository extends JpaRepository<Products, Long> {
 
     Page<Products> findByProductStateNot(ProductState sold, Pageable pageable);
 
-    List<Products> findByUsersAndProductStateIn(Users findUsers, List<ProductState> states, Pageable pageable);
+    @Query("select p from Products p join fetch p.users u where u = :findUsers and p.productState in :states")
+    List<Products> findByUsersAndProductStateInWithUserFetch(@Param("findUsers") Users findUsers, @Param("states") List<ProductState> states, Pageable pageable);
 
 }

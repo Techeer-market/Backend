@@ -16,4 +16,7 @@ public interface S3Service {
 
     String getS3FileNameFromUrl(String imageUrl);
 
+    // 이미지 리사이징
+    List<String> uploadResizeProductImageList(BucketDir bucketDir, List<MultipartFile> imageFiles) throws IOException;
+
 }

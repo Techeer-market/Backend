@@ -41,7 +41,7 @@ public class Users extends BaseEntity {
     @Column(name = "social")
     private Social social;
 
-    @OneToMany(mappedBy = "users",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users",fetch = FetchType.LAZY)
     private List<Products> products;
 
 }
