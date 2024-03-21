@@ -1,12 +1,12 @@
 package com.teamjo.techeermarket.domain.products.controller;
 
-import com.teamjo.techeermarket.domain.mypage.service.MyPageServiceImpl;
+import com.teamjo.techeermarket.domain.mypage.service.MyPageService;
 import com.teamjo.techeermarket.domain.products.dto.request.ProductRequestDto;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductDetailViewDto;
 import com.teamjo.techeermarket.domain.products.dto.response.ProductPreViewDto;
 import com.teamjo.techeermarket.domain.products.entity.ProductState;
-import com.teamjo.techeermarket.domain.products.service.ProductServiceImpl;
-import com.teamjo.techeermarket.domain.products.service.ProductSubServiceImpl;
+import com.teamjo.techeermarket.domain.products.service.ProductService;
+import com.teamjo.techeermarket.domain.products.service.ProductSubService;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
 import com.teamjo.techeermarket.global.exception.product.InvalidProductStateException;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +27,10 @@ import java.util.Map;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private final ProductServiceImpl productServiceImpl;
-    private final ProductSubServiceImpl productSubServiceImpl;
+    private final ProductService productService;
+    private final ProductSubService productSubServiceImpl;
 
-    private final MyPageServiceImpl myPageServiceImpl;
+    private final MyPageService myPageService;
 
     /**
     // 게시물 작성하기
@@ -40,7 +40,7 @@ public class ProductController {
                                           @AuthenticationPrincipal UserDetailsImpl userDetailsImpl ) throws IOException {
         String email = userDetailsImpl.getUsername();
         // 상품 DB에 저장
-        Long productId = productServiceImpl.saveProduct(productRequstDto, email);
+        Long productId = productService.saveProduct(productRequstDto, email);
 
         // UserPurchase DB에 => 상품 id + (seller-id) 만 저장
         productSubServiceImpl.updateProductSeller(email,productId);
@@ -83,7 +83,7 @@ public class ProductController {
     public ResponseEntity<List<ProductPreViewDto>> getAllProductListByPagination(
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
-        List<ProductPreViewDto> productsList = productServiceImpl.getAllProductList(pageNo, pageSize);
+        List<ProductPreViewDto> productsList = productService.getAllProductList(pageNo, pageSize);
         return ResponseEntity.ok(productsList);
     }
 
@@ -96,7 +96,7 @@ public class ProductController {
     public ResponseEntity<List<ProductPreViewDto>> getListExceptSold(
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize) {
-        List<ProductPreViewDto> productsList = productServiceImpl.getListExceptSold(pageNo, pageSize);
+        List<ProductPreViewDto> productsList = productService.getListExceptSold(pageNo, pageSize);
         return ResponseEntity.ok(productsList);
     }
 
@@ -109,7 +109,7 @@ public class ProductController {
     public ResponseEntity<ProductDetailViewDto> getProductDetail (@PathVariable Long productId,
                                                                   @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         String email = userDetailsImpl.getUsername();
-        ProductDetailViewDto productDetailDto = productServiceImpl.getProductDetail(email, productId);
+        ProductDetailViewDto productDetailDto = productService.getProductDetail(email, productId);
 
         // 조회수 증가
         productSubServiceImpl.increaseViewsCount(productId);
@@ -126,7 +126,7 @@ public class ProductController {
     public HttpStatus deleteProduct(@PathVariable Long productId,
                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String email = userDetails.getUsername();
-        productServiceImpl.deleteProduct(productId, email);
+        productService.deleteProduct(productId, email);
 
         return HttpStatus.OK ;
     }
@@ -142,7 +142,7 @@ public class ProductController {
                                            @Validated @ModelAttribute ProductRequestDto updateRequest,
                                            @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
         String email = userDetailsImpl.getUsername();
-        productServiceImpl.updateProduct(productId, updateRequest, email);
+        productService.updateProduct(productId, updateRequest, email);
 
         // 상품 ID 리턴
         return ResponseEntity.ok(Map.of("productId", productId));
@@ -157,7 +157,7 @@ public class ProductController {
     public HttpStatus likeProduct (@PathVariable Long productId,
                                    @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
         String email = userDetailsImpl.getUsername();
-        myPageServiceImpl.likeProduct(email, productId);
+        myPageService.likeProduct(email, productId);
         return HttpStatus.OK;
     }
 
@@ -170,7 +170,7 @@ public class ProductController {
     public HttpStatus unlikeProduct (@PathVariable Long productId,
                                      @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) throws IOException {
         String email = userDetailsImpl.getUsername();
-        myPageServiceImpl.unlikeProduct(email, productId);
+        myPageService.unlikeProduct(email, productId);
         return HttpStatus.OK;
     }
 
@@ -184,7 +184,7 @@ public class ProductController {
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam String search) {
-        Page<ProductPreViewDto> productPage = productServiceImpl.searchProductsTitle(pageNo, pageSize, search);
+        Page<ProductPreViewDto> productPage = productService.searchProductsTitle(pageNo, pageSize, search);
 
         List<ProductPreViewDto> productList = productPage.getContent();
         return ResponseEntity.ok(productList);

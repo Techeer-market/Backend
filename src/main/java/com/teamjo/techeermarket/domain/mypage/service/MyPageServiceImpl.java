@@ -173,14 +173,24 @@ public class MyPageServiceImpl implements MyPageService {
 
 
     // 특정 상태의 상품 목록 조회 메서드
+//    @Override
+//    public List<ProductPreViewDto> getProductsByState(Users findUsers, List<ProductState> states, Pageable pageable) {
+//        return productRepository
+//                .findByUsersAndProductStateIn(findUsers, states, pageable)
+//                .stream()
+//                .map(product -> productMapper.fromListEntity((Products) product))
+//                .collect(Collectors.toList());
+//    }
+
     @Override
     public List<ProductPreViewDto> getProductsByState(Users findUsers, List<ProductState> states, Pageable pageable) {
         return productRepository
-                .findByUsersAndProductStateIn(findUsers, states, pageable)
+                .findByUsersAndProductStateInWithUserFetch(findUsers, states, pageable)
                 .stream()
                 .map(product -> productMapper.fromListEntity((Products) product))
                 .collect(Collectors.toList());
     }
+
 
 
 
