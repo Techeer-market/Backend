@@ -62,6 +62,7 @@ dependencies {
 	implementation group: 'org.bgee.log4jdbc-log4j2', name:'log4jdbc-log4j2-jdbc4.1',version:'1.16'
 	implementation 'org.json:json:20230227'
 
+
 	// 구글 oauth
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.6.2'
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -69,10 +70,13 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'com.vaadin.external.google', module: 'android-json'
+	}
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-//	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 tasks.named('test') {
