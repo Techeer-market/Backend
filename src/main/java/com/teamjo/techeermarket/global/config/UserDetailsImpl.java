@@ -1,6 +1,7 @@
 package com.teamjo.techeermarket.global.config;
 
 import com.teamjo.techeermarket.domain.users.entity.Users;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import java.util.Collections;
 
 @Slf4j
 @Getter
+@Builder
 @RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 

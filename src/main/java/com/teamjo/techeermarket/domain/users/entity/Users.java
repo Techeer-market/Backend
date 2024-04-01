@@ -44,4 +44,11 @@ public class Users extends BaseEntity {
     @OneToMany(mappedBy = "users",fetch = FetchType.EAGER)
     private List<Products> products;
 
+
+    @Builder
+    private Users(Long id, String email) {
+        this.id = id;
+        this.email = email;
+    }
+
 }
