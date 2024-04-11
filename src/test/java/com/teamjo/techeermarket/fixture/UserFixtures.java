@@ -28,4 +28,16 @@ public class UserFixtures {
       UserDetailsImpl.builder()
           .user(TEST_GET_ROOM_USER)
           .build();
+
+  public static final Users TEST_GET_CHAT_USER =
+      Users.builder()
+          .id(3L)
+          .name("testName")
+          .email("test@test.com")
+          .build();
+
+  public static final UserDetailsImpl TEST_GET_CHAT_USER_DETAIL =
+      UserDetailsImpl.builder()
+          .user(TEST_GET_CHAT_USER)
+          .build();
 }
