@@ -1,10 +1,19 @@
 package com.teamjo.techeermarket.domain.chats.controller;
 
 import static com.teamjo.techeermarket.fixture.ChatRoomFixtures.TEST_CREATE_ROOM_RESPONSE;
+import static com.teamjo.techeermarket.fixture.ChatRoomFixtures.TEST_GET_ROOM_1;
+import static com.teamjo.techeermarket.fixture.ChatRoomFixtures.TEST_GET_ROOM_2;
+import static com.teamjo.techeermarket.fixture.ChatRoomFixtures.TEST_GET_ROOM_RESPONSE_3;
+import static com.teamjo.techeermarket.fixture.ChatRoomFixtures.TEST_GET_ROOM_RESPONSE_4;
 import static com.teamjo.techeermarket.fixture.ProductsFixtures.TEST_CREATE_ROOM_USER_PRODUCTS;
 import static com.teamjo.techeermarket.fixture.UserFixtures.TEST_CREATE_ROOM_USER;
 import static com.teamjo.techeermarket.fixture.UserFixtures.TEST_CREATE_ROOM_USER_DETAIL;
+import static com.teamjo.techeermarket.fixture.UserFixtures.TEST_GET_ROOM_USER;
+import static com.teamjo.techeermarket.fixture.UserFixtures.TEST_GET_ROOM_USER_DETAIL;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -12,22 +21,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomRes;
+import com.teamjo.techeermarket.domain.chats.entity.ChatRoom;
+import com.teamjo.techeermarket.domain.chats.repository.ChatRoomRepository;
 import com.teamjo.techeermarket.domain.chats.service.ChatRoomService;
 import com.teamjo.techeermarket.domain.chats.service.ChatService;
 import com.teamjo.techeermarket.domain.products.repository.ProductRepository;
 import com.teamjo.techeermarket.domain.products.service.ProductService;
 import com.teamjo.techeermarket.domain.users.service.UserService;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
@@ -47,6 +65,8 @@ public class ChatRoomControllerTest {
   private ChatService chatService;
   @MockBean
   private SimpMessageSendingOperations template;
+  @MockBean
+  private ChatRoomRepository chatRoomRepository;
   @Autowired
   private MockMvc mockMvc;
   @Autowired
@@ -63,9 +83,6 @@ public class ChatRoomControllerTest {
   void createChatRoom() throws Exception {
 
     //when
-    when(userService.findUser(any())).thenReturn(TEST_CREATE_ROOM_USER);
-    when(productRepository.findById(any())).thenReturn(
-        Optional.ofNullable(TEST_CREATE_ROOM_USER_PRODUCTS));
     when(chatRoomService.createChatRoom(any(), any())).thenReturn(TEST_CREATE_ROOM_RESPONSE);
 
     //then
@@ -78,5 +95,51 @@ public class ChatRoomControllerTest {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.chatRoomId").value(TEST_CREATE_ROOM_RESPONSE.getChatRoomId()))
         .andDo(print());
+  }
+
+  @Test
+  @DisplayName("Controller 채팅방 리스트 조회 - 채팅방이 존재하는 경우")
+  void getAllChatRoomExistence() throws Exception {
+
+    //when
+    List<ChatRoomRes> outputData = new ArrayList<>();
+    outputData.add(TEST_GET_ROOM_RESPONSE_3);
+    outputData.add(TEST_GET_ROOM_RESPONSE_4);
+
+    when(chatRoomService.findChatRoomByUserId(any(), anyInt(), anyInt())).thenReturn(outputData);
+
+    //then
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/api/chat/room")
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .with(SecurityMockMvcRequestPostProcessors.user(TEST_GET_ROOM_USER_DETAIL))
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(2)))
+        .andDo(print());
+
+  }
+
+  @Test
+  @DisplayName("Controller 채팅방 리스트 조회 - 채팅방이 존재하지 않는 경우")
+  void getAllChatRoomNonexistent() throws Exception {
+
+    //when
+    List<ChatRoomRes> outputData = new ArrayList<>();
+
+    when(chatRoomService.findChatRoomByUserId(any(), anyInt(), anyInt())).thenReturn(outputData);
+
+    //then
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.get("/api/chat/room")
+                .with(SecurityMockMvcRequestPostProcessors.csrf())
+                .with(SecurityMockMvcRequestPostProcessors.user(TEST_GET_ROOM_USER_DETAIL))
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(0)))
+        .andDo(print());
+
   }
 }

@@ -4,6 +4,7 @@ import static com.teamjo.techeermarket.fixture.ProductsFixtures.TEST_CREATE_ROOM
 import static com.teamjo.techeermarket.fixture.ProductsFixtures.TEST_GET_ROOM_USER_PRODUCTS;
 
 import com.teamjo.techeermarket.domain.chats.dto.response.ChatCreateRes;
+import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomRes;
 import com.teamjo.techeermarket.domain.chats.entity.ChatRoom;
 
 public class ChatRoomFixtures {
@@ -27,6 +28,30 @@ public class ChatRoomFixtures {
           .products(TEST_GET_ROOM_USER_PRODUCTS)
           .sellerEmail("seller@test.com")
           .sellerEmail("buyer@test.com")
+          .build();
+
+  public static final ChatRoomRes TEST_GET_ROOM_RESPONSE_3 =
+      ChatRoomRes.builder()
+          .id(1L)
+          .productId(1L)
+          .productTitle("testTitle")
+          .productLocation("testLocation")
+          .currentChatAt("11:11:11")
+          .productPrice(10000)
+          .productThumbnail("testThumbnail")
+          .chatPartnerName("testPartnerName")
+          .build();
+
+  public static final ChatRoomRes TEST_GET_ROOM_RESPONSE_4 =
+      ChatRoomRes.builder()
+          .id(1L)
+          .productId(1L)
+          .productTitle("testTitle")
+          .productLocation("testLocation")
+          .currentChatAt("11:11:11")
+          .productPrice(10000)
+          .productThumbnail("testThumbnail")
+          .chatPartnerName("testPartnerName")
           .build();
 
 }

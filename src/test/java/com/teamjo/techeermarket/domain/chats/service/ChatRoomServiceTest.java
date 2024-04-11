@@ -50,7 +50,7 @@ public class ChatRoomServiceTest {
     chatRoomList.add(TEST_GET_ROOM_1);
     chatRoomList.add(TEST_GET_ROOM_2);
 
-    List<Object[]> dataArray = new ArrayList<>();
+    List<Object[]> outputData = new ArrayList<>();
     for (ChatRoom chatRoom : chatRoomList) {
       Object[] data = new Object[]{
           chatRoom.getId(),
@@ -62,10 +62,10 @@ public class ChatRoomServiceTest {
           chatRoom.getSellerEmail(),
           chatRoom.getBuyerEmail()
       };
-      dataArray.add(data);
+      outputData.add(data);
     }
 
-    Page<Object[]> page = new PageImpl<>(dataArray, pageable, dataArray.size());
+    Page<Object[]> page = new PageImpl<>(outputData, pageable, outputData.size());
 
     when(chatRoomRepository.findByUserIn(any(), eq(pageable))).thenReturn(page);
     when(userRepository.findUserByEmail(any())).thenReturn(Optional.ofNullable(TEST_GET_ROOM_USER));
