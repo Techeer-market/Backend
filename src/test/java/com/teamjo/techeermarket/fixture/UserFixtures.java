@@ -16,4 +16,16 @@ public class UserFixtures {
           .user(TEST_CREATE_ROOM_USER)
           .build();
 
+
+  public static final Users TEST_GET_ROOM_USER =
+      Users.builder()
+          .id(2L)
+          .name("testName")
+          .email("test@test.com")
+          .build();
+
+  public static final UserDetailsImpl TEST_GET_ROOM_USER_DETAIL =
+      UserDetailsImpl.builder()
+          .user(TEST_GET_ROOM_USER)
+          .build();
 }
