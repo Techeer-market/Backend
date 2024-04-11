@@ -5,7 +5,6 @@ import static com.teamjo.techeermarket.fixture.UserFixtures.TEST_GET_ROOM_USER;
 
 import com.teamjo.techeermarket.domain.chats.dto.response.ProductInfo;
 import com.teamjo.techeermarket.domain.products.entity.Products;
-import com.teamjo.techeermarket.domain.users.entity.Users;
 
 public class ProductsFixtures {
   public static final Products TEST_CREATE_ROOM_USER_PRODUCTS =

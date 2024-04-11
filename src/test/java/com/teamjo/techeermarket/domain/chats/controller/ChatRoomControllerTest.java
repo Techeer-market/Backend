@@ -1,19 +1,13 @@
 package com.teamjo.techeermarket.domain.chats.controller;
 
 import static com.teamjo.techeermarket.fixture.ChatRoomFixtures.TEST_CREATE_ROOM_RESPONSE;
-import static com.teamjo.techeermarket.fixture.ChatRoomFixtures.TEST_GET_ROOM_1;
-import static com.teamjo.techeermarket.fixture.ChatRoomFixtures.TEST_GET_ROOM_2;
 import static com.teamjo.techeermarket.fixture.ChatRoomFixtures.TEST_GET_ROOM_RESPONSE_3;
 import static com.teamjo.techeermarket.fixture.ChatRoomFixtures.TEST_GET_ROOM_RESPONSE_4;
-import static com.teamjo.techeermarket.fixture.ProductsFixtures.TEST_CREATE_ROOM_USER_PRODUCTS;
-import static com.teamjo.techeermarket.fixture.UserFixtures.TEST_CREATE_ROOM_USER;
 import static com.teamjo.techeermarket.fixture.UserFixtures.TEST_CREATE_ROOM_USER_DETAIL;
-import static com.teamjo.techeermarket.fixture.UserFixtures.TEST_GET_ROOM_USER;
 import static com.teamjo.techeermarket.fixture.UserFixtures.TEST_GET_ROOM_USER_DETAIL;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -22,7 +16,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomRes;
-import com.teamjo.techeermarket.domain.chats.entity.ChatRoom;
 import com.teamjo.techeermarket.domain.chats.repository.ChatRoomRepository;
 import com.teamjo.techeermarket.domain.chats.service.ChatRoomService;
 import com.teamjo.techeermarket.domain.chats.service.ChatService;
@@ -31,17 +24,11 @@ import com.teamjo.techeermarket.domain.products.service.ProductService;
 import com.teamjo.techeermarket.domain.users.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -59,24 +46,8 @@ public class ChatRoomControllerTest {
   private ProductService productService;
   @MockBean
   private ChatRoomService chatRoomService;
-  @MockBean
-  private ProductRepository productRepository;
-  @MockBean
-  private ChatService chatService;
-  @MockBean
-  private SimpMessageSendingOperations template;
-  @MockBean
-  private ChatRoomRepository chatRoomRepository;
   @Autowired
   private MockMvc mockMvc;
-  @Autowired
-  private ObjectMapper objectMapper;
-
-
-  private String toJsonString(Object object) throws JsonProcessingException {
-    return objectMapper.writeValueAsString(object);
-  }
-
 
   @Test
   @DisplayName("Controller 채팅방 생성")

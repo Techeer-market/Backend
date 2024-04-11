@@ -2,7 +2,6 @@ package com.teamjo.techeermarket.domain.chats.service;
 
 import static com.teamjo.techeermarket.fixture.ChatRoomFixtures.TEST_GET_ROOM_1;
 import static com.teamjo.techeermarket.fixture.ChatRoomFixtures.TEST_GET_ROOM_2;
-import static com.teamjo.techeermarket.fixture.ProductsFixtures.TEST_CREATE_ROOM_USER_PRODUCTS;
 import static com.teamjo.techeermarket.fixture.UserFixtures.TEST_GET_ROOM_USER;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -11,7 +10,6 @@ import static org.mockito.Mockito.when;
 
 import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomRes;
 import com.teamjo.techeermarket.domain.chats.entity.ChatRoom;
-import com.teamjo.techeermarket.domain.chats.repository.ChatRepository;
 import com.teamjo.techeermarket.domain.chats.repository.ChatRoomRepository;
 import com.teamjo.techeermarket.domain.users.repository.UserRepository;
 import java.util.ArrayList;

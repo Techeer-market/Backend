@@ -2,10 +2,8 @@ package com.teamjo.techeermarket.fixture;
 
 import static com.teamjo.techeermarket.fixture.ProductsFixtures.TEST_CREATE_ROOM_USER_PRODUCTINFO;
 
-import com.teamjo.techeermarket.domain.chats.dto.response.ChatCreateRes;
 import com.teamjo.techeermarket.domain.chats.dto.response.ChatInfo;
 import com.teamjo.techeermarket.domain.chats.dto.response.ChatRes;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ChatFixtures {
