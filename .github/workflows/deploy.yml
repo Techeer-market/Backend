@@ -20,12 +20,10 @@ jobs:
           java-version: '11'
 
       - name: Grant execute permission for gradlew
-        working-directory: ./server-app
         run: chmod +x ./gradlew
         shell: bash
 
       - name: Build with Gradle
-        working-directory: ./server-app
         run: ./gradlew clean build
         shell: bash
 
@@ -33,7 +31,7 @@ jobs:
         uses: 1466587594/get-current-time@v2
         id: current-time
         with:
-          format: YYYYMMDDTHHmm
+          format: YYYY-MM-DDTHH-mm-ss
           utcOffset: "+09:00"
 
       - name: Generate deployment package
