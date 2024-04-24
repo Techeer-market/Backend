@@ -43,10 +43,11 @@ jobs:
       - name: Generate deployment package
         run: |
           mkdir -p deploy
-          cp server-app/build/libs/server-app.jar deploy/techeermarket-application-prod-ebextensions-1.jar
+          cp build/libs/*.jar deploy/application.jar
           cp Procfile deploy/Procfile
           cp -r .ebextensions deploy/.ebextensions
-          cd deploy && zip -r techeermarket-application-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}} .
+          cp -r .platform deploy/.platform
+          cd deploy && zip -r deploy.zip .
 
       - name: Deploy Consumer to EB
         uses: einaregilsson/beanstalk-deploy@v14
@@ -57,4 +58,4 @@ jobs:
           environment_name: Techeermarketapplicationprod-env
           version_label: techeermarket-application-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}
           region: ap-northeast-2
-          deployment_package: deploy/techeermarket-application-prod-label-${{steps.current-time.outputs.formattedTime}}-${{github.sha}}.zip
+          deployment_package: deploy/deploy.zip
