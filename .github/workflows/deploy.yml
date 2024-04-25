@@ -33,7 +33,10 @@ jobs:
         run: |
           ./gradlew clean build
           echo "Current working directory: $(pwd)"
-          echo "Current working directory: $(ls -l)"
+          cd build
+          echo "build directory: $(ls -l)"
+          cd libs
+          echo "libs directory: $(ls -l)"
         shell: bash
 
       - name: Get current time
