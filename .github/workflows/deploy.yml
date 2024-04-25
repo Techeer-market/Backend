@@ -33,6 +33,7 @@ jobs:
         run: |
           ./gradlew clean build
           echo "Current working directory: $(pwd)"
+          echo "Current working directory: $(ㅣs -l)"
         shell: bash
 
       - name: Get current time
