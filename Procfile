@@ -1,1 +1,1 @@
-web: java -jar techeermarket-application-prod-ebextensions-1.jar
+web: appstart
