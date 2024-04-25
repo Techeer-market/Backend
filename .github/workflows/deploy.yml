@@ -32,11 +32,6 @@ jobs:
       - name: Build with Gradle
         run: |
           ./gradlew clean build
-          echo "Current working directory: $(pwd)"
-          cd build
-          echo "build directory: $(ls -l)"
-          cd libs
-          echo "libs directory: $(ls -l)"
         shell: bash
 
       - name: Get current time
@@ -48,10 +43,8 @@ jobs:
 
       - name: Generate deployment package
         run: |
-          echo "Current working directory: $(pwd)"
           mkdir -p deploy
-          echo "Current working directory: $(pwd)"
-          cp build/libs/techeermarket-1.0.0-SNAPSHOT.jar deploy/application.jar
+          cp build/libs/techeermarket-0.0.1-SNAPSHOT.jar deploy/application.jar
           cp Procfile deploy/Procfile
           cp -r .ebextensions deploy/.ebextensions
           cp -r .platform deploy/.platform
