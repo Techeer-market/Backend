@@ -245,7 +245,8 @@ public class ProductServiceImpl implements ProductService {
             s3ServiceImpl.deleteImage(imageUrl);
         }
         // 게시물에 연결된 이전 이미지들 db에서 삭제
-         existingProduct.getProductImages().clear();
+        productImageRepository.deleteAll(productImages);  // JPA Repository의 deleteAll을 사용하여 한 번에 모든 이미지 삭제
+        existingProduct.getProductImages().clear();
 
 
         // 수정된 내용 저장
