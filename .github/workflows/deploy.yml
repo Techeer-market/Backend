@@ -48,7 +48,9 @@ jobs:
 
       - name: Generate deployment package
         run: |
+          echo "Current working directory: $(pwd)"
           mkdir -p deploy
+          echo "Current working directory: $(pwd)"
           cp build/libs/techeermarket-1.0.0-SNAPSHOT.jar deploy/application.jar
           cp Procfile deploy/Procfile
           cp -r .ebextensions deploy/.ebextensions
