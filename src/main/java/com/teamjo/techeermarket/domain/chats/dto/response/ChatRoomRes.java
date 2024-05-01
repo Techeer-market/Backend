@@ -14,4 +14,5 @@ public class ChatRoomRes {
   private int productPrice;
   private String productThumbnail;
   private String chatPartnerName;
+  private String createdAt;
 }

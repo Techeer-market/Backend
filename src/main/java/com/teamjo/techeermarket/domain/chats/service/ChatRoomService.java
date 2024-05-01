@@ -2,8 +2,10 @@ package com.teamjo.techeermarket.domain.chats.service;
 
 
 import com.teamjo.techeermarket.domain.chats.dto.response.ChatCreateRes;
+import com.teamjo.techeermarket.domain.chats.dto.response.ChatInfo;
 import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomRes;
 import com.teamjo.techeermarket.domain.chats.dto.response.ProductInfo;
+import com.teamjo.techeermarket.domain.chats.entity.Chat;
 import com.teamjo.techeermarket.domain.chats.entity.ChatRoom;
 import com.teamjo.techeermarket.domain.chats.mapper.ChatMapper;
 import com.teamjo.techeermarket.domain.chats.mapper.ChatRoomMapper;
@@ -17,6 +19,7 @@ import com.teamjo.techeermarket.global.exception.product.ProductNotFoundExceptio
 import com.teamjo.techeermarket.global.exception.user.UserNotFoundException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,18 +41,54 @@ public class ChatRoomService {
   private final ProductMapper productMapper;
 
   @Transactional
-  public ChatCreateRes createChatRoom(Long productId, String buyer) {
+  public ChatCreateRes createChatRoom(Long productId, String buyer, Long chatRoomId) {
 
     Products product = productRepository.findById(productId)
-        .orElseThrow(ProductNotFoundException::new);;
+        .orElseThrow(ProductNotFoundException::new);
 
-    ChatRoom chatRoom = chatRoomMapper.toEntity(product, product.getUsers().getEmail(), buyer);
-    ChatRoom save = chatRoomRepository.save(chatRoom);
+    if (chatRoomId != 0) {
+      Optional<ChatRoom> chatRoom1 = chatRoomRepository.findById(chatRoomId);
 
-    ProductInfo productInfo = productMapper.toProductInfo(product);
+      ChatRoom chatRoom = chatRoom1.get();
+      ProductInfo productInfo = productMapper.toProductInfo(product);
 
-    return chatMapper.toChatCreateResDto(save.getId(), productInfo);
+      List<Chat> chatList = chatRepository.findByChatRoomId(chatRoom.getId());
+
+      List<ChatInfo> response = chatList.stream()
+          .map(chatMapper::toChatResDtoList)
+          .collect(Collectors.toList());
+
+      String chatCreateAt = chatRoom.getCreatedAt();
+
+      return chatMapper.toChatCreateResDto(chatRoom.getId(), productInfo, chatCreateAt, response);
+    } else { // 상품 페이지에서 채팅하기를 누른 경우
+      Optional<ChatRoom> chatRoom1 = chatRoomRepository.findChatRoom(productId, product.getUsers().getEmail(), buyer);
+
+      if (!chatRoom1.isEmpty()) {
+        ChatRoom chatRoom = chatRoom1.get();
+        ProductInfo productInfo = productMapper.toProductInfo(product);
+
+        List<Chat> chatList = chatRepository.findByChatRoomId(chatRoom.getId());
+
+        List<ChatInfo> response = chatList.stream()
+            .map(chatMapper::toChatResDtoList)
+            .collect(Collectors.toList());
+
+        String chatCreateAt = chatRoom.getCreatedAt();
+
+        return chatMapper.toChatCreateResDto(chatRoom.getId(), productInfo, chatCreateAt, response);
+      } else {
+        ChatRoom chatRoom = chatRoomMapper.toEntity(product, product.getUsers().getEmail(), buyer);
+        ChatRoom save = chatRoomRepository.save(chatRoom);
+
+        ProductInfo productInfo = productMapper.toProductInfo(product);
+
+        return chatMapper.toChatCreateNewResDto(save.getId(), productInfo);
+      }
+
+    }
   }
+
 
   @Transactional(readOnly = true)
   public List<ChatRoomRes> findChatRoomByUserId(String userEmail, int pageNo, int pageSize) {
@@ -75,6 +114,7 @@ public class ChatRoomService {
     String productThumbnail = (String) result[5];
     String sellerEmail = (String) result[6];
     String buyerEmail = (String) result[7];
+    String createdAt = (String) result[8];
 
     String chatPartnerEmail = userEmail.equals(sellerEmail) ? buyerEmail : sellerEmail;
     String chatPartnerName = userRepository.findUserByEmail(chatPartnerEmail)
@@ -95,6 +135,7 @@ public class ChatRoomService {
         .productPrice(productPrice)
         .productThumbnail(productThumbnail)
         .chatPartnerName(chatPartnerName)
+        .createdAt(createdAt)
         .build();
   }
 

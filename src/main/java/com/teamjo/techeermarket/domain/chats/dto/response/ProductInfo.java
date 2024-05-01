@@ -10,6 +10,7 @@ public class ProductInfo {
   private String title ;
   private String thumbnailURL;  // 썸네일 이미지
   private String name;  // 작성자
+  private String userEmail;  // 작성자 이메일
   private Long userId ; // 작성자 id
   private int price ;
   private String createdAt ;

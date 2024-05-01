@@ -35,7 +35,7 @@ public class ChatService {
     ChatRoom chatRoom = chatRoomRepository.findById(chatReq.getChatRoomId())
         .orElseThrow(ChatNotFoundException::new);
 
-    Chat chat = chatMapper.toEntity(chatRoom, chatReq.getSenderEmail(), chatReq.getMessage());
+    Chat chat = chatMapper.toEntity(chatRoom, chatReq.getSenderId(), chatReq.getMessage());
 
     chatRepository.save(chat);
   }
@@ -47,7 +47,7 @@ public class ChatService {
 
     ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
         .orElseThrow(ChatNotFoundException::new);
-    Long productId = chatRoom.getId();
+    Long productId = chatRoom.getProducts().getId();
 
     Products products = productRepository.findById(productId)
         .orElseThrow(ProductNotFoundException::new);
@@ -59,8 +59,8 @@ public class ChatService {
 
     ProductInfo productInfo = productMapper.toProductInfo(products);
 
-    String chatCreateAt = chatList.get(chatList.size() - 1).getCreatedAt();
+    String chatCreateAt = chatRoom.getCreatedAt();
 
-    return chatMapper.toChatResDto(response, productInfo, chatCreateAt);
+    return chatMapper.toChatResDto(chatRoom.getId(), response, productInfo, chatCreateAt);
   }
 }
