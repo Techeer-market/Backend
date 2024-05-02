@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ChatRepository extends JpaRepository<Chat, Long> {
 
-  @Query("SELECT c FROM Chat c WHERE c.chatRoom.id = :chatRoomId ORDER BY c.createdAt DESC")
+  @Query("SELECT c FROM Chat c WHERE c.chatRoom.id = :chatRoomId ORDER BY c.createdAt")
   List<Chat> findByChatRoomId(@Param("chatRoomId") Long chatRoomId);
 
   @Query("SELECT c.createdAt FROM Chat c WHERE c.chatRoom.id = :chatRoomId ORDER BY c.createdAt")
