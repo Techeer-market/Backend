@@ -80,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
         products.setProductState(ProductState.SALE); // ProductState를 "SALE"로 설정
 
         List<MultipartFile> imageFiles = request.getProductImages();
-        List<String> imageUrls = s3ServiceImpl.uploadProductImageList(BucketDir.PRODUCT, imageFiles); // 단순한 이미지 url 리스트 출력 -> 수정 필요
+        List<String> imageUrls = s3ServiceImpl.uploadResizeProductImageList(BucketDir.PRODUCT, imageFiles); // 단순한 이미지 url 리스트 출력 -> 수정 필요
 
         // 첫 번째 이미지를 thumbnail로 설정
         if (!imageUrls.isEmpty()) {
@@ -245,7 +245,8 @@ public class ProductServiceImpl implements ProductService {
             s3ServiceImpl.deleteImage(imageUrl);
         }
         // 게시물에 연결된 이전 이미지들 db에서 삭제
-         existingProduct.getProductImages().clear();
+        productImageRepository.deleteAll(productImages);  // JPA Repository의 deleteAll을 사용하여 한 번에 모든 이미지 삭제
+        existingProduct.getProductImages().clear();
 
 
         // 수정된 내용 저장

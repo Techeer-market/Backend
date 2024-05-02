@@ -77,5 +77,35 @@ public class S3ServiceImpl implements S3Service {
     }
 
 
+    // 이미지 리사이징 리스트 - 은주님
+    @Override
+    public List<String> uploadResizeProductImageList(BucketDir bucketDir, List<MultipartFile> imageFiles) throws IOException {
+        List<String> imageUrls = new ArrayList<>();
+        for (int i = 0; i < imageFiles.size(); i++) {
+            MultipartFile imageFile = imageFiles.get(i);
+            // 첫 번째 이미지인지 확인
+            boolean isFirstImage = (i == 0);
+            String imageUrl = uploadResizeImage(bucketDir, imageFile, isFirstImage);
+            imageUrls.add(imageUrl);
+        }
+        return imageUrls;
+    }
+
+    // 이미지 리사이징 - 은주님
+    public String uploadResizeImage(BucketDir bucketDir, MultipartFile multipartFile, boolean isFirstImage) throws IOException {
+        String s3FileName = generateS3FileName(bucketDir, multipartFile.getOriginalFilename());
+        ObjectMetadata objMeta = new ObjectMetadata();
+        objMeta.setContentLength(multipartFile.getSize());
+        objMeta.setContentType(multipartFile.getContentType());
+        // 첫 번째 이미지에만 isFirstImage 메타데이터 추가
+        if (isFirstImage) {
+            objMeta.addUserMetadata("isFirstImage", "true");
+        }
+        amazonS3.putObject(new PutObjectRequest(bucket, s3FileName, multipartFile.getInputStream(), objMeta));
+        return amazonS3.getUrl(bucket, s3FileName).toString();
+    }
+
+
+
 
 }
