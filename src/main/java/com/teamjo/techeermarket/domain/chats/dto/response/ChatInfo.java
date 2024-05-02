@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class ChatInfo {
-  private String senderEmail;
+  private Long senderId;
   private String message;
   private String createdAt;
 }

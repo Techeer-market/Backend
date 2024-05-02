@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ChatReq {
   private Long chatRoomId; // 방 번호
-  private String senderEmail;
+  private Long senderId;
   private String message;
   private String createdAt;
 

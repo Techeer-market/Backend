@@ -12,34 +12,44 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ChatMapper {
-  public Chat toEntity(ChatRoom chatRoom, String senderEmail, String message) {
+  public Chat toEntity(ChatRoom chatRoom, Long senderId, String message) {
     return Chat.builder()
         .chatRoom(chatRoom)
-        .senderEmail(senderEmail)
+        .senderId(senderId)
         .message(message)
         .build();
   }
 
   public ChatInfo toChatResDtoList(Chat chat) {
     return ChatInfo.builder()
-        .senderEmail(chat.getSenderEmail())
+        .senderId(chat.getSenderId())
         .message(chat.getMessage())
         .createdAt(chat.getCreatedAt())
         .build();
   }
 
-  public ChatRes toChatResDto (List<ChatInfo> response, ProductInfo productInfo, String chatCreateAt) {
+  public ChatRes toChatResDto (Long chatRoomId, List<ChatInfo> response, ProductInfo productInfo, String chatCreateAt) {
     return ChatRes.builder()
+        .chatRoomId(chatRoomId)
         .chatInfoList(response)
         .productInfo(productInfo)
         .chatCreateAt(chatCreateAt)
         .build();
   }
 
-  public ChatCreateRes toChatCreateResDto (Long chatRoomId, ProductInfo productInfo) {
+  public ChatCreateRes toChatCreateNewResDto (Long chatRoomId, ProductInfo productInfo) {
     return ChatCreateRes.builder()
         .chatRoomId(chatRoomId)
         .productInfo(productInfo)
+        .build();
+  }
+
+  public ChatCreateRes toChatCreateResDto (Long chatRoomId, ProductInfo productInfo, String chatCreateAt, List<ChatInfo> response) {
+    return ChatCreateRes.builder()
+        .chatRoomId(chatRoomId)
+        .productInfo(productInfo)
+        .chatInfoList(response)
+        .chatCreateAt(chatCreateAt)
         .build();
   }
 }

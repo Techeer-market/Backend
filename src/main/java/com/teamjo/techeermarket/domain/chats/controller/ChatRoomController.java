@@ -34,9 +34,10 @@ public class ChatRoomController {
   @PostMapping("/create/{productId}")
   public ResponseEntity<ChatCreateRes> createRoom(
       @PathVariable Long productId,
-      @AuthenticationPrincipal UserDetailsImpl userDetailsImpl
+      @AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+      @RequestParam Long chatRoomId
   ) {
-    ChatCreateRes chatCreateRes = chatRoomService.createChatRoom(productId, userDetailsImpl.getUsername());
+    ChatCreateRes chatCreateRes = chatRoomService.createChatRoom(productId, userDetailsImpl.getUsername(), chatRoomId);
 
     return ResponseEntity.status(HttpStatus.CREATED).body(chatCreateRes);
   }

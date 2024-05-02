@@ -1,8 +1,10 @@
 package com.teamjo.techeermarket.domain.users.controller;
 
+import com.teamjo.techeermarket.domain.chats.dto.response.ProductInfo;
 import com.teamjo.techeermarket.domain.users.dto.SignUpRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.UserChangeInfoDto;
 import com.teamjo.techeermarket.domain.users.dto.UserDetailResponseDto;
+import com.teamjo.techeermarket.domain.users.dto.UserIdDto;
 import com.teamjo.techeermarket.domain.users.service.UserServiceImpl;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -95,7 +97,18 @@ public class UserController {
 //    }
 
 
+    /*
+    //  유저 id 조회 - 채팅에서 사용
+    */
+    @GetMapping("/id")
+    public ResponseEntity<UserIdDto> getUserId(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
 
+        UserIdDto userIdDto = UserIdDto.builder()
+            .userId(userDetailsImpl.getUser().getId())
+            .build();
+
+        return ResponseEntity.ok(userIdDto);
+    }
 
 
 

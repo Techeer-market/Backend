@@ -93,6 +93,7 @@ public class ProductMapper {
             .title(product.getTitle())
             .thumbnailURL(product.getThumbnail())
             .name(product.getUsers().getName())
+            .userEmail(product.getUsers().getEmail())
             .userId(product.getUsers().getId())
             .price(product.getPrice())
             .createdAt(product.getCreatedAt())

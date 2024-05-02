@@ -20,7 +20,7 @@ public class Chat extends BaseEntity {
   @JoinColumn(name = "chat_room_id")
   private ChatRoom chatRoom;
 
-  private String senderEmail;
+  private Long senderId;
   private String message;
 
 
