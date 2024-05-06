@@ -41,7 +41,7 @@ public class ChatRoomService {
   private final ProductMapper productMapper;
 
   @Transactional
-  public ChatCreateRes createChatRoom(Long productId, String buyer, Long chatRoomId) {
+  public ChatCreateRes createChatRoom(Long productId, String loginUserEmail, Long chatRoomId) {
 
     Products product = productRepository.findById(productId)
         .orElseThrow(ProductNotFoundException::new);
@@ -60,9 +60,11 @@ public class ChatRoomService {
 
       String chatCreateAt = chatRoom.getCreatedAt();
 
-      return chatMapper.toChatCreateResDto(chatRoom.getId(), productInfo, chatCreateAt, response);
+      String chatPartnerEmail = loginUserEmail.equals(chatRoom.getBuyerEmail()) ? chatRoom.getSellerEmail() : chatRoom.getSellerEmail();
+
+      return chatMapper.toChatCreateResDto(chatRoom.getId(), chatPartnerEmail, productInfo, chatCreateAt, response);
     } else { // 상품 페이지에서 채팅하기를 누른 경우
-      Optional<ChatRoom> chatRoom1 = chatRoomRepository.findChatRoom(productId, product.getUsers().getEmail(), buyer);
+      Optional<ChatRoom> chatRoom1 = chatRoomRepository.findChatRoom(productId, product.getUsers().getEmail(), loginUserEmail);
 
       if (!chatRoom1.isEmpty()) {
         ChatRoom chatRoom = chatRoom1.get();
@@ -76,14 +78,18 @@ public class ChatRoomService {
 
         String chatCreateAt = chatRoom.getCreatedAt();
 
-        return chatMapper.toChatCreateResDto(chatRoom.getId(), productInfo, chatCreateAt, response);
+        String chatPartnerEmail = loginUserEmail.equals(chatRoom.getBuyerEmail()) ? chatRoom.getSellerEmail() : chatRoom.getSellerEmail();
+
+        return chatMapper.toChatCreateResDto(chatRoom.getId(), chatPartnerEmail, productInfo, chatCreateAt, response);
       } else {
-        ChatRoom chatRoom = chatRoomMapper.toEntity(product, product.getUsers().getEmail(), buyer);
+        ChatRoom chatRoom = chatRoomMapper.toEntity(product, product.getUsers().getEmail(), loginUserEmail);
         ChatRoom save = chatRoomRepository.save(chatRoom);
 
         ProductInfo productInfo = productMapper.toProductInfo(product);
 
-        return chatMapper.toChatCreateNewResDto(save.getId(), productInfo);
+        String chatPartnerEmail = loginUserEmail.equals(chatRoom.getBuyerEmail()) ? chatRoom.getSellerEmail() : chatRoom.getSellerEmail();
+
+        return chatMapper.toChatCreateNewResDto(save.getId(), chatPartnerEmail, productInfo);
       }
 
     }

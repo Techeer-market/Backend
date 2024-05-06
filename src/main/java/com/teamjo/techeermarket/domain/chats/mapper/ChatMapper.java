@@ -37,16 +37,18 @@ public class ChatMapper {
         .build();
   }
 
-  public ChatCreateRes toChatCreateNewResDto (Long chatRoomId, ProductInfo productInfo) {
+  public ChatCreateRes toChatCreateNewResDto (Long chatRoomId, String chatPartnerEmail, ProductInfo productInfo) {
     return ChatCreateRes.builder()
         .chatRoomId(chatRoomId)
+        .chatPartnerEmail(chatPartnerEmail)
         .productInfo(productInfo)
         .build();
   }
 
-  public ChatCreateRes toChatCreateResDto (Long chatRoomId, ProductInfo productInfo, String chatCreateAt, List<ChatInfo> response) {
+  public ChatCreateRes toChatCreateResDto (Long chatRoomId, String chatPartnerEmail, ProductInfo productInfo, String chatCreateAt, List<ChatInfo> response) {
     return ChatCreateRes.builder()
         .chatRoomId(chatRoomId)
+        .chatPartnerEmail(chatPartnerEmail)
         .productInfo(productInfo)
         .chatInfoList(response)
         .chatCreateAt(chatCreateAt)
