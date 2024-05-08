@@ -45,6 +45,7 @@ public class ProductMapper {
                 .createdAt(product.getCreatedAt())
                 .likes(product.getHeart())
                 .views(product.getViews())
+                .chatRooms(product.getChatRooms())
                 .build();
     }
 

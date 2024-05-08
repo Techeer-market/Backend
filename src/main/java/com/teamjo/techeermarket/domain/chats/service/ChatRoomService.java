@@ -81,13 +81,15 @@ public class ChatRoomService {
         String chatPartnerEmail = loginUserEmail.equals(chatRoom.getBuyerEmail()) ? chatRoom.getSellerEmail() : chatRoom.getSellerEmail();
 
         return chatMapper.toChatCreateResDto(chatRoom.getId(), chatPartnerEmail, productInfo, chatCreateAt, response);
-      } else {
+      } else { // 채팅방이 없는 경우 (새로 만들어야 하는 경우)
         ChatRoom chatRoom = chatRoomMapper.toEntity(product, product.getUsers().getEmail(), loginUserEmail);
         ChatRoom save = chatRoomRepository.save(chatRoom);
 
         ProductInfo productInfo = productMapper.toProductInfo(product);
 
         String chatPartnerEmail = loginUserEmail.equals(chatRoom.getBuyerEmail()) ? chatRoom.getSellerEmail() : chatRoom.getSellerEmail();
+
+        productRepository.incrementChatRoomCount(product);
 
         return chatMapper.toChatCreateNewResDto(save.getId(), chatPartnerEmail, productInfo);
       }

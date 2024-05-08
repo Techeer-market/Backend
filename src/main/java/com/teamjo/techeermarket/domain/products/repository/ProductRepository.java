@@ -26,6 +26,10 @@ public interface ProductRepository extends JpaRepository<Products, Long> {
     @Query("UPDATE Products p SET p.heart = p.heart - 1 WHERE p = :product")
     void decrementHeartCount(@Param("product") Products product);
 
+    @Modifying
+    @Query("UPDATE Products p SET p.categorys = p.heart + 1 WHERE p = :product")
+    void incrementChatRoomCount(@Param("product") Products product);
+
     Page<Products> findByIdIn(Set<Long> productIds, Pageable pageable);
 
     Page<Products> findByCategorysAndTitleContainingIgnoreCaseOrderByIdDesc(Categorys category, String title, Pageable pageable);
