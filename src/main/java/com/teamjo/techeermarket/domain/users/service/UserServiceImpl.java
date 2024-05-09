@@ -9,7 +9,6 @@ import com.teamjo.techeermarket.domain.users.mapper.UserFromMapper;
 import com.teamjo.techeermarket.domain.users.mapper.UserMapper;
 import com.teamjo.techeermarket.domain.users.repository.UserRepository;
 import com.teamjo.techeermarket.global.exception.user.InvalidPasswordException;
-import com.teamjo.techeermarket.global.exception.user.InvalidRefreshTokenException;
 import com.teamjo.techeermarket.global.exception.user.UserEmailAlreadyExistsException;
 import com.teamjo.techeermarket.global.exception.user.UserNotFoundException;
 import com.teamjo.techeermarket.global.jwt.JwtUtill;
