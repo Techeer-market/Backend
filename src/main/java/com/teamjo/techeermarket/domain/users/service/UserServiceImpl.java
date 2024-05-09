@@ -8,6 +8,7 @@ import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.mapper.UserFromMapper;
 import com.teamjo.techeermarket.domain.users.mapper.UserMapper;
 import com.teamjo.techeermarket.domain.users.repository.UserRepository;
+import com.teamjo.techeermarket.global.exception.user.InvalidPasswordException;
 import com.teamjo.techeermarket.global.exception.user.UserEmailAlreadyExistsException;
 import com.teamjo.techeermarket.global.exception.user.UserNotFoundException;
 import com.teamjo.techeermarket.global.jwt.JwtUtill;
@@ -77,9 +78,16 @@ public class UserServiceImpl implements UserService {
         Users userEntity = userRepository.findUserByEmail(currentEmail)
                 .orElseThrow(UserNotFoundException::new);
 
+        // 기존 비밀번호 확인
+        if (changeInfoDto.getOldPassword() != null && changeInfoDto.getNewPassword() != null) {
+            if (!passwordEncoder.matches(changeInfoDto.getOldPassword(), userEntity.getPassword())) {
+                throw new InvalidPasswordException();
+            }
+        }
+
         // UserChangeInfoDto에 따라 유저 정보 업데이트
-        if (changeInfoDto.getPassword() != null) {
-            userEntity.setPassword(passwordEncoder.encode(changeInfoDto.getPassword()));
+        if (changeInfoDto.getNewPassword() != null) {
+            userEntity.setPassword(passwordEncoder.encode(changeInfoDto.getNewPassword()));
         }
         if (changeInfoDto.getBirthday() != null) {
             userEntity.setBirthday(changeInfoDto.getBirthday());

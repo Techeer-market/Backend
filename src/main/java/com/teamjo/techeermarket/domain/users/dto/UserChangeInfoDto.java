@@ -13,7 +13,9 @@ public class UserChangeInfoDto {
 
     private String email;
 
-    private String password;
+    private String oldPassword;
+
+    private String newPassword;
 
     private String birthday ;
 

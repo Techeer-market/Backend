@@ -16,6 +16,8 @@ public enum ErrorCode {
 
     REFRESH_TOKEN_IS_INVALID(HttpStatus.UNAUTHORIZED, "U005","리프레시 토큰이 유효하지 않습니다."),
 
+    PASSWORD_IS_INVALID(HttpStatus.UNAUTHORIZED,"U006","유저의 비밀번호가 틀렸습니다."),
+
     PRODUCT_IS_NOT_YOURS(HttpStatus.UNAUTHORIZED, "U006","해당 상품이 사용자의 것이 아닙니다."),
 
     // 상품 관련
