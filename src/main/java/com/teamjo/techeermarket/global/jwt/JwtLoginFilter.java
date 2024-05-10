@@ -24,9 +24,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 // 로그인을 시도할 때 JWT 토큰을 생성하고, 해당 토큰을 쿠키에 저장하여 응답에 추가하는 기능
 public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -35,6 +35,9 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtUtill jwt = new JwtUtill();
 
     List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+
+    private final Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,6}$");
+
 
 
     public JwtLoginFilter(AuthenticationManager authenticationManager) {
@@ -55,6 +58,11 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         // 로그인 정보
         LoginRequestDto userLogin = objectMapper.readValue(reqeust.getInputStream(), LoginRequestDto.class);
+
+        // 이메일 형식 검증
+        if (!emailPattern.matcher(userLogin.getEmail()).matches()) {
+            throw new IllegalArgumentException("Invalid email format");
+        }
 
         // 리프레시 토큰이 없는 경우
         if (refreshToken == null) {
@@ -111,7 +119,6 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         SecurityContextHolder.clearContext();
 
-//        super.unsuccessfulAuthentication(request, response, failed);
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED, "사용자를 찾을 수 없습니다");
         response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         response.getOutputStream().write(objectMapper.writeValueAsBytes(errorResponse));
