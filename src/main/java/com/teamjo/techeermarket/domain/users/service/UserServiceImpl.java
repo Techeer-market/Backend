@@ -8,6 +8,8 @@ import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.mapper.UserFromMapper;
 import com.teamjo.techeermarket.domain.users.mapper.UserMapper;
 import com.teamjo.techeermarket.domain.users.repository.UserRepository;
+import com.teamjo.techeermarket.global.exception.user.InvalidPasswordException;
+import com.teamjo.techeermarket.global.exception.user.InvalidRefreshTokenException;
 import com.teamjo.techeermarket.global.exception.user.UserEmailAlreadyExistsException;
 import com.teamjo.techeermarket.global.exception.user.UserNotFoundException;
 import com.teamjo.techeermarket.global.jwt.JwtUtill;
@@ -16,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -77,9 +82,16 @@ public class UserServiceImpl implements UserService {
         Users userEntity = userRepository.findUserByEmail(currentEmail)
                 .orElseThrow(UserNotFoundException::new);
 
+        // 기존 비밀번호 확인
+        if (changeInfoDto.getOldPassword() != null && changeInfoDto.getNewPassword() != null) {
+            if (!passwordEncoder.matches(changeInfoDto.getOldPassword(), userEntity.getPassword())) {
+                throw new InvalidPasswordException();
+            }
+        }
+
         // UserChangeInfoDto에 따라 유저 정보 업데이트
-        if (changeInfoDto.getPassword() != null) {
-            userEntity.setPassword(passwordEncoder.encode(changeInfoDto.getPassword()));
+        if (changeInfoDto.getNewPassword() != null) {
+            userEntity.setPassword(passwordEncoder.encode(changeInfoDto.getNewPassword()));
         }
         if (changeInfoDto.getBirthday() != null) {
             userEntity.setBirthday(changeInfoDto.getBirthday());
@@ -116,31 +128,23 @@ public class UserServiceImpl implements UserService {
 
     /*
     //  Refresh 토큰 API
-    //  refresh 토큰이 유효하면 -> access token만 재발급
-    //  refresh 토큰이 유효하지 않으면 + 10일 이내로 남으면 -> RT,AT 둘다 재발급
+    //  refresh 토큰이 유효하면 -> 둘다 재 발급
+    //  refresh 토큰이 유효하지 않으면 -> 로그아웃
     */
-//    public Map<String, String> refreshToken(String refreshToken) {
-//        if (jwtUtill.validateToken(refreshToken)) {
-//            String email = jwtUtill.getEmailFromToken(refreshToken);
-//            Users user = userRepository.findByEmail(email)
-//                    .orElseThrow(() -> new UserNotFoundException());
-//
-//            String newAccessToken = jwtUtill.makeAccessToken(user);
-//
-//            Map<String, String> tokens = new HashMap<>();
-//            tokens.put("access_token", newAccessToken);
-//
-//            if (jwtUtill.getRemainingDays(refreshToken) < 10) {
-//                String newRefreshToken = jwtUtill.makeRefreshToken(user);
-//                tokens.put("refresh_token", newRefreshToken);
-//            }
-//
-//            return tokens;
-//        } else {
-//            throw new InvalidTokenException();
-//        }
-//    }
+    @Override
+    public Map<String, String> makerefreshTokens(String refreshToken) {
+        if (!jwtUtill.validateToken(refreshToken)) {
+            throw new InvalidRefreshTokenException();
+        }
+        String currentEmail = jwtUtill.getEmailFromToken(refreshToken);
+        Users userEntity = userRepository.findUserByEmail(currentEmail)
+                .orElseThrow(UserNotFoundException::new);
 
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("accessToken", jwtUtill.makeAccessToken(userEntity));
+        tokens.put("refreshToken", jwtUtill.makeRefreshToken(userEntity));
+        return tokens;
+    }
 
 
 }

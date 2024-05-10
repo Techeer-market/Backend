@@ -6,6 +6,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,14 +17,11 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtUtill {
-    private static final long AUTH_TIME = 3 * 60 * 60 * 1000L;       // 3 hours
+    private static final long AUTH_TIME = 8 * 60 * 60 * 1000L;       // 8 hours
     private static final long REFRESH_TIME = 30 * 24 * 60 * 60 * 1000L;   // 30 days
 
-//    @Value("${jwt.secret}")
-//    private static String secretKey;
-//    public static final Algorithm ALGORITHM = Algorithm.HMAC256(secretKey);
     public static final Algorithm ALGORITHM = Algorithm.HMAC256("hahaha");
-
+    long currentTimeInSeconds = Instant.now().getEpochSecond();
 
     // 사용자 정보를 받아와서 인증 토큰을 생성
     public String makeAccessToken(Users user) {
@@ -30,6 +29,7 @@ public class JwtUtill {
         return JWT.create()
                 .withSubject(user.getEmail())
                 .withClaim("exp", Instant.now().getEpochSecond() + AUTH_TIME)
+                .withExpiresAt(new Date(currentTimeInSeconds * 1000 + AUTH_TIME))
                 .sign(ALGORITHM);
     }
 
@@ -39,8 +39,10 @@ public class JwtUtill {
         return JWT.create()
                 .withSubject(user.getEmail())
                 .withClaim("exp", Instant.now().getEpochSecond() + REFRESH_TIME)
+                .withExpiresAt(new Date(currentTimeInSeconds * 1000 + REFRESH_TIME))
                 .sign(ALGORITHM);
     }
+
 
     // 주어진 JWT 토큰을 검증
     public static VerifyResultDto verify(String token) {
@@ -57,7 +59,6 @@ public class JwtUtill {
                     .build();
         }
     }
-
 
 
     // 토큰이 유효한지 검증
@@ -81,6 +82,7 @@ public class JwtUtill {
             return null;
         }
     }
+
 
     // 리프레시 토큰이 만료되었는지 확인
     public boolean isRefreshTokenExpired(String token) {

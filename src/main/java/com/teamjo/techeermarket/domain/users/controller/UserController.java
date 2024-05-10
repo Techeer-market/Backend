@@ -5,15 +5,23 @@ import com.teamjo.techeermarket.domain.users.dto.SignUpRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.UserChangeInfoDto;
 import com.teamjo.techeermarket.domain.users.dto.UserDetailResponseDto;
 import com.teamjo.techeermarket.domain.users.dto.UserIdDto;
+import com.teamjo.techeermarket.domain.users.entity.Users;
+import com.teamjo.techeermarket.domain.users.service.UserService;
 import com.teamjo.techeermarket.domain.users.service.UserServiceImpl;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
+import com.teamjo.techeermarket.global.exception.user.InvalidRefreshTokenException;
+import com.teamjo.techeermarket.global.jwt.JwtUtill;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -21,7 +29,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private UserService userService;
+
+    @Autowired
+    private JwtUtill jwtUtill;
 
     /*
     //  test API
@@ -40,7 +51,7 @@ public class UserController {
     */
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
-        userServiceImpl.signUp(signUpRequestDto);
+        userService.signUp(signUpRequestDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -51,8 +62,7 @@ public class UserController {
     */
     @GetMapping
     public ResponseEntity<UserDetailResponseDto> getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-        System.out.println("Email: " + userDetailsImpl.getUsername());  // 로그 추가
-        return ResponseEntity.ok(userServiceImpl.getUserInfo(userDetailsImpl.getUsername()));
+        return ResponseEntity.ok(userService.getUserInfo(userDetailsImpl.getUsername()));
     }
 
 
@@ -64,37 +74,10 @@ public class UserController {
     public ResponseEntity<UserDetailResponseDto> updateUserInformation(@RequestBody UserChangeInfoDto changeInfoDto,
                                                                        @AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
         String userEmail = userDetailsImpl.getUsername();
-        UserDetailResponseDto updatedUserInfo = userServiceImpl.updateUserInfo(userEmail, changeInfoDto);
+        UserDetailResponseDto updatedUserInfo = userService.updateUserInfo(userEmail, changeInfoDto);
         return ResponseEntity.ok(updatedUserInfo);
     }
 
-
-
-
-
-    /*
-    //  Refresh 토큰 API
-    //  refresh 토큰이 유효하면 -> access token만 재발급
-    //  refresh 토큰이 유효하지 않으면 + 10일 이내로 남으면 -> RT,AT 둘다 재발급
-    */
-//    @PostMapping("/refresh")
-//    public ResponseEntity<Map<String, String>> refresh(@RequestParam String refreshToken, HttpServletResponse response) {
-//        try {
-//            Map<String, String> newTokens = userService.refreshToken(refreshToken);
-//
-//            Cookie newAccessTokenCookie = new Cookie("access_token", newTokens.get("access_token"));
-//            response.addCookie(newAccessTokenCookie);
-//
-//            if (newTokens.containsKey("refresh_token")) {
-//                Cookie newRefreshTokenCookie = new Cookie("refresh_token", newTokens.get("refresh_token"));
-//                response.addCookie(newRefreshTokenCookie);
-//            }
-//
-//            return ResponseEntity.ok(newTokens);
-//        } catch (InvalidTokenException e) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-//        }
-//    }
 
 
     /*
@@ -104,10 +87,32 @@ public class UserController {
     public ResponseEntity<UserIdDto> getUserId(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
 
         UserIdDto userIdDto = UserIdDto.builder()
-            .userId(userDetailsImpl.getUser().getId())
-            .build();
+                .userId(userDetailsImpl.getUser().getId())
+                .build();
 
         return ResponseEntity.ok(userIdDto);
+    }
+
+
+
+    /*
+    //  Refresh 토큰 API
+    //  refresh 토큰이 유효하면 -> access token만 재발급
+    //  refresh 토큰이 유효하지 않으면 -> 로그아웃 처리
+    */
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
+        String refreshTokenHeader = request.getHeader("Refresh-Token");
+        if (refreshTokenHeader == null || !refreshTokenHeader.startsWith("refresh_token:")) {
+            throw new InvalidRefreshTokenException();
+        }
+        String refreshToken = refreshTokenHeader.substring("refresh_token:".length()).trim();
+        Map<String, String> tokens = userService.makerefreshTokens(refreshToken);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Access-Token", "access_token:" + tokens.get("accessToken"));
+        headers.add("Refresh-Token", "refresh_token:" + tokens.get("refreshToken"));
+        return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 
 

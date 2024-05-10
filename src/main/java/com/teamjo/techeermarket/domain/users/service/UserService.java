@@ -6,6 +6,8 @@ import com.teamjo.techeermarket.domain.users.dto.UserDetailResponseDto;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+
 public interface UserService {
 
     void signUp(SignUpRequestDto signUpRequestDto);
@@ -17,5 +19,5 @@ public interface UserService {
 
     Users findUser(String email);
 
-
+    Map<String, String> makerefreshTokens(String refreshToken);
 }
