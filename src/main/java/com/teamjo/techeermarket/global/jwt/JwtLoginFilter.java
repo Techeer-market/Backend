@@ -39,7 +39,6 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
     private final Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,6}$");
 
 
-
     public JwtLoginFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
         setFilterProcessesUrl("/api/users/login");
