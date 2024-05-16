@@ -40,6 +40,8 @@ public class ProductDetailViewDto {
 
     private int views;  // 뷰 수
 
+    private int chatRoom ;
+
     private String createdAt ;
 
     private String updatedAt ;
