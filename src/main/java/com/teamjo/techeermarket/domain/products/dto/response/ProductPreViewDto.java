@@ -27,5 +27,6 @@ public class ProductPreViewDto {
     private int likes ; // 좋아요수
 
     private int views;  // 뷰 수
+    private int chatRooms; // 채팅 수
 
 }

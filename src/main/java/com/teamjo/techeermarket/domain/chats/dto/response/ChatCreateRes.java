@@ -8,6 +8,7 @@ import lombok.Data;
 @Builder
 public class ChatCreateRes {
   private Long chatRoomId;
+  private String chatPartnerEmail;
   private ProductInfo productInfo;
   private String chatCreateAt;
   private List<ChatInfo> chatInfoList;

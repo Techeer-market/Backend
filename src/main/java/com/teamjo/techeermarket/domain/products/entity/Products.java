@@ -51,6 +51,9 @@ public class Products extends BaseEntity {
     @Column(name = "heart")
     private int heart;
 
+    @Column(name = "chatRooms")
+    private int chatRooms;
+
     @Column(name = "location", length = 512)
     private String location;
 
