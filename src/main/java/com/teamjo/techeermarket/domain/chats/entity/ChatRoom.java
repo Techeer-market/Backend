@@ -23,7 +23,8 @@ public class ChatRoom extends BaseEntity {
   private Products products;
 
   private String sellerEmail;
+
   private String buyerEmail;
 
-
+  private boolean isDelete = false;
 }

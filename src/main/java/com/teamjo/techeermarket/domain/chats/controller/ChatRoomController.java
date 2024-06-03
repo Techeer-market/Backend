@@ -2,15 +2,15 @@ package com.teamjo.techeermarket.domain.chats.controller;
 
 import com.teamjo.techeermarket.domain.chats.dto.response.ChatCreateRes;
 import com.teamjo.techeermarket.domain.chats.dto.response.ChatRoomRes;
+import com.teamjo.techeermarket.domain.chats.dto.response.deleteRes;
 import com.teamjo.techeermarket.domain.chats.service.ChatRoomService;
-import com.teamjo.techeermarket.domain.products.service.ProductService;
-import com.teamjo.techeermarket.domain.users.service.UserService;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ChatRoomController {
   private final ChatRoomService chatRoomService;
-  private final ProductService productService;
-  private final UserService userService;
 
   /*
    * @Describe : 채팅방 제작
@@ -55,6 +53,28 @@ public class ChatRoomController {
     List<ChatRoomRes> chatRooms = chatRoomService.findChatRoomByUserId(userDetailsImpl.getUsername(), pageNo, pageSize);
 
     return ResponseEntity.ok(chatRooms);
+  }
+
+  /*
+   * @Describe : 채팅방 삭제
+   * @Param1 : 삭제 채팅방 번호 (chatRoomId)
+   */
+  @DeleteMapping("/room/{chatRoomId}")
+  public deleteRes deleteRoom(
+      @PathVariable Long chatRoomId,
+      @AuthenticationPrincipal UserDetailsImpl userDetailsImpl
+  ) {
+    if (!chatRoomService.deleteChatRoom(chatRoomId, userDetailsImpl.getUsername())) {
+      return deleteRes.builder()
+              .code(404)
+              .response("존재하지 않은 채팅이거나 본인의 채팅방이 아닙니다.")
+              .build();
+    }
+
+    return deleteRes.builder()
+        .code(200)
+        .response("성공하였습니다.")
+        .build();
   }
 
 

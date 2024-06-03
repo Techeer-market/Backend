@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChatRoomService {
   private final ChatRoomRepository chatRoomRepository;
   private final ChatRepository chatRepository;
@@ -40,8 +41,7 @@ public class ChatRoomService {
   private final ChatMapper chatMapper;
   private final ProductMapper productMapper;
 
-  @Transactional
-  public ChatCreateRes createChatRoom(Long productId, String loginUserEmail, Long chatRoomId) {
+  public ChatCreateRes createChatRoom(Long productId, String buyer, Long chatRoomId) {
 
     Products product = productRepository.findById(productId)
         .orElseThrow(ProductNotFoundException::new);
@@ -60,11 +60,9 @@ public class ChatRoomService {
 
       String chatCreateAt = chatRoom.getCreatedAt();
 
-      String chatPartnerEmail = loginUserEmail.equals(chatRoom.getBuyerEmail()) ? chatRoom.getSellerEmail() : chatRoom.getSellerEmail();
-
-      return chatMapper.toChatCreateResDto(chatRoom.getId(), chatPartnerEmail, productInfo, chatCreateAt, response);
+      return chatMapper.toChatCreateResDto(chatRoom.getId(), productInfo, chatCreateAt, response);
     } else { // 상품 페이지에서 채팅하기를 누른 경우
-      Optional<ChatRoom> chatRoom1 = chatRoomRepository.findChatRoom(productId, product.getUsers().getEmail(), loginUserEmail);
+      Optional<ChatRoom> chatRoom1 = chatRoomRepository.findChatRoom(productId, product.getUsers().getEmail(), buyer);
 
       if (!chatRoom1.isEmpty()) {
         ChatRoom chatRoom = chatRoom1.get();
@@ -78,27 +76,19 @@ public class ChatRoomService {
 
         String chatCreateAt = chatRoom.getCreatedAt();
 
-        String chatPartnerEmail = loginUserEmail.equals(chatRoom.getBuyerEmail()) ? chatRoom.getSellerEmail() : chatRoom.getSellerEmail();
-
-        return chatMapper.toChatCreateResDto(chatRoom.getId(), chatPartnerEmail, productInfo, chatCreateAt, response);
-      } else { // 채팅방이 없는 경우 (새로 만들어야 하는 경우)
-        ChatRoom chatRoom = chatRoomMapper.toEntity(product, product.getUsers().getEmail(), loginUserEmail);
+        return chatMapper.toChatCreateResDto(chatRoom.getId(), productInfo, chatCreateAt, response);
+      } else {
+        ChatRoom chatRoom = chatRoomMapper.toEntity(product, product.getUsers().getEmail(), buyer);
         ChatRoom save = chatRoomRepository.save(chatRoom);
 
         ProductInfo productInfo = productMapper.toProductInfo(product);
 
-        String chatPartnerEmail = loginUserEmail.equals(chatRoom.getBuyerEmail()) ? chatRoom.getSellerEmail() : chatRoom.getSellerEmail();
-
-        productRepository.incrementChatRoomCount(product);
-
-        return chatMapper.toChatCreateNewResDto(save.getId(), chatPartnerEmail, productInfo);
+        return chatMapper.toChatCreateNewResDto(save.getId(), productInfo);
       }
 
     }
   }
 
-
-  @Transactional(readOnly = true)
   public List<ChatRoomRes> findChatRoomByUserId(String userEmail, int pageNo, int pageSize) {
     Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by("id").descending());  // 1페이지부터 시작하도록
     Page<Object[]> results = chatRoomRepository.findByUserIn(userEmail, pageable);
@@ -110,7 +100,17 @@ public class ChatRoomService {
     } else {
       return Collections.emptyList(); // 채팅 리스트가 없는 경우 빈 배열을 반환
     }
+  }
 
+  public boolean deleteChatRoom(Long chatRoomId, String loginUserEmail) {
+    ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElse(null);
+
+    if (chatRoom == null || !chatRoom.getSellerEmail().equals(loginUserEmail)) {
+      return false;
+    }
+
+    chatRoom.setDelete(true);
+    return true;
   }
 
   private ChatRoomRes mapToChatRoomRes(Object[] result, String userEmail) {
