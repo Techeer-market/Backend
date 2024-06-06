@@ -20,7 +20,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
       + "c.sellerEmail, "
       + "c.buyerEmail, "
       + "c.createdAt "
-      + "FROM ChatRoom c WHERE :userEmail LIKE c.buyerEmail OR :userEmail LIKE c.sellerEmail")
+      + "FROM ChatRoom c WHERE (:userEmail LIKE c.buyerEmail OR :userEmail LIKE c.sellerEmail) AND c.isDelete = false")
   Page<Object[]> findByUserIn(@Param("userEmail") String userEmail, Pageable pageable);
 
   @Query("SELECT c FROM ChatRoom c where (c.products.id = :productId AND c.buyerEmail LIKE :userEmail1 AND c.sellerEmail LIKE :userEmail2) OR (c.products.id = :productId AND c.buyerEmail LIKE :userEmail2 AND c.sellerEmail LIKE :userEmail1)")
