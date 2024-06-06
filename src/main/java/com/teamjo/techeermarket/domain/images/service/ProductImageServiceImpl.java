@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductImageServiceImpl implements ProductImageService {
 
     private final ProductImageRepository productImageRepository;
-    private final S3ServiceImpl s3ServiceImpl;
 
     @Override
     public ProductImage saveImage(ProductImage productImage) {

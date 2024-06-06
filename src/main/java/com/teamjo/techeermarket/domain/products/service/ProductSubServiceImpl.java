@@ -32,18 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductSubServiceImpl implements ProductSubService {
 
     private final ProductRepository productRepository;
-    private final ProductImageServiceImpl productImageServiceImpl;
     private final UserLikeRepository userLikeRepository;
     private final UserPurchaseRepository userPurchaseRepository;
     private final UserRepository userRepository;
-    @Autowired
-    private final ProductMapper productMapper;
-    @Autowired
-    private final S3ServiceImpl s3ServiceImpl;
-    @Autowired
-    private final CategoryRepository categoryRepository;
-    @Autowired
-    private final ProductImageRepository productImageRepository;
 
 
     /*

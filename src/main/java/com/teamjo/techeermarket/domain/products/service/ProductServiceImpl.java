@@ -52,8 +52,6 @@ public class ProductServiceImpl implements ProductService {
     private final UserRepository userRepository;
     @Autowired
     private final CategoryRepository categoryRepository;
-//    @Autowired
-//    private final ChatRoomRepository chatRoomRepository ;
     @Autowired
     private final UserLikeRepository userLikeRepository;
     @Autowired
