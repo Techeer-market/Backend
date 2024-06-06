@@ -1,5 +1,6 @@
 package com.teamjo.techeermarket.domain.users.mapper;
 
+import com.teamjo.techeermarket.domain.users.dto.SignUpRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.UserDetailResponseDto;
 import com.teamjo.techeermarket.domain.users.entity.Users;
 import lombok.RequiredArgsConstructor;
@@ -18,4 +19,14 @@ public class UserFromMapper {
                 .profileUrl(users.getProfileUrl())
                 .build();
     }
+
+    public static Users toEntity(SignUpRequestDto dto) {
+        return Users.builder()
+                .email(dto.getEmail())
+                .name(dto.getName())
+                .birthday(dto.getBirthday())
+                .social(dto.getSocial())
+                .build();
+    }
+
 }

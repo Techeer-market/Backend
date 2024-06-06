@@ -31,9 +31,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private JwtUtill jwtUtill;
-
     /*
     //  test API
     */
@@ -114,6 +111,11 @@ public class UserController {
         headers.add("Refresh-Token", "refresh_token:" + tokens.get("refreshToken"));
         return new ResponseEntity<>(headers, HttpStatus.OK);
     }
+
+
+    /*
+    / 유저 탈퇴 API
+     */
 
 
 
