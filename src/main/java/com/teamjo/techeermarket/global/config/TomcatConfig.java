@@ -8,10 +8,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TomcatConfig {
 
+    // 100 MB
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> customizer() {
         return factory -> factory.addConnectorCustomizers(connector -> {
             connector.setMaxPostSize(104857600); // 100MB로 설정
         });
     }
+
 }
