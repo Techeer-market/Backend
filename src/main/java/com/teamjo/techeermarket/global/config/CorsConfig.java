@@ -17,6 +17,7 @@ public class CorsConfig {
         config.setAllowCredentials(true);   // 쿠키 및 자격 증명 허용
         config.addAllowedOriginPattern("*"); // 모든 IP에 응답 허용
         config.addAllowedOrigin("http://localhost:8080");
+        config.addAllowedOrigin("https://techeermarket.site");
 
 //        config.addExposedHeader("Set-Cookie");
         config.addExposedHeader("*");
