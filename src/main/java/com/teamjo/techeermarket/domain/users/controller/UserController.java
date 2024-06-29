@@ -1,16 +1,12 @@
 package com.teamjo.techeermarket.domain.users.controller;
 
-import com.teamjo.techeermarket.domain.chats.dto.response.ProductInfo;
 import com.teamjo.techeermarket.domain.users.dto.SignUpRequestDto;
 import com.teamjo.techeermarket.domain.users.dto.UserChangeInfoDto;
 import com.teamjo.techeermarket.domain.users.dto.UserDetailResponseDto;
 import com.teamjo.techeermarket.domain.users.dto.UserIdDto;
-import com.teamjo.techeermarket.domain.users.entity.Users;
 import com.teamjo.techeermarket.domain.users.service.UserService;
-import com.teamjo.techeermarket.domain.users.service.UserServiceImpl;
 import com.teamjo.techeermarket.global.config.UserDetailsImpl;
 import com.teamjo.techeermarket.global.exception.user.InvalidRefreshTokenException;
-import com.teamjo.techeermarket.global.jwt.JwtUtill;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +31,8 @@ public class UserController {
     //  test API
     */
     @GetMapping("/test")
-    public ResponseEntity<String> privateEndpoint(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
-        System.out.println("이메일 출력 = " + userDetailsImpl.getUsername());
-        String user = userDetailsImpl.getUsername();
-        return ResponseEntity.ok(user);
+    public String privateEndpoint() {
+        return "OK" ;
     }
 
 
