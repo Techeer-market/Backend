@@ -26,14 +26,15 @@ public class WebSecurityConfig {
     private final CorsConfig config;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
-    private static final String[] AUTH_WHITE_LIST = {
-            "/api/users/signup",
-            "/api/users/login",
-            "/api/category/**",
-            "/api/test/**",
-            "/error",
-            "/h2-console/**"
-    };
+// 전체 허용으로 인해 잠시 주석처리
+//    private static final String[] AUTH_WHITE_LIST = {
+//            "/api/users/signup",
+//            "/api/users/login",
+//            "/api/category/**",
+//            "/api/test/**",
+//            "/error",
+//            "/h2-console/**"
+//    };
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -43,13 +44,11 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorizeHttpRequestsConfigurer -> {
-                    for (String path : AUTH_WHITE_LIST) {
-                        authorizeHttpRequestsConfigurer.antMatchers(String.valueOf(new AntPathRequestMatcher(path))).permitAll();
-                    }
-                })
-                .apply(new MyCustomDsl());
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorizeRequests -> {
+                authorizeRequests.anyRequest().permitAll(); // 모든 요청 허용
+            })
+            .apply(new MyCustomDsl());
         return http.build();
     }
 
